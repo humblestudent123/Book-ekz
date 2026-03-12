@@ -1,70 +1,225 @@
-# Getting Started with Create React App
+# Book‑Recommender (Frontend)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Система поиска книг и персональных рекомендаций на основе жанра.
+>
+> **Автор**: Поняев Никита Иванович
+> **Курс**: 2026 г., МГОК, Специальность 09.02.07
 
-## Available Scripts
+## Описание проекта
+- Полноценное SPA‑приложение, построенное на React 18 и Vite.
+- Каталог книг (обложка, название, автор, жанр).
+- Текстовый поиск + фильтр по жанрам.
+- Персональные рекомендации: книги того же жанра, что чаще всего лайкнули.
 
-In the project directory, you can run:
+## Архитектура
+src/
+├─ components/          – UI‑компоненты (BookCard, Catalog, SearchBar)
+├─ utils/               – бизнес‑логика (RecommendationLogic.js)
+├─ data/                – JSON‑массив книг (books.json)
+├─ styles.css           – общий CSS
+└─ App.jsx              – корневой компонент
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Установка и запуск
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+# 1. Клонируйте репозиторий
+git clone https://github.com/humblestudent123/Book-ekz.git
+cd Book‑ekz
 
-### `npm test`
+# 2. Установите зависимости
+npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# 3. Запустите dev‑сервер
+npm run dev   # Vite – http://localhost:5173
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Тестирование (инструментальная)
+Chrome ≥ 115, Firefox ≥ 114, Edge ≥ 115.
+Проверка адаптивности на мобильных и десктопных экранах.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Лицензия
+MIT © 2026 – [Поняев Никита Иванович]
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Контакты
+gmail: vasickinfedor@gmail.com
+Telegram: @hard1050
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 2. Пояснительная записка (Markdown‑шаблон)
 
-### Code Splitting
+> Сохраните как `PZ.md`. После проверки и заполнения можно конвертировать в PDF через Pandoc:
+>
+> ```bash
+> pandoc PZ.md -o PZ.pdf --pdf-engine=xelatex \
+>   -V geometry:margin=20mm \
+>   -V fontsize=14pt \
+>   -V mainfont="Times New Roman" \
+>   -V monofont="Courier New"
+> ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```markdown
+# Пояснительная записка к дипломному проекту
 
-### Analyzing the Bundle Size
+## Титульный лист  
+(заполняется вручную в Word, но можно скопировать шаблон)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Содержание
+1. Введение ……………… 3  
+2. Раздел 1. Анализ предметной области ……….. 5  
+   2.1 Сбор данных ………… 6  
+   2.2 Диаграммы IDEF0 и Use‑Case ……… 7  
+   2.3 Предложенное решение ……………… 8  
+3. Раздел 2. Технология разработки продукта заказчика ……. 10  
+   3.1 Техническое задание ………… 11  
+   3.2 Выбор среды программирования ………… 12  
+4. Раздел 3. Организация работ по внедрению продукта …….. 14  
+   4.1 Установка и настройка ……………… 15  
+   4.2 Тестирование компонентов ……….. 16  
+   4.3 Экономический расчёт ………… 18  
+5. Заключение ………………………… 20  
+6. Список источников ………………………… 22  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Введение
+(≈ 2–3 страницы)
 
-### Advanced Configuration
+### Актуальность темы
+…
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Цель и задачи проекта
+…
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Раздел 1. Анализ предметной области
 
-### `npm run build` fails to minify
+### 1.1 Сбор данных
+- Стейкхолдеры: читатели, администраторы.
+- Функциональные требования: фильтрация по жанру, поиск, рекомендации.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 1.2 Диаграммы IDEF0 и Use‑Case
+> **Рисунок 1 – Контекстная диаграмма процесса рекомендаций**  
+> *см. рисунок 1*
+
+| Шаг | Описание |
+|-----|----------|
+| 1   | Пользователь выбирает жанр |
+| …   | … |
+
+### 1.3 Предложенное решение
+- Frontend на React 18 + Vite.
+- Логика рекомендаций: «лучший жанр» + 5 книг.
+
+---
+
+## Раздел 2. Технология разработки продукта заказчика
+
+### 2.1 Техническое задание
+(требования к функциональности, UI/UX)
+
+### 2.2 Выбор среды программирования
+- **React** – гибкость компонентов, реактивность.
+- **Vite** – быстрый старт (< 1 с), HMR.
+
+> Архитектура компонентов: `App → SearchBar + Catalog → BookCard`.
+
+---
+
+## Раздел 3. Организация работ по внедрению продукта
+
+### 3.1 Установка и настройка
+
+git clone(SSH): git@github.com:humblestudent123/Book-ekz.git
+npm install
+npm run dev
+
+
+### 3.2 Тестирование
+- Кросс‑браузерность (Chrome, Firefox, Edge).
+- Адаптивный дизайн.
+
+### 3.3 Экономический расчёт
+> **Таблица 1 – Экономическая целесообразность**  
+> (см. таблицу 1)
+
+| Показатель | Значение |
+|------------|----------|
+| Человекочасы | 120 h |
+| Стоимость | ₽200 000 |
+
+---
+
+## Заключение
+(выводы о достижении целей, перспективы развития)
+
+---
+
+## Список источников
+1. Кузнецов А.А., *Теория и практика рекомендационных систем*, Москва: Издательство НИУ ВШЭ, 2020.
+2. React Documentation, https://reactjs.org/, доступно 12.02.2026.
+3. … (до 20+)
+
+---
+
+## Приложения
+
+### ПРИЛОЖЕНИЕ 1 – Эскизный проект
+(Wireframes: изображения в папке `docs/wireframes/`)
+
+### ПРИЛОЖЕНИЕ 2 – Рабочий проект
+Перечень файлов с размерами (см. таблицу ниже).
+
+| № | Файл | Размер (Б) |
+|---|------|------------|
+| 1 | src/App.jsx | 842 |
+| 2 | src/components/BookCard.jsx | 658 |
+| … | … | … |
+
+### ПРИЛОЖЕНИЕ 3 – Руководство пользователя
+(инструкции по запуску, описания интерфейса)
+
+---
+
+
+
+
+
+
+3. Таблица размеров исходных файлов
+
+find src -type f -exec du -b {} + | sort -n > file_sizes.txt
+Пример содержимого file_sizes.txt:
+842   src/App.jsx
+658   src/components/BookCard.jsx
+Вставьте таблицу в ПРИЛОЖЕНИЕ 2.
+
+
+
+
+4. Руководство пользователя (Markdown)
+# Руководство пользователя
+
+## Предварительные требования
+- Node.js v20+  
+- npm 8+
+
+## Установка
+```bash
+git clone https://github.com/humblestudent123/Book-ekz.git
+cd Book‑ekz
+npm install
+
+Запуск
+npm run dev   # Vite – http://localhost:5173
+
+
+
