@@ -405,6 +405,9 @@ section {
   margin-bottom: 10px;
 }
 
+
+
+
 /* Контент читателя — прокручиваемая область */
 .reader-content {
   flex: 1;
@@ -454,4 +457,51 @@ section {
 .black-theme {
   background: #070707;
   color: #eaeaea;
+}
+
+
+
+
+
+
+
+
+
+
+/* ---------- Reader modal – заполняем высоту ---------- */
+.reader-modal {
+  display: flex;
+  flex-direction: column;          /* header → content → controls */
+}
+
+/* Контент читателя растягивается до свободного места между header и controls */
+.reader-content {
+  flex: 1;                         /* занимает всё, что осталось */
+  overflow-y: auto;                /* прокрутка внутри контента */
+  padding-right: 8px;
+  line-height: 1.7;                /* комфортный интервал по умолчанию */
+}
+
+.reader-page {
+  white-space: pre-wrap;
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 17px;
+  line-height: 1.75;
+
+  text-align: justify;
+  text-justify: inter-word;
+
+  hyphens: auto;
+  word-break: break-word;
+
+  max-width: 650px;     /* ключевая вещь */
+  margin: 0 auto;       /* центрируем текст */
+}
+
+.reader-content {
+  flex: 1;
+  overflow-y: auto;
+
+  padding: 20px 40px;   /* ← добавь */
 }
