@@ -162,7 +162,7 @@ useEffect(() => {
     <div className="app-container">
       {/* Header */}
       <header className="header">
-        <h1>Books — интерфейс и рекомендации</h1>
+        <h1 id='h1'>ReadNext</h1>
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
