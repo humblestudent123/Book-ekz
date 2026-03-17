@@ -472,40 +472,47 @@ section {
 
 
 
-/* ---------- Reader modal – заполняем высоту ---------- */
+/* ---------- Reader modal – заполняем высоту и стиль ---------- */
 .reader-modal {
   display: flex;
-  flex-direction: column;          /* header → content → controls */
+  flex-direction: column;  /* header → content → controls */
+  width: 720px;
+  max-width: calc(100% - 48px);
+  height: 70vh;
+  max-height: 90vh;
+  background: #0b0b0b;
+  color: #eaeaea;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;       /* скролл только внутри контента */
 }
 
 /* Контент читателя растягивается до свободного места между header и controls */
 .reader-content {
-  flex: 1;                         /* занимает всё, что осталось */
-  overflow-y: auto;                /* прокрутка внутри контента */
-  padding-right: 8px;
-  line-height: 1.7;                /* комфортный интервал по умолчанию */
+  flex: 1;                /* занимает всё оставшееся место */
+  overflow-y: auto;       /* вертикальная прокрутка */
+  padding: 20px 40px;     /* внутренние отступы */
+  line-height: 1.75;      /* комфортный интервал для чтения */
 }
 
+/* Страница текста – центрированная, удобно читать */
 .reader-page {
   white-space: pre-wrap;
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 17px;
   line-height: 1.75;
-
   text-align: justify;
   text-justify: inter-word;
-
   hyphens: auto;
   word-break: break-word;
-
-  max-width: 650px;     /* ключевая вещь */
-  margin: 0 auto;       /* центрируем текст */
+  max-width: 650px;       /* ограничиваем ширину текста */
+  margin: 0 auto;         /* центрируем текст по горизонтали */
 }
 
-.reader-content {
-  flex: 1;
-  overflow-y: auto;
 
-  padding: 20px 40px;   /* ← добавь */
-}
+
+
+
+
