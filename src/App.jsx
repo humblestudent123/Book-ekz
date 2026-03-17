@@ -1,342 +1,207 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import "./App.css";
+// src/App.jsx
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 
-// ===== Пример данных =====
-const SAMPLE_BOOKS = [
-  // ... (оставь свои книги как было)
-  // Я оставил данные из твоего предыдущего сообщения:
-  {
-    id: 1,
-    title: "Преступление и наказание",
-    author: "Фёдор Достоевский",
-    year: 1866,
-    genres: ["Роман", "Криминальный жанр", "Психологический реализм"],
-    tags: ["Психология", "Философия", "Нигилизм"],
-    description:
-      "Бедный студент Раскольников убивает старуху-процентщицу, чтобы проверить свою теорию о «праве сильной личности», но муки совести разрушают его.",
-    content:
-      "Это пример текста книги. Здесь будет полноценное содержимое... " +
-      "Повтори и расширяй по желанию. ".repeat(80),
-  },
-  {
-    id: 2,
-    title: "1984",
-    author: "Джордж Оруэлл",
-    year: 1949,
-    genres: ["Антиутопия", "Политическая сатира"],
-    tags: ["Тоталитаризм", "Пропаганда", "Контроль"],
-    description:
-      "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
-    content: "Пример содержимого книги 1984. ".repeat(60),
-  },
-  {
-    id: 3,
-    title: "Гарри поттер",
-    author: "Джоан Роллинг",
-    year: 2000,
-    genres: ["Антиутопия", "Политическая сатира"],
-    tags: ["Тоталитаризм", "Пропаганда", "Контроль"],
-    description:
-      "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
-    content: "Пример содержимого книги 1984. ".repeat(60),
-  },
-  {
-    id: 4,
-    title: "Убийство в восточном экспрессе",
-    author: "Агата Кристи",
-    year: 1949,
-    genres: ["Антиутопия", "Политическая сатира"],
-    tags: ["Тоталитаризм", "Пропаганда", "Контроль"],
-    description:
-      "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
-    content: "Пример содержимого книги 1984. ".repeat(60),
-  },
-  
-  // добавь остальные как в твоём файле...
-];
+import SearchBar   from './components/SearchBar';
+import BookList    from './components/BookList';
+import Sidebar     from './components/Sidebar';
+import ReaderModal from './components/ReaderModal';
 
-// ===== Утилиты =====
-function paginateText(text = "", approxCharsPerPage = 1200) {
-  // Разбиваем текст по словам, формируем страницы по приблизительной длине,
-  // но не ломаем слова/предложения слишком грубо.
+import { SAMPLE_BOOKS } from './data';
+
+/* ---------- constants ---------- */
+const LOAD_MORE_STEP = 6;
+const PAGE_CHARS      = 1000;          // approximate characters per page
+const ALL_GENRE       = 'Все';         // “All” filter label
+
+/* ---------- utils ---------- */
+const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
+  if (!text) return [''];
+
   const words = text.split(/\s+/);
   const pages = [];
-  let cur = "";
+  let current = '';
 
-  for (let i = 0; i < words.length; i++) {
-    const w = words[i];
-    // если добавление слова не превысит лимит — добавляем
-    if ((cur + " " + w).length <= approxCharsPerPage || cur.length === 0) {
-      cur = (cur + " " + w).trim();
+  for (let word of words) {
+    // Append word to the current page if it fits
+    if ((current + ' ' + word).length <= approxCharsPerPage || current.length === 0) {
+      current = `${current} ${word}`.trim();
     } else {
-      pages.push(cur);
-      cur = w;
+      pages.push(current);
+      current = word;
     }
   }
-  if (cur.length) pages.push(cur);
-  // если слишком мало страниц — всё равно вернуть минимум 1
+
+  if (current) pages.push(current);
+
   return pages.length ? pages : [text];
-}
+};
 
-function computeRecommendations(baseId, books, topK = 4) {
-  // заглушка — в реальности у тебя уже есть функция, можно её использовать
-  // здесь просто пустой массив (ты уже используешь реальную функцию выше)
-  return [];
-}
-
-// ===== Компоненты =====
-function BookCard({ book, onSelect }) {
-  return (
-    <div className="book-card" onClick={() => onSelect(book)}>
-      <h3>{book.title}</h3>
-      <p>
-        {book.author} · {book.year}
-      </p>
-      <div style={{ marginTop: "10px" }}>
-        {book.tags.map((t) => (
-          <span key={t} className="tag">
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SearchBar({ query, setQuery }) {
-  return (
-    <div className="search-bar">
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Поиск по названию, автору или тегам..."
-      />
-    </div>
-  );
-}
-
-// ===== Основной компонент =====
+/* ---------- App component ---------- */
 export default function App() {
-  const [books] = useState(SAMPLE_BOOKS);
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(null);
-  const [genreFilter, setGenreFilter] = useState("Все");
-  const [showCount, setShowCount] = useState(6);
+  /* ---------- state ---------- */
+  const books = SAMPLE_BOOKS; // static dataset
 
-  // Reader states
+  const [query, setQuery]         = useState('');
+  const [selected, setSelected]   = useState(null);
+  const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
+  const [showCount, setShowCount]          = useState(LOAD_MORE_STEP);
+
+  /* ---------- reader state ---------- */
   const [isReading, setIsReading] = useState(false);
+  const [pages, setPages]         = useState([]);
   const [readingPage, setReadingPage] = useState(0);
-  const [pages, setPages] = useState([]);
 
-  const scrollRef = useRef(null);
-
-  // Фильтрация книг
+  /* ---------- filtering ---------- */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return books.filter((b) => {
-      if (genreFilter !== "Все" && !b.genres.includes(genreFilter)) return false;
-      if (!q) return true;
-      const hay = b.title + " " + b.author + " " + b.tags.join(" ") + " " + b.description;
-      return hay.toLowerCase().includes(q);
-    });
+    return books.filter(b =>
+      (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
+      (!q ||
+        `${b.title} ${b.author} ${b.tags.join(' ')}`.toLowerCase().includes(q))
+    );
   }, [books, query, genreFilter]);
 
-  const visibleBooks = useMemo(() => filtered.slice(0, Math.max(showCount, 6)), [filtered, showCount]);
+  const visibleBooks = useMemo(() => filtered.slice(0, showCount), [filtered, showCount]);
 
-  // Скролл для подгрузки (левый блок)
+  /* ---------- genres list ---------- */
+  const genres = useMemo(() => {
+    const setG = new Set();
+    books.forEach(b => b.genres.forEach(g => setG.add(g)));
+    return [ALL_GENRE, ...Array.from(setG)];
+  }, [books]);
+
+  /* ---------- recommendations ---------- */
+  const recommendations = useMemo(() => {
+    if (!selected) return [];
+    return books
+      .filter(b =>
+        b.id !== selected.id &&
+        b.genres.some(g => selected.genres.includes(g))
+      )
+      .slice(0, 4);
+  }, [selected, books]);
+
+  /* ---------- reader initialization ---------- */
+useEffect(() => {
+  if (isReading && selected && !selected.content) {
+    fetch(selected.contentUrl)
+      .then(r => r.text())
+      .then(text =>
+        // обновляем только нужное поле у выбранной книги
+        setSelected(prev => ({ ...prev, content: text }))
+      )
+      .catch(err => console.error('Не удалось загрузить текст', err));
+  }
+}, [isReading, selected]);
+
+
+
+useEffect(() => {
+  if (isReading && selected) {
+    const raw = selected.content || selected.description || '';
+    const paginated = paginateText(raw, PAGE_CHARS);
+
+    setPages(paginated);
+    setReadingPage(0);          // всегда начинаем с первой страницы
+  }
+}, [isReading, selected]);      // зависимость от `selected` важна: после fetch он изменится
+
+
+  /* ---------- keyboard navigation ---------- */
+  const nextPage = useCallback(() =>
+    setReadingPage(p => Math.min(p + 1, pages.length - 1)), [pages.length]);
+
+  const prevPage = useCallback(() =>
+    setReadingPage(p => Math.max(p - 1, 0)), []);
+
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
+    if (!isReading) return;
 
-    const handleScroll = () => {
-      if (container.scrollTop + container.clientHeight >= container.scrollHeight - 50) {
-        setShowCount((prev) => Math.min(prev + 6, filtered.length));
+    const onKey = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'Escape':
+          setIsReading(false);
+          break;
+        case 'ArrowRight':
+          nextPage();
+          break;
+        case 'ArrowLeft':
+          prevPage();
+          break;
+        default:
+          break;
       }
     };
 
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, [filtered.length]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isReading, nextPage, prevPage]);
 
-  // Пересоздаём страницы при открытии читалки (или при смене selected)
+  /* ---------- persistence of page number per book ---------- */
   useEffect(() => {
-    if (isReading && selected) {
-      const raw = selected.content || selected.description || "";
-      const p = paginateText(raw, 1000); // около 1000 символов на страницу — можно изменить
-      setPages(p);
-      setReadingPage(0);
+    if (selected) {
+      localStorage.setItem(`reading-page-${selected.id}`, String(readingPage));
     }
-  }, [isReading, selected]);
+  }, [readingPage, selected]);
 
-  // Управление клавишами в читалке
+  /* ---------- actions ---------- */
+  const loadMore = () =>
+    setShowCount(prev => Math.min(prev + LOAD_MORE_STEP, filtered.length));
+
+  const openReader = useCallback(() => {
+    if (selected) setIsReading(true);
+  }, [selected]);
+
+  /* ---------- reset showCount when filter/search changes ---------- */
   useEffect(() => {
-    if (!isReading) return;
-    function onKey(e) {
-      if (e.key === "Escape") {
-        setIsReading(false);
-      } else if (e.key === "ArrowRight") {
-        setReadingPage((p) => Math.min(p + 1, pages.length - 1));
-      } else if (e.key === "ArrowLeft") {
-        setReadingPage((p) => Math.max(p - 1, 0));
-      }
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isReading, pages.length]);
+    setShowCount(LOAD_MORE_STEP);
+  }, [query, genreFilter]);
 
-  // Список жанров
-  const genres = useMemo(() => {
-    const setG = new Set();
-    books.forEach((b) => b.genres.forEach((g) => setG.add(g)));
-    return ["Все", ...Array.from(setG)];
-  }, [books]);
-
-  // Рекомендации (твой реальный код можно тут оставить)
-  const recommendations = useMemo(() => {
-    if (!selected) return [];
-    // если у тебя есть computeRecommendations выше — используй её
-    // я оставляю заглушку: будут книги с ближайшими id (настроить можно)
-    const recs = books.filter((b) => b.id !== selected.id).slice(0, 4);
-    return recs;
-  }, [selected, books]);
-
-  // Reader actions
-  const openReader = () => {
-    if (!selected) return;
-    setIsReading(true);
-  };
-  const closeReader = () => {
-    setIsReading(false);
-  };
-  const nextPage = () => setReadingPage((p) => Math.min(p + 1, pages.length - 1));
-  const prevPage = () => setReadingPage((p) => Math.max(p - 1, 0));
-
+  /* ---------- UI rendering ---------- */
   return (
     <div className="app-container">
+      {/* Header */}
       <header className="header">
-        <h1 className="header-title">Books — интерфейс и рекомендации</h1>
+        <h1>Books — интерфейс и рекомендации</h1>
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
-      <div className="main-grid">
-        <section>
-          <div className="filters">
-            <label>Жанр:</label>
-            <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)}>
-              {genres.map((g) => (
-                <option key={g}>{g}</option>
-              ))}
-            </select>
+      {/* Main layout */}
+      <main className="main-grid">
+        <BookList
+          books={visibleBooks}
+          visibleCount={showCount}
+          onSelect={setSelected}
+          loadMore={loadMore}
+          genreFilter={genreFilter}
+          setGenreFilter={setGenreFilter}
+          genres={genres}
+        />
 
-            <div style={{ marginLeft: "auto", opacity: 0.7 }}>Найдено: {filtered.length}</div>
-          </div>
+        <Sidebar
+          selected={selected}
+          setSelected={setSelected}
+          recommendations={recommendations}
+          reset={() => setSelected(null)}
+          openReader={openReader}
+        />
+      </main>
 
-          <div className="books-scroll" ref={scrollRef}>
-            <div className="books-grid">
-              {visibleBooks.map((book) => (
-                <BookCard key={book.id} book={book} onSelect={setSelected} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <aside className="sidebar">
-          {selected ? (
-            <>
-              <h2>{selected.title}</h2>
-              <div className="meta">
-                {selected.author} · {selected.year}
-              </div>
-              <div className="description">{selected.description}</div>
-
-              <div className="rec-block">
-                <h3>Рекомендации</h3>
-
-                {recommendations.length === 0 ? (
-                  <p style={{ opacity: 0.7 }}>Нет похожих книг.</p>
-                ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                    {recommendations.map((r) => (
-                      <div key={r.id} className="rec-item" onClick={() => setSelected(r)}>
-                        <div className="rec-item-title">{r.title}</div>
-                        <div className="rec-item-author">{r.author}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                <button className="reset-btn" onClick={() => setSelected(null)}>
-                  Сбросить
-                </button>
-
-                <button
-                  className="reset-btn"
-                  style={{ background: "#222", border: "1px solid #555" }}
-                  onClick={openReader}
-                >
-                  Читать
-                </button>
-              </div>
-            </>
-          ) : (
-            <div style={{ opacity: 0.7, fontSize: "14px" }}>
-              Выберите книгу, чтобы увидеть детали и рекомендации.
-            </div>
-          )}
-        </aside>
-      </div>
-
+      {/* Footer */}
       <footer className="footer">
-        Подсказки: подключите реальное API, добавьте метрики популярности и поведенческие данные.
+        Подсказки: подключите API, добавьте аналитику и рекомендации.
       </footer>
 
-      {/* ===== Reader Modal (не fullscreen, тёмная тема) ===== */}
+      {/* Reader modal – only when a book is opened for reading */}
       {isReading && selected && (
-        <div className="reader-overlay" onClick={closeReader}>
-          <div
-            className="reader-modal black-theme"
-            onClick={(e) => e.stopPropagation()} // не закрываем при клике по модалке
-            role="dialog"
-            aria-modal="true"
-          >
-            <button className="reader-close" onClick={closeReader} aria-label="Закрыть">
-              ✕
-            </button>
-
-            <div className="reader-header">
-              <div>
-                <strong>{selected.title}</strong>
-                <div style={{ opacity: 0.8, fontSize: 13 }}>
-                  {selected.author} · {selected.year}
-                </div>
-              </div>
-            </div>
-
-            <div className="reader-content">
-              {pages.length > 0 ? (
-                <div className="reader-page">{pages[readingPage]}</div>
-              ) : (
-                <div className="reader-page">Нет содержания для чтения.</div>
-              )}
-            </div>
-
-            <div className="reader-controls">
-              <button onClick={prevPage} disabled={readingPage === 0}>
-                ← Предыдущая
-              </button>
-
-              <div className="reader-progress">
-                Стр. {Math.min(readingPage + 1, pages.length)} / {pages.length || 1}
-              </div>
-
-              <button onClick={nextPage} disabled={readingPage >= pages.length - 1}>
-                Следующая →
-              </button>
-            </div>
-          </div>
-        </div>
+        <ReaderModal
+          book={selected}
+          pages={pages}
+          pageIndex={readingPage}
+          onClose={() => setIsReading(false)}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
       )}
     </div>
   );
