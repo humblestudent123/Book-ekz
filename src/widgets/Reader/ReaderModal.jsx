@@ -62,7 +62,7 @@ export default function ReaderModal({
               onKeyDown={handleKeyDown} // Enter для перехода
               style={{ width: 50, margin: '0 5px' }}
             />
-            / {pages.length}
+            - {pages.length}
           </div>
 
           <button onClick={nextPage} disabled={pageIndex >= pages.length - 1}>Следующая →</button>
