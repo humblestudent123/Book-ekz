@@ -206,7 +206,7 @@ const recommendations = useMemo(() => {
 
       {/* Footer */}
       <footer className="footer">
-        Подсказки: подключите API, добавьте аналитику и рекомендации.
+        приложение находится в BETA любые баги и не точности возможны
       </footer>
 
       {/* Reader modal */}
