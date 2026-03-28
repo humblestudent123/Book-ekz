@@ -73,13 +73,21 @@ export default function App() {
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
-  /* ---------- recommendations ---------- */
-  const recommendations = useMemo(() => {
-    if (!selected) return [];
-    return books
-      .filter(b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g)))
-      .slice(0, 4);
-  }, [selected, books]);
+/* ---------- recommendations ---------- */
+const recommendations = useMemo(() => {
+  if (!selected) {
+    // На главной странице — первые 4 книги
+    return books.slice(0, 4);
+  }
+
+  // Для выбранной книги — книги с пересекающимися жанрами
+  const recs = books.filter(
+    b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g))
+  );
+
+  // Если похожих нет — показываем 4 любые книги, кроме выбранной
+  return recs.length > 0 ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
+}, [selected, books]);
 
   /* ---------- reader initialization ---------- */
   useEffect(() => {
