@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import '../Reader/ReaderModal.css'
 
 export default function ReaderModal({
   book, pages, pageIndex, onClose, nextPage, prevPage, goToPage

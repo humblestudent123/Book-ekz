@@ -38,3 +38,26 @@
   gap: 10px;
   padding: 10px;
 }
+
+
+
+
+
+
+
+
+.reader-page-input {
+  width: 60px;               /* ширина под номер страницы */
+  background-color: #1b1b1b; /* чёрный фон */
+  color: #ffffff;            /* белый текст */
+  border: 1px solid #444;    /* тёмная рамка */
+  border-radius: 4px;        /* скругление */
+  text-align: center;        /* цифры по центру */
+  font-size: 14px;
+  padding: 4px 6px;
+}
+
+.reader-page-input:focus {
+  outline: 2px solid #4caf50; /* зелёная подсветка при фокусе */
+  outline-offset: 2px;
+}
