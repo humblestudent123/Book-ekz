@@ -59,3 +59,47 @@
   opacity: 0.5;
   cursor: default;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Кастомный скроллбар для цитатника */
+.quotes-list {
+  overflow-y: auto;
+  scrollbar-width: thin;              /* Firefox */
+  scrollbar-color: #fff transparent;  /* Firefox */
+}
+
+/* Chrome, Edge, Safari */
+.quotes-list::-webkit-scrollbar {
+  width: 4px; /* тонкий */
+}
+
+.quotes-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quotes-list::-webkit-scrollbar-thumb {
+  background-color: #ffffff; /* белый */
+  border-radius: 10px;
+}
+
+/* при наведении можно чуть ярче */
+.quotes-list::-webkit-scrollbar-thumb:hover {
+  background-color: #cccccc;
+}

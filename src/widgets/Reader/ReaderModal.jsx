@@ -4,12 +4,22 @@ import '../Reader/ReaderModal.css';
 
 export default function ReaderModal({ book, pages, pageIndex, onClose, nextPage, prevPage, goToPage }) {
   const [inputPage, setInputPage] = useState(pageIndex + 1);
-  const [quotes, setQuotes] = useState({});           // цитаты по книге
   const [showQuotesList, setShowQuotesList] = useState(false); // показывать overlay цитат
   const [selectionText, setSelectionText] = useState('');      // текущий выделенный текст
   const [showAddBtn, setShowAddBtn] = useState(false);         // кнопка добавить цитату
   const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });       // позиция кнопки
   const modalRef = useRef(null);
+  const [quotes, setQuotes] = useState(() => {
+  const saved = localStorage.getItem('quotes');
+  return saved ? JSON.parse(saved) : {};
+  }); // цитаты по книге
+
+
+
+  // автосохранение при изменении
+  useEffect(() => {
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+  }, [quotes]);
 
   // Обновляем input при смене страницы
   useEffect(() => {
@@ -59,20 +69,30 @@ const handleMouseUp = () => {
   setShowAddBtn(true);
 
   setBtnPos({
-    x: rect.right - modalRect.left + 5,
-    y: rect.bottom - modalRect.top + 5
+    x: Math.min(rect.right - modalRect.left + 5, modalRect.width - 40),
+    y: Math.max(rect.bottom - modalRect.top + 5, 10)
   });
-};
+  };
 
-// Добавление цитаты
+
+// Добавление цитаты + отображение даты и времени
+const now = new Date();
+const formatted = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
 const handleAddQuote = () => {
   if (selectionText) {
     setQuotes(prev => ({
       ...prev,
-      [book.id]: [...(prev[book.id] || []), selectionText]
+      [book.id]: [
+        ...(prev[book.id] || []),
+        {
+          text: selectionText,
+          date: formatted
+        }
+      ]
     }));
+
     setShowAddBtn(false);
-    window.getSelection().removeAllRanges(); // убираем выделение
+    window.getSelection().removeAllRanges();
   }
 };
 // Удаление цитаты
@@ -82,7 +102,10 @@ const handleDeleteQuote = (index) => {
     [book.id]: prev[book.id].filter((_, i) => i !== index)
   }));
 };
-
+// Удаление всех цитат
+const clearQuotes = () => {
+  setQuotes({});
+};
 
 
 
@@ -206,28 +229,38 @@ const handleDeleteQuote = (index) => {
       style={{
         padding: '8px',
         borderBottom: '1px solid #333',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 10
+        marginBottom: 6,
       }}
     >
-      <span style={{ fontSize: 14 }}>{q}</span>
+      {/* Дата над цитатой */}
+      {typeof q !== 'string' && q.date && (
+        <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 4 }}>
+          {q.date}
+        </div>
+      )}
 
-      <button
-        onClick={() => handleDeleteQuote(idx)}
-        style={{
-          background: 'transparent',
-          border: '1px solid #555',
-          color: '#ff6b6b',
-          borderRadius: 4,
-          padding: '2px 6px',
-          cursor: 'pointer',
-          fontSize: 12
-        }}
-      >
-        ✕
-      </button>
+      {/* Сам текст цитаты */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 14 }}>
+          {typeof q === 'string' ? q : q.text}
+        </span>
+
+        {/* Кнопка удалить */}
+        <button
+          onClick={() => handleDeleteQuote(idx)}
+          style={{
+            background: 'transparent',
+            border: '1px solid #555',
+            color: '#ff6b6b',
+            borderRadius: 4,
+            padding: '2px 6px',
+            cursor: 'pointer',
+            fontSize: 12
+          }}
+        >
+          ✕
+        </button>
+      </div>
     </div>
   ))
 ) : (
