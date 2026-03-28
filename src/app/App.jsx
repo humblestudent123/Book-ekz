@@ -1,12 +1,12 @@
 // src/App.jsx
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 
-import SearchBar   from './components/SearchBar';
-import BookList    from './components/BookList';
-import Sidebar     from './components/Sidebar';
-import ReaderModal from './components/ReaderModal';
+import SearchBar   from '../components/SearchBar';
+import Sidebar     from '../components/Sidebar';
+import BookList    from '../widgets/BookList/BookList';
+import ReaderModal from '../widgets/Reader/ReaderModal';
 
-import { SAMPLE_BOOKS } from './data';
+import { SAMPLE_BOOKS } from '../data';
 
 /* ---------- constants ---------- */
 const LOAD_MORE_STEP = 6;
@@ -117,7 +117,7 @@ useEffect(() => {
   useEffect(() => {
     if (!isReading) return;
 
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e) => {
       switch (e.key) {
         case 'Escape':
           setIsReading(false);

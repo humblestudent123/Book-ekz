@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import BookCard from './BookCard';
+import BookCard from '../../entities/book/BookCard';
 
 export default function BookList({ books, visibleCount, onSelect, loadMore }) {
   const scrollRef = useRef(null);
@@ -33,3 +33,4 @@ export default function BookList({ books, visibleCount, onSelect, loadMore }) {
     </section>
   );
 }
+
