@@ -16,28 +16,45 @@ export default function ReaderModal({ book, pages, pageIndex, onClose, nextPage,
   }, [pageIndex]);
 
   // Отслеживаем выделение текста
-  const handleMouseUp = () => {
-    const selection = window.getSelection().toString().trim();
-    if (selection) {
-      setSelectionText(selection);
-      setShowAddBtn(true);
-      const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
-      setBtnPos({ x: rect.right + window.pageXOffset, y: rect.top + window.pageYOffset });
-    } else {
-      setShowAddBtn(false);
-    }
-  };
+// Следим за выделением текста
+const handleMouseUp = () => {
+  const selection = window.getSelection().toString().trim();
+  if (selection) {
+    setSelectionText(selection);
+    setShowAddBtn(true);
 
-  const handleAddQuote = () => {
-    if (selectionText) {
-      setQuotes(prev => ({
-        ...prev,
-        [book.id]: [...(prev[book.id] || []), selectionText]
-      }));
-      setShowAddBtn(false);
-      window.getSelection().removeAllRanges();
-    }
-  };
+    // получаем позицию выделенного текста
+    const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+    setBtnPos({ 
+      x: rect.left + window.scrollX, 
+      y: rect.top + window.scrollY - 30 // чуть выше текста
+    });
+  } else {
+    setShowAddBtn(false);
+  }
+};
+
+// Добавление цитаты
+const handleAddQuote = () => {
+  if (selectionText) {
+    setQuotes(prev => ({
+      ...prev,
+      [book.id]: [...(prev[book.id] || []), selectionText]
+    }));
+    setShowAddBtn(false);
+    window.getSelection().removeAllRanges(); // убираем выделение
+  }
+};
+// Удаление цитаты
+const handleDeleteQuote = (index) => {
+  setQuotes(prev => ({
+    ...prev,
+    [book.id]: prev[book.id].filter((_, i) => i !== index)
+  }));
+};
+
+
+
 
   const handleInputChange = (e) => setInputPage(e.target.value);
 
@@ -150,15 +167,40 @@ export default function ReaderModal({ book, pages, pageIndex, onClose, nextPage,
               onClick={(e) => e.stopPropagation()}
             >
               <h3>Цитаты</h3>
-              {quotes[book.id]?.length ? (
-                quotes[book.id].map((q, idx) => (
-                  <p key={idx} style={{ padding: '5px 0', borderBottom: '1px solid #333' }}>
-                    {q}
-                  </p>
-                ))
-              ) : (
-                <p>Нет цитат</p>
-              )}
+{quotes[book.id]?.length ? (
+  quotes[book.id].map((q, idx) => (
+    <div
+      key={idx}
+      style={{
+        padding: '8px',
+        borderBottom: '1px solid #333',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 10
+      }}
+    >
+      <span style={{ fontSize: 14 }}>{q}</span>
+
+      <button
+        onClick={() => handleDeleteQuote(idx)}
+        style={{
+          background: 'transparent',
+          border: '1px solid #555',
+          color: '#ff6b6b',
+          borderRadius: 4,
+          padding: '2px 6px',
+          cursor: 'pointer',
+          fontSize: 12
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  ))
+) : (
+  <p>Нет цитат</p>
+)}
             </div>
           </div>
         )}
