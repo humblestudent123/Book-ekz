@@ -108,6 +108,18 @@ export default function App() {
     }));
   }, [selected]);
 
+  const goToPage = useCallback(
+  (pageNum) => {
+    if (!selected) return;
+    setReadingPages(prev => ({
+      ...prev,
+      [selected.id]: Math.min(Math.max(pageNum, 0), pages.length - 1),
+    }));
+  },
+  [selected, pages.length]
+);
+
+
   useEffect(() => {
     if (!isReading) return;
     const onKey = (e) => {
@@ -198,6 +210,7 @@ export default function App() {
           onClose={() => setIsReading(false)}
           nextPage={nextPage}
           prevPage={prevPage}
+          goToPage={goToPage}
         />
       )}
     </div>
