@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import '../Reader/ReaderModal.css';
 
@@ -9,29 +9,59 @@ export default function ReaderModal({ book, pages, pageIndex, onClose, nextPage,
   const [selectionText, setSelectionText] = useState('');      // текущий выделенный текст
   const [showAddBtn, setShowAddBtn] = useState(false);         // кнопка добавить цитату
   const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });       // позиция кнопки
+  const modalRef = useRef(null);
 
   // Обновляем input при смене страницы
   useEffect(() => {
     setInputPage(pageIndex + 1);
   }, [pageIndex]);
 
+  useEffect(() => {
+  const handleSelectionChange = () => {
+    const selection = window.getSelection();
+    const text = selection?.toString().trim();
+
+    if (!text) {
+      setShowAddBtn(false);
+    }
+  };
+
+  document.addEventListener('selectionchange', handleSelectionChange);
+
+  return () => {
+    document.removeEventListener('selectionchange', handleSelectionChange);
+  };
+}, []);
+
+
   // Отслеживаем выделение текста
 // Следим за выделением текста
 const handleMouseUp = () => {
-  const selection = window.getSelection().toString().trim();
-  if (selection) {
-    setSelectionText(selection);
-    setShowAddBtn(true);
+  const selection = window.getSelection();
 
-    // получаем позицию выделенного текста
-    const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
-    setBtnPos({ 
-      x: rect.left + window.scrollX, 
-      y: rect.top + window.scrollY - 30 // чуть выше текста
-    });
-  } else {
+  if (!selection || selection.rangeCount === 0) {
     setShowAddBtn(false);
+    return;
   }
+
+  const text = selection.toString().trim();
+
+  if (!text) {
+    setShowAddBtn(false);
+    return;
+  }
+
+  const range = selection.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  const modalRect = modalRef.current.getBoundingClientRect();
+
+  setSelectionText(text);
+  setShowAddBtn(true);
+
+  setBtnPos({
+    x: rect.right - modalRect.left + 5,
+    y: rect.bottom - modalRect.top + 5
+  });
 };
 
 // Добавление цитаты
@@ -70,11 +100,10 @@ const handleDeleteQuote = (index) => {
   return (
     <div className="reader-overlay" onClick={onClose}>
       <div
+        ref={modalRef}
         className="reader-modal black-theme"
         onClick={(e) => e.stopPropagation()}
         onMouseUp={handleMouseUp}
-        role="dialog"
-        aria-modal="true"
       >
         {/* Кнопка закрытия */}
         <button className="reader-close" onClick={onClose}>✕</button>
@@ -102,6 +131,9 @@ const handleDeleteQuote = (index) => {
             </button>
           </div>
         </div>
+
+                
+
 
         {/* Контент книги */}
         <div className="reader-content">
@@ -206,25 +238,29 @@ const handleDeleteQuote = (index) => {
         )}
 
         {/* Кнопка добавить цитату рядом с выделением */}
-        {showAddBtn && (
-          <button
-            onClick={handleAddQuote}
-            style={{
-              position: 'absolute',
-              left: btnPos.x + 5,
-              top: btnPos.y - 25,
-              zIndex: 1400,
-              padding: '4px 8px',
-              background: '#4caf50',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
-          >
-            Добавить цитату
-          </button>
-        )}
+  {showAddBtn && (
+    <button
+      onClick={handleAddQuote}
+      
+      style={{
+        position: 'absolute',
+        left: btnPos.x,
+        top: btnPos.y,
+        zIndex: 1400,
+        padding: '4px 8px',
+        background: '#ffffffff',
+        color: '#000000ff',
+        border: 'none',
+        borderRadius: 4,
+        cursor: 'pointer',
+        fontSize: 12,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      +
+    </button>
+    
+  )}
       </div>
     </div>
   );
