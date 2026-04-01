@@ -1,28 +1,51 @@
 [
   {
-    "id": 1775039479926,
-    "title": "100LET",
-    "author": "Garcia",
+    "id": "ezco0x",
+    "title": "Дж. Р. Р. Толкин",
+    "author": "Властелин колец",
     "genres": [
-      "фантастика",
-      "экшен"
+      "фантастика"
     ],
     "tags": [
       "круто",
-      "классно"
+      "класно"
     ],
-    "contentUrl": "Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+    "contentUrl": "books/Дж. Р. Р. Толкин — Властелин колец.txt"
   },
   {
-    "id": 1775039500108,
-    "title": "100 let",
-    "author": "sadsad",
+    "id": null,
+    "title": "Властелин колец",
+    "author": "Дж. Р. Р. Толкин",
     "genres": [
-      "asdad"
+      "круто",
+      "класно"
     ],
     "tags": [
-      "asdasd"
+      "плохо",
+      "некруто."
     ],
-    "contentUrl": "books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+    "contentUrl": "books\\Дж. Р. Р. Толкин — Властелин колец.txt"
+  },
+  {
+    "id": null,
+    "title": "11",
+    "author": "111",
+    "genres": [
+      "111"
+    ],
+    "tags": [],
+    "contentUrl": "Book-ekz\\public\\books\\Дж. Р. Р. Толкин — Властелин колец.txt"
+  },
+  {
+    "id": null,
+    "title": "фывыфвв",
+    "author": "фыфыв",
+    "genres": [
+      "фывфы"
+    ],
+    "tags": [
+      "фыфыв"
+    ],
+    "contentUrl": "books\\Дж. Р. Р. Толкин — Властелин колец.txt"
   }
 ]
