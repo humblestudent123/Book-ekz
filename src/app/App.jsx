@@ -5,12 +5,18 @@ import Sidebar from '../components/Sidebar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import AdminPanel from './pages/AdminPanel'; 
-import { fetchBooks } from '../api/booksApi';
+import { getBooks, addBook, deleteBook } from '../api/booksApi';
 
 /* ---------- constants ---------- */
 const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000; // approx chars per page
 const ALL_GENRE = 'Все';
+
+
+
+
+
+
 
 /* ---------- utils ---------- */
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
@@ -53,10 +59,24 @@ export default function App() {
 
   const readingPage = selected?.id ? readingPages[selected.id] || 0 : 0;
 
-  /* ---------- fetch books ---------- */
+
+  // Локальная функция для получения книг
   useEffect(() => {
-    fetchBooks().then(setBooks).catch(err => console.error(err));
+    const fetchBooks = async () => {
+      try {
+        const data = await getBooks();
+        setBooks(Array.isArray(data) ? data : []); // защита от undefined
+      } catch (err) {
+        console.error(err);
+        setBooks([]);
+      }
+    };
+
+    fetchBooks();
   }, []);
+  
+
+  
 
   /* ---------- handle book added from admin ---------- */
   const handleBookAdded = useCallback(
@@ -67,10 +87,10 @@ export default function App() {
   /* ---------- filtered & visible books ---------- */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return books.filter(
+    return (books || []).filter(
       b =>
-        (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
-        (!q || `${b.title} ${b.author} ${b.tags?.join(' ')}`.toLowerCase().includes(q))
+        (genreFilter === ALL_GENRE || (b.genres || []).includes(genreFilter)) &&
+        (!q || `${b.title} ${b.author} ${(b.tags || []).join(' ')}`.toLowerCase().includes(q))
     );
   }, [books, query, genreFilter]);
 
@@ -79,7 +99,7 @@ export default function App() {
   /* ---------- genres ---------- */
   const genres = useMemo(() => {
     const setG = new Set();
-    books.forEach(b => b.genres.forEach(g => setG.add(g)));
+    books.forEach(b => (b.genres || []).forEach(g => setG.add(g)));
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
@@ -87,7 +107,9 @@ export default function App() {
   const recommendations = useMemo(() => {
     if (!selected) return books.slice(0, 4);
     const recs = books.filter(
-      b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g))
+      b =>
+        b.id !== selected.id &&
+        (b.genres || []).some(g => (selected.genres || []).includes(g))
     );
     return recs.length > 0 ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
   }, [selected, books]);
@@ -108,7 +130,7 @@ export default function App() {
     if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [selected.id]: Math.min((prev[selected.id] || 0) + 1, pages.length - 1),
+      [selected.id]: Math.min((prev[selected.id] || 0) + 1, Math.max(pages.length - 1, 0)),
     }));
   }, [selected, pages]);
 
@@ -152,10 +174,10 @@ export default function App() {
 
   /* ---------- open reader ---------- */
   const openReader = useCallback(() => {
-    if (!selected) return;
+    if (!selected || !selected.contentUrl) return;
 
     const loadBook = content => {
-      const paginated = paginateText(content, PAGE_CHARS);
+      const paginated = paginateText(content || '', PAGE_CHARS);
       const savedPage = readingPages[selected.id] ?? 0;
       setPages(paginated);
       setReadingPages(prev => ({ ...prev, [selected.id]: savedPage }));

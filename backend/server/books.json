@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1775039479926,
+    "title": "100LET",
+    "author": "Garcia",
+    "genres": [
+      "фантастика",
+      "экшен"
+    ],
+    "tags": [
+      "круто",
+      "классно"
+    ],
+    "contentUrl": "Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+  },
+  {
+    "id": 1775039500108,
+    "title": "100 let",
+    "author": "sadsad",
+    "genres": [
+      "asdad"
+    ],
+    "tags": [
+      "asdasd"
+    ],
+    "contentUrl": "books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+  }
+]

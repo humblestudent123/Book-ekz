@@ -1,50 +1,87 @@
-// src/pages/AdminPanel.jsx
 import React, { useState } from 'react';
-import { fetchBooks, addBook } from '../../api/booksApi';
+import { addBook } from '../../api/booksApi';
 
 export default function AdminPanel({ onBookAdded }) {
-  const [newBook, setNewBook] = useState({
-    title: '',
-    author: '',
-    description: '',
-    image: '',
-    categories: []
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewBook(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCategoriesChange = (e) => {
-    const value = e.target.value;
-    setNewBook(prev => ({ ...prev, categories: value.split(',').map(c => c.trim()) }));
-  };
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [genres, setGenres] = useState('');
+  const [tags, setTags] = useState('');
+  const [contentUrl, setContentUrl] = useState(''); // <-- теперь можно вводить URL
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newBook.title) return alert('Введите название книги');
+    setLoading(true);
+    setError('');
+
+    const book = {
+      title,
+      author,
+      genres: genres ? genres.split(',').map(g => g.trim()) : [],
+      tags: tags ? tags.split(',').map(t => t.trim()) : [],
+      contentUrl
+    };
+
+    console.log('Отправляем на сервер:', book);
+
     try {
-      const added = await addBook(newBook);
-      onBookAdded(added); // уведомляем родителя, чтобы добавить книгу в список
-      setNewBook({ title: '', author: '', description: '', image: '', categories: [] });
-      alert('Книга добавлена!');
+      const newBook = await addBook(book);
+      onBookAdded(newBook); // обновляем состояние в App.jsx
+      setTitle('');
+      setAuthor('');
+      setGenres('');
+      setTags('');
+      setContentUrl(''); // очищаем поле после добавления
     } catch (err) {
-      console.error('Ошибка при добавлении книги', err);
+      console.error('Ошибка добавления книги:', err.response?.data || err.message);
+      setError('Не удалось добавить книгу');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="admin-panel">
-      <h2>Админ-панель — добавить книгу</h2>
+    <div>
+      <h2>Добавить новую книгу</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="title" placeholder="Название" value={newBook.title} onChange={handleChange} required />
-        <input type="text" name="author" placeholder="Автор" value={newBook.author} onChange={handleChange} />
-        <input type="text" name="description" placeholder="Описание" value={newBook.description} onChange={handleChange} />
-        <input type="text" name="image" placeholder="URL обложки" value={newBook.image} onChange={handleChange} />
-        <input type="text" name="categories" placeholder="Категории (через запятую)" value={newBook.categories.join(', ')} onChange={handleCategoriesChange} />
-        <button type="submit">Добавить книгу</button>
+        <input
+          type="text"
+          placeholder="Название"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Автор"
+          value={author}
+          onChange={e => setAuthor(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Жанры через запятую"
+          value={genres}
+          onChange={e => setGenres(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Теги через запятую"
+          value={tags}
+          onChange={e => setTags(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="URL контента книги"
+          value={contentUrl}
+          onChange={e => setContentUrl(e.target.value)}
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Добавление...' : 'Добавить книгу'}
+        </button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
