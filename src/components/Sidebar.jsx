@@ -6,7 +6,7 @@ export default function Sidebar({
   setSelected,
   recommendations,
   reset,
-  openReader   // <-- новый проп
+  openReader 
 }) {
   if (!selected) return (
     <aside className="sidebar">
@@ -62,5 +62,5 @@ Sidebar.propTypes = {
   setSelected: PropTypes.func.isRequired,
   recommendations: PropTypes.array.isRequired,
   reset: PropTypes.func.isRequired,
-  openReader: PropTypes.func.isRequired, // <-- добавляем
+  openReader: PropTypes.func.isRequired,
 };

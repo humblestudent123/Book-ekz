@@ -1,18 +1,16 @@
-// src/App.jsx
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 
-import SearchBar   from '../components/SearchBar';
-import Sidebar     from '../components/Sidebar';
-import BookList    from '../widgets/BookList/BookList';
+import SearchBar from '../components/SearchBar';
+import Sidebar from '../components/Sidebar';
+import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
+import AdminPanel from './pages/AdminPanel'; 
 import { fetchBooks } from '../api/booksApi';
-
-import { SAMPLE_BOOKS } from '../data';
 
 /* ---------- constants ---------- */
 const LOAD_MORE_STEP = 6;
-const PAGE_CHARS     = 1000; // approximate characters per page
-const ALL_GENRE      = 'Все'; // “All” filter label
+const PAGE_CHARS = 1000; // approx chars per page
+const ALL_GENRE = 'Все';
 
 /* ---------- utils ---------- */
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
@@ -21,9 +19,10 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   const pages = [];
   let current = '';
 
-  for (let word of words) {
-    if ((current + ' ' + word).length <= approxCharsPerPage || current.length === 0) {
-      current = `${current} ${word}`.trim();
+  for (const word of words) {
+    const candidate = `${current} ${word}`.trim();
+    if (candidate.length <= approxCharsPerPage || !current) {
+      current = candidate;
     } else {
       pages.push(current);
       current = word;
@@ -36,32 +35,42 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
 
 /* ---------- App component ---------- */
 export default function App() {
-  /* ---------- state ---------- */
-  const books = SAMPLE_BOOKS;
-
+  const [books, setBooks] = useState([]);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(null);
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
   const [showCount, setShowCount] = useState(LOAD_MORE_STEP);
 
+  const [isAdminView, setIsAdminView] = useState(false);
+
   /* ---------- reader state ---------- */
   const [isReading, setIsReading] = useState(false);
   const [pages, setPages] = useState([]);
   const [readingPages, setReadingPages] = useState(() => {
-    // Восстанавливаем все сохраненные страницы книг из localStorage
     const saved = localStorage.getItem('reading-pages');
     return saved ? JSON.parse(saved) : {};
   });
 
-  // Текущая страница выбранной книги
-  const readingPage = selected ? readingPages[selected.id] || 0 : 0;
+  const readingPage = selected?.id ? readingPages[selected.id] || 0 : 0;
 
-  /* ---------- filtered books & visible slice ---------- */
+  /* ---------- fetch books ---------- */
+  useEffect(() => {
+    fetchBooks().then(setBooks).catch(err => console.error(err));
+  }, []);
+
+  /* ---------- handle book added from admin ---------- */
+  const handleBookAdded = useCallback(
+    book => setBooks(prev => [...prev, book]),
+    []
+  );
+
+  /* ---------- filtered & visible books ---------- */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return books.filter(b =>
-      (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
-      (!q || `${b.title} ${b.author} ${b.tags.join(' ')}`.toLowerCase().includes(q))
+    return books.filter(
+      b =>
+        (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
+        (!q || `${b.title} ${b.author} ${b.tags?.join(' ')}`.toLowerCase().includes(q))
     );
   }, [books, query, genreFilter]);
 
@@ -74,29 +83,23 @@ export default function App() {
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
-/* ---------- recommendations ---------- */
-const recommendations = useMemo(() => {
-  if (!selected) {
-    // На главной странице — первые 4 книги
-    return books.slice(0, 4);
-  }
-
-  // Для выбранной книги — книги с пересекающимися жанрами
-  const recs = books.filter(
-    b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g))
-  );
-
-  // Если похожих нет — показываем 4 любые книги, кроме выбранной
-  return recs.length > 0 ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
-}, [selected, books]);
+  /* ---------- recommendations ---------- */
+  const recommendations = useMemo(() => {
+    if (!selected) return books.slice(0, 4);
+    const recs = books.filter(
+      b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g))
+    );
+    return recs.length > 0 ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
+  }, [selected, books]);
 
   /* ---------- reader initialization ---------- */
   useEffect(() => {
-    if (isReading && selected && !selected.content) {
+    if (!isReading || !selected || selected.content) return;
+    if (selected.contentUrl) {
       fetch(selected.contentUrl)
         .then(r => r.text())
         .then(text => setSelected(prev => ({ ...prev, content: text })))
-        .catch(err => console.error('Не удалось загрузить текст', err));
+        .catch(err => console.error(err));
     }
   }, [isReading, selected]);
 
@@ -105,37 +108,42 @@ const recommendations = useMemo(() => {
     if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [selected.id]: Math.min((prev[selected.id] || 0) + 1, pages.length - 1)
+      [selected.id]: Math.min((prev[selected.id] || 0) + 1, pages.length - 1),
     }));
-  }, [selected, pages.length]);
+  }, [selected, pages]);
 
   const prevPage = useCallback(() => {
     if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [selected.id]: Math.max((prev[selected.id] || 0) - 1, 0)
+      [selected.id]: Math.max((prev[selected.id] || 0) - 1, 0),
     }));
   }, [selected]);
 
   const goToPage = useCallback(
-  (pageNum) => {
-    if (!selected) return;
-    setReadingPages(prev => ({
-      ...prev,
-      [selected.id]: Math.min(Math.max(pageNum, 0), pages.length - 1),
-    }));
-  },
-  [selected, pages.length]
-);
-
+    pageNum => {
+      if (!selected) return;
+      setReadingPages(prev => ({
+        ...prev,
+        [selected.id]: Math.min(Math.max(pageNum, 0), pages.length - 1),
+      }));
+    },
+    [selected, pages]
+  );
 
   useEffect(() => {
     if (!isReading) return;
-    const onKey = (e) => {
+    const onKey = e => {
       switch (e.key) {
-        case 'Escape': setIsReading(false); break;
-        case 'ArrowRight': nextPage(); break;
-        case 'ArrowLeft': prevPage(); break;
+        case 'Escape':
+          setIsReading(false);
+          break;
+        case 'ArrowRight':
+          nextPage();
+          break;
+        case 'ArrowLeft':
+          prevPage();
+          break;
       }
     };
     window.addEventListener('keydown', onKey);
@@ -146,46 +154,55 @@ const recommendations = useMemo(() => {
   const openReader = useCallback(() => {
     if (!selected) return;
 
-    const loadBook = (content) => {
+    const loadBook = content => {
       const paginated = paginateText(content, PAGE_CHARS);
-      const savedPage = readingPages[selected.id] || 0;
-
+      const savedPage = readingPages[selected.id] ?? 0;
       setPages(paginated);
       setReadingPages(prev => ({ ...prev, [selected.id]: savedPage }));
       setIsReading(true);
     };
 
-    if (selected.content) {
-      loadBook(selected.content);
-    } else {
+    if (selected.content) loadBook(selected.content);
+    else if (selected.contentUrl)
       fetch(selected.contentUrl)
         .then(r => r.text())
         .then(text => {
           setSelected(prev => ({ ...prev, content: text }));
           loadBook(text);
         })
-        .catch(err => console.error('Не удалось загрузить текст', err));
-    }
+        .catch(err => console.error(err));
   }, [selected, readingPages]);
 
-  /* ---------- load more books ---------- */
   const loadMore = () => setShowCount(prev => Math.min(prev + LOAD_MORE_STEP, filtered.length));
 
-  /* ---------- persist readingPages to localStorage ---------- */
   useEffect(() => {
     localStorage.setItem('reading-pages', JSON.stringify(readingPages));
   }, [readingPages]);
 
-  /* ---------- UI rendering ---------- */
+  /* ---------- admin view ---------- */
+  if (isAdminView) {
+    return (
+      <div className="app-container">
+        <header className="header">
+          <h1>ReadNext - Admin</h1>
+          <button onClick={() => setIsAdminView(false)}>Вернуться на главную</button>
+        </header>
+        <main>
+          <AdminPanel onBookAdded={handleBookAdded} />
+        </main>
+      </div>
+    );
+  }
+
+  /* ---------- normal UI ---------- */
   return (
     <div className="app-container">
-      {/* Header */}
       <header className="header">
-        <h1 id='h1'>ReadNext</h1>
+        <h1>ReadNext</h1>
         <SearchBar query={query} setQuery={setQuery} />
+        <button onClick={() => setIsAdminView(true)}>Перейти в админку</button>
       </header>
 
-      {/* Main layout */}
       <main className="main-grid">
         <BookList
           books={visibleBooks}
@@ -205,12 +222,6 @@ const recommendations = useMemo(() => {
         />
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
-        приложение находится в BETA любые баги и не точности возможны
-      </footer>
-
-      {/* Reader modal */}
       {isReading && selected && (
         <ReaderModal
           book={selected}
@@ -222,6 +233,10 @@ const recommendations = useMemo(() => {
           goToPage={goToPage}
         />
       )}
+
+      <footer className="footer">
+        приложение находится в BETA, баги и неточности возможны
+      </footer>
     </div>
   );
 }
