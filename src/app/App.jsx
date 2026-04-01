@@ -5,6 +5,7 @@ import SearchBar   from '../components/SearchBar';
 import Sidebar     from '../components/Sidebar';
 import BookList    from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
+import { fetchBooks } from '../api/booksApi';
 
 import { SAMPLE_BOOKS } from '../data';
 
