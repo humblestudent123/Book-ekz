@@ -1,17 +1,15 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import './App.scss'; // <--- обязательно подключаем стили
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchBar from '../components/SearchBar';
 import Sidebar from '../components/Sidebar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import { SAMPLE_BOOKS } from '../data';
+import '../App.css';
 
-/* constants */
 const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
 
-/* utils */
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
   const words = text.split(/\s+/);
@@ -29,15 +27,12 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   return pages.length ? pages : [text];
 };
 
-/* App component */
-export default function App() {
+export default function Library() {
   const books = SAMPLE_BOOKS;
-
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(null);
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
   const [showCount, setShowCount] = useState(LOAD_MORE_STEP);
-
   const [isReading, setIsReading] = useState(false);
   const [pages, setPages] = useState([]);
   const [readingPages, setReadingPages] = useState(() => {
@@ -45,14 +40,13 @@ export default function App() {
     return saved ? JSON.parse(saved) : {};
   });
 
-  const readingPage = selected ? readingPages[selected.id] || 0 : 0;
+  const readingPage = selected ? (readingPages[selected.id] ?? 0) : 0;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return books.filter(
-      b =>
-        (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
-        (!q || `${b.title} ${b.author} ${b.tags.join(' ')}`.toLowerCase().includes(q))
+    return books.filter(b =>
+      (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
+      (!q || `${b.title} ${b.author} ${b.tags.join(' ')}`.toLowerCase().includes(q))
     );
   }, [books, query, genreFilter]);
 
@@ -69,14 +63,14 @@ export default function App() {
     const recs = books.filter(
       b => b.id !== selected.id && b.genres.some(g => selected.genres.includes(g))
     );
-    return recs.length ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
+    return recs.length > 0 ? recs : books.filter(b => b.id !== selected.id).slice(0, 4);
   }, [selected, books]);
 
   const nextPage = useCallback(() => {
     if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [selected.id]: Math.min((prev[selected.id] || 0) + 1, pages.length - 1),
+      [selected.id]: Math.min((prev[selected.id] ?? 0) + 1, pages.length - 1)
     }));
   }, [selected, pages.length]);
 
@@ -84,25 +78,41 @@ export default function App() {
     if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [selected.id]: Math.max((prev[selected.id] || 0) - 1, 0),
+      [selected.id]: Math.max((prev[selected.id] ?? 0) - 1, 0)
     }));
   }, [selected, pages.length]);
+
+  const goToPage = useCallback((pageNum) => {
+    if (!selected) return;
+    const clamped = Math.min(Math.max(pageNum, 0), pages.length - 1);
+    setReadingPages(prev => ({ ...prev, [selected.id]: clamped }));
+  }, [selected, pages.length]);
+
+  useEffect(() => {
+    if (!isReading) return;
+    const onKey = e => {
+      switch (e.key) {
+        case 'Escape': setIsReading(false); break;
+        case 'ArrowRight': nextPage(); break;
+        case 'ArrowLeft': prevPage(); break;
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isReading, nextPage, prevPage]);
 
   const openReader = useCallback(() => {
     if (!selected) return;
     const { id: bookId, contentUrl } = selected;
-
     const loadBook = content => {
       const paginated = paginateText(content, PAGE_CHARS);
-      const savedPage = readingPages[bookId] || 0;
+      const savedPage = readingPages[bookId] ?? 0;
       setPages(paginated);
       setReadingPages(prev => ({ ...prev, [bookId]: savedPage }));
       setIsReading(true);
     };
-
-    if (selected.content) {
-      loadBook(selected.content);
-    } else {
+    if (selected.content) loadBook(selected.content);
+    else {
       fetch(contentUrl)
         .then(r => r.text())
         .then(text => {
@@ -120,12 +130,11 @@ export default function App() {
   }, [readingPages]);
 
   return (
-    <div className="app-container">
+    <div className="library-container">
       <header className="header">
         <h1>ReadNext</h1>
         <SearchBar query={query} setQuery={setQuery} />
       </header>
-
       <main className="main-grid">
         <BookList
           books={visibleBooks}
@@ -144,9 +153,6 @@ export default function App() {
           openReader={openReader}
         />
       </main>
-
-      <footer className="footer">приложение находится в BETA</footer>
-
       {isReading && selected && (
         <ReaderModal
           book={selected}
@@ -155,6 +161,7 @@ export default function App() {
           onClose={() => setIsReading(false)}
           nextPage={nextPage}
           prevPage={prevPage}
+          goToPage={goToPage}
         />
       )}
     </div>
