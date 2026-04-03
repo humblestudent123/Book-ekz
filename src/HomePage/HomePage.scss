@@ -1,0 +1,70 @@
+.home {
+  .hero {
+    position: relative;
+    text-align: right;
+    color: white;
+
+    .hero-image {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+      text-align: right;
+
+      h1 {
+        font-size: 64px;
+        font-weight: bold;
+      }
+
+      p {
+        font-size: 20px;
+        margin: 10px 0 20px 0;
+      }
+
+      .btn-primary {
+        padding: 12px 30px;
+        background-color: #4f46e5;
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+
+        &:hover {
+          background-color: #3730a3;
+        }
+      }
+    }
+  }
+
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 50px 0;
+    background: #0a0a0a;
+
+    .feature-card {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+      color: #fff;
+
+      h3 {
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #ccc;
+      }
+    }
+  }
+}
