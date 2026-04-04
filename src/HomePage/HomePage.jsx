@@ -7,8 +7,34 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <h1>Добро пожаловать в библиотеку</h1>
-      <button onClick={() => navigate('/library')}>Перейти</button>
+      <div className="home-page__content">
+        <img 
+          className="home-page__logo" 
+          src="../logo.png" 
+          alt="ReadNext" 
+        />
+
+        <div className="home-page__buttons">
+          <button
+            className="home-page__button home-page__button--primary"
+            onClick={() => navigate('/library')}
+          >
+            Перейти
+          </button>
+
+        <div className="home-page__buttons">
+          <a 
+            href="https://github.com/humblestudent123/Book-ekz" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="home-page__button home-page__button--secondary"
+          >
+            GitHub
+          </a>
+        </div>
+
+        </div>
+      </div>
     </div>
   );
 }

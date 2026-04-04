@@ -122,7 +122,7 @@ export default function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <h1>ReadNext</h1>
+        <h1 id="h1">ReadNext</h1>
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
