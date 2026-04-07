@@ -28,8 +28,6 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
 
 export default function Library() {
   const books = SAMPLE_BOOKS;
-
-  const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(null);
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
@@ -41,8 +39,7 @@ export default function Library() {
     return saved ? JSON.parse(saved) : {};
   });
 
-  // Новый state для хранения загруженного контента книг
-  const [bookContents, setBookContents] = useState({});
+  const readingPage = selected ? (readingPages[selected.id] ?? 0) : 0;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -60,68 +57,33 @@ export default function Library() {
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
+  // Рекомендации теперь всегда доступны, но можно задать свои
   const recommendations = useMemo(() => {
-    const recs = currentReadingBook
-      ? books.filter(
-          b =>
-            b.id !== currentReadingBook.id &&
-            b.genres.some(g => currentReadingBook.genres.includes(g))
-        )
-      : books;
-      
-    return recs.length > 0 ? recs.slice(0, 4) : books.slice(0, 4); // fallback
-  }, [books, currentReadingBook]);
-
-  const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
+    // Возвращаем 4 книги из SAMPLE_BOOKS как рекомендации
+    return books.slice(0, 4);
+  }, [books]);
 
   const nextPage = useCallback(() => {
-    if (!currentReadingBook) return;
+    if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [currentReadingBook.id]: Math.min((prev[currentReadingBook.id] ?? 0) + 1, pages.length - 1)
+      [selected.id]: Math.min((prev[selected.id] ?? 0) + 1, pages.length - 1)
     }));
-  }, [currentReadingBook, pages.length]);
+  }, [selected, pages.length]);
 
   const prevPage = useCallback(() => {
-    if (!currentReadingBook) return;
+    if (!selected) return;
     setReadingPages(prev => ({
       ...prev,
-      [currentReadingBook.id]: Math.max((prev[currentReadingBook.id] ?? 0) - 1, 0)
+      [selected.id]: Math.max((prev[selected.id] ?? 0) - 1, 0)
     }));
-  }, [currentReadingBook, pages.length]);
+  }, [selected, pages.length]);
 
   const goToPage = useCallback((pageNum) => {
-    if (!currentReadingBook) return;
+    if (!selected) return;
     const clamped = Math.min(Math.max(pageNum, 0), pages.length - 1);
-    setReadingPages(prev => ({ ...prev, [currentReadingBook.id]: clamped }));
-  }, [currentReadingBook, pages.length]);
-
-const openReader = useCallback((book) => {
-  if (!book) return;
-  const bookId = book.id;
-
-  const loadBook = (content) => {
-    const paginated = paginateText(content, PAGE_CHARS);
-    const savedPage = readingPages[bookId] ?? 0;
-
-    setPages(paginated);
-    setReadingPages(prev => ({ ...prev, [bookId]: savedPage }));
-    setCurrentReadingBook(book); // только одно состояние
-    setIsReading(true);
-  };
-
-  if (bookContents[bookId]) loadBook(bookContents[bookId]);
-  else if (book.content) loadBook(book.content);
-  else {
-    fetch(book.contentUrl)
-      .then(r => r.text())
-      .then(text => {
-        setBookContents(prev => ({ ...prev, [bookId]: text }));
-        loadBook(text);
-      })
-      .catch(err => console.error(err));
-  }
-}, [readingPages, bookContents]);
+    setReadingPages(prev => ({ ...prev, [selected.id]: clamped }));
+  }, [selected, pages.length]);
 
   useEffect(() => {
     if (!isReading) return;
@@ -136,6 +98,28 @@ const openReader = useCallback((book) => {
     return () => window.removeEventListener('keydown', onKey);
   }, [isReading, nextPage, prevPage]);
 
+  const openReader = useCallback(() => {
+    if (!selected) return;
+    const { id: bookId, contentUrl } = selected;
+    const loadBook = content => {
+      const paginated = paginateText(content, PAGE_CHARS);
+      const savedPage = readingPages[bookId] ?? 0;
+      setPages(paginated);
+      setReadingPages(prev => ({ ...prev, [bookId]: savedPage }));
+      setIsReading(true);
+    };
+    if (selected.content) loadBook(selected.content);
+    else {
+      fetch(contentUrl)
+        .then(r => r.text())
+        .then(text => {
+          setSelected(prev => ({ ...prev, content: text }));
+          loadBook(text);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [selected, readingPages]);
+
   const loadMore = () => setShowCount(prev => Math.min(prev + LOAD_MORE_STEP, filtered.length));
 
   useEffect(() => {
@@ -148,45 +132,49 @@ const openReader = useCallback((book) => {
         <h1>ReadNext</h1>
         <SearchBar query={query} setQuery={setQuery} />
       </header>
-
+      
       <main className="main-grid">
-        {/* Рекомендации */}
-        <section className="recommendations-section">
-          <h3>Рекомендации</h3>
-          <div className="recommendations-grid">
-            {recommendations.map(book => (
-              <div
-                key={book.id}
-                className="recommendation-card"
-                 onClick={(e) => {
-                   e.stopPropagation();
-                   openReader(book); // передаём книгу напрямую
-                 }}
-              >
-                <h4>{book.title}</h4>
-                <p>{book.author}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Рекомендации теперь всегда доступны */}
+      {/* Рекомендации теперь всегда доступны */}
+      <section className="recommendations-section">
+        <h3>Рекомендации</h3>
+        <div className="recommendations-grid">
+          {recommendations.map((book) => (
+            <div 
+              key={book.id} 
+              className="recommendation-card"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Просто открываем модалку с этой книгой, но не меняем selected
+                setSelected(book);
+              }}
+            >
+              <h4>{book.title}</h4>
+              <p>{book.author}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+
 
         <BookList
           books={visibleBooks}
           visibleCount={showCount}
-          onSelect={(book) => setCurrentReadingBook(book)}
+          onSelect={setSelected}
           loadMore={loadMore}
           genreFilter={genreFilter}
           setGenreFilter={setGenreFilter}
           genres={genres}
         />
       </main>
-
-      {currentReadingBook && (
+      
+      {isReading && selected && (
         <ReaderModal
-          book={currentReadingBook}
+          book={selected}
           pages={pages}
           pageIndex={readingPage}
-          onClose={() => setCurrentReadingBook(null)}
+          onClose={() => setIsReading(false)}
           nextPage={nextPage}
           prevPage={prevPage}
           goToPage={goToPage}
