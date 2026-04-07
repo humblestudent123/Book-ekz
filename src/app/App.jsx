@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import { SAMPLE_BOOKS } from '../data';
+import logo from '../assets/ReadNext-logo.png';
 
 /* constants */
 const LOAD_MORE_STEP = 6;
@@ -122,7 +123,7 @@ export default function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <h1 id="h1">ReadNext</h1>
+        <img id="logo" src={logo} alt="readNext-Логотип" />
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
