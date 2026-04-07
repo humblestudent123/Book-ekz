@@ -15,6 +15,23 @@
   background-position: center;
   background-size: cover;
 
+
+.home-page {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+  margin-right: 8%;
+  padding: 40px 50px;
+}
+
+.home-page__logo {
+  width: 630px;
+  height: auto;
+  margin-bottom: 28px;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+}
+
+
   // Затемнение для лучшей читаемости текста
   &::before {
     content: '';

@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.scss';
+import logo from '../assets/ReadNext-logo.png';
+
+
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ export default function HomePage() {
       <div className="home-page__content">
         <img 
           className="home-page__logo" 
-          src="../logo.png" 
+          src={logo} 
           alt="ReadNext" 
         />
 
@@ -22,7 +25,6 @@ export default function HomePage() {
             Перейти
           </button>
 
-        <div className="home-page__buttons">
           <a 
             href="https://github.com/humblestudent123/Book-ekz" 
             target="_blank" 
@@ -31,8 +33,6 @@ export default function HomePage() {
           >
             GitHub
           </a>
-        </div>
-
         </div>
       </div>
     </div>
