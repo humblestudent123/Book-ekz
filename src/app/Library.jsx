@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchBar from '../components/SearchBar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import { SAMPLE_BOOKS } from '../data';
 import '../App.css';
 import logo from '../assets/ReadNext-logo.png';
+import { useDebounce } from '../hooks/useDebounce';
+import { loadBookText } from '../utils/loadBook';
 
 const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000;
@@ -15,9 +17,12 @@ const ALL_GENRE = 'Все';
 
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
+
   const words = text.split(/\s+/);
   const pages = [];
+
   let current = '';
+
   for (let word of words) {
     if ((current + ' ' + word).length <= approxCharsPerPage || current.length === 0) {
       current = `${current} ${word}`.trim();
@@ -26,30 +31,46 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
       current = word;
     }
   }
+
   if (current) pages.push(current);
+
   return pages.length ? pages : [text];
 };
 
+
+
+
+
 export default function Library() {
+
   const books = SAMPLE_BOOKS;
 
+ 
+  
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
   const [showCount, setShowCount] = useState(LOAD_MORE_STEP);
-  const [pages, setPages] = useState([]);
+  const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState(() => {
     const saved = localStorage.getItem('reading-pages');
     return saved ? JSON.parse(saved) : {};
   });
 
+
+  const debouncedQuery = useDebounce(query, 300);
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
+
     return books.filter(b =>
       (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
-      (!q || `${b.title} ${b.author} ${b.tags.join(' ')}`.toLowerCase().includes(q))
+      (!q ||
+        b.title.toLowerCase().includes(q) ||
+        b.author.toLowerCase().includes(q) ||
+        b.tags.join(' ').toLowerCase().includes(q)
+      )
     );
-  }, [books, query, genreFilter]);
+  }, [books, debouncedQuery, genreFilter]);
 
   const visibleBooks = useMemo(() => filtered.slice(0, showCount), [filtered, showCount]);
 
@@ -60,18 +81,20 @@ export default function Library() {
   }, [books]);
 
   const recommendations = useMemo(() => {
-    const recs = currentReadingBook
-      ? books.filter(
-          b =>
-            b.id !== currentReadingBook.id &&
-            b.genres.some(g => currentReadingBook.genres.includes(g))
-        )
-      : books;
-
-    return recs.length > 0 ? recs.slice(0, 4) : books.slice(0, 4);
-  }, [books, currentReadingBook]);
+    return books.slice(0, 4);
+  }, [books]);
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
+
+
+
+  const pages = useMemo(() => {
+  if (!currentReadingBook) return [];
+  return bookPages[currentReadingBook.id] ?? [];
+}, [currentReadingBook, bookPages]);
+
+
+
 
   const nextPage = useCallback(() => {
     if (!currentReadingBook) return;
@@ -95,27 +118,55 @@ export default function Library() {
     setReadingPages(prev => ({ ...prev, [currentReadingBook.id]: clamped }));
   }, [currentReadingBook, pages.length]);
 
-  const openReader = useCallback(async (book) => {
-    if (!book) return;
-  
-    let content = book.content;
-  
-    try {
-      if (content && content.endsWith('.txt')) {
-        const res = await fetch(content);
-        content = await res.text();
-      }
-    } catch (e) {
-      content = "Ошибка загрузки книги";
+
+
+
+
+
+const openReader = useCallback(async (book) => {
+  if (!book) return;
+
+  let content = book.content;
+
+  try {
+    if (content?.endsWith('.txt')) {
+      content = await loadBookText(content);
     }
+  } catch (e) {
+    content = "Ошибка загрузки книги";
+  }
+
+  const paginated = paginateText(content, PAGE_CHARS);
+  const savedPage = readingPages[book.id] ?? 0;
+
+  setBookPages(prev => ({
+    ...prev,
+    [book.id]: paginated
+  }));
+
+
+
+  setReadingPages(prev => ({
+    ...prev,
+    [book.id]: savedPage
+  }));
+
+  setCurrentReadingBook({ ...book, content });
+
+}, [readingPages]);
   
-    const paginated = paginateText(content, PAGE_CHARS);
-    const savedPage = readingPages[book.id] ?? 0;
+
+
+
   
-    setPages(paginated);
-    setReadingPages(prev => ({ ...prev, [book.id]: savedPage }));
-    setCurrentReadingBook({ ...book, content }); // важно
-  }, [readingPages]);
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     const onKey = e => {
