@@ -4,10 +4,14 @@ import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import { SAMPLE_BOOKS } from '../data';
 import '../App.css';
+import logo from '../assets/ReadNext-logo.png';
 
 const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
+
+
+
 
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
@@ -31,18 +35,13 @@ export default function Library() {
 
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState(null);
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
   const [showCount, setShowCount] = useState(LOAD_MORE_STEP);
-  const [isReading, setIsReading] = useState(false);
   const [pages, setPages] = useState([]);
   const [readingPages, setReadingPages] = useState(() => {
     const saved = localStorage.getItem('reading-pages');
     return saved ? JSON.parse(saved) : {};
   });
-
-  // Новый state для хранения загруженного контента книг
-  const [bookContents, setBookContents] = useState({});
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -68,8 +67,8 @@ export default function Library() {
             b.genres.some(g => currentReadingBook.genres.includes(g))
         )
       : books;
-      
-    return recs.length > 0 ? recs.slice(0, 4) : books.slice(0, 4); // fallback
+
+    return recs.length > 0 ? recs.slice(0, 4) : books.slice(0, 4);
   }, [books, currentReadingBook]);
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
@@ -96,45 +95,39 @@ export default function Library() {
     setReadingPages(prev => ({ ...prev, [currentReadingBook.id]: clamped }));
   }, [currentReadingBook, pages.length]);
 
-const openReader = useCallback((book) => {
-  if (!book) return;
-  const bookId = book.id;
-
-  const loadBook = (content) => {
+  const openReader = useCallback(async (book) => {
+    if (!book) return;
+  
+    let content = book.content;
+  
+    try {
+      if (content && content.endsWith('.txt')) {
+        const res = await fetch(content);
+        content = await res.text();
+      }
+    } catch (e) {
+      content = "Ошибка загрузки книги";
+    }
+  
     const paginated = paginateText(content, PAGE_CHARS);
-    const savedPage = readingPages[bookId] ?? 0;
-
+    const savedPage = readingPages[book.id] ?? 0;
+  
     setPages(paginated);
-    setReadingPages(prev => ({ ...prev, [bookId]: savedPage }));
-    setCurrentReadingBook(book); // только одно состояние
-    setIsReading(true);
-  };
-
-  if (bookContents[bookId]) loadBook(bookContents[bookId]);
-  else if (book.content) loadBook(book.content);
-  else {
-    fetch(book.contentUrl)
-      .then(r => r.text())
-      .then(text => {
-        setBookContents(prev => ({ ...prev, [bookId]: text }));
-        loadBook(text);
-      })
-      .catch(err => console.error(err));
-  }
-}, [readingPages, bookContents]);
+    setReadingPages(prev => ({ ...prev, [book.id]: savedPage }));
+    setCurrentReadingBook({ ...book, content }); // важно
+  }, [readingPages]);
 
   useEffect(() => {
-    if (!isReading) return;
     const onKey = e => {
       switch (e.key) {
-        case 'Escape': setIsReading(false); break;
+        case 'Escape': setCurrentReadingBook(null); break;
         case 'ArrowRight': nextPage(); break;
         case 'ArrowLeft': prevPage(); break;
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isReading, nextPage, prevPage]);
+  }, [nextPage, prevPage]);
 
   const loadMore = () => setShowCount(prev => Math.min(prev + LOAD_MORE_STEP, filtered.length));
 
@@ -145,12 +138,11 @@ const openReader = useCallback((book) => {
   return (
     <div className="library-container">
       <header className="header">
-        <h1>ReadNext</h1>
+        <img src={logo} alt="ReadNext Logo" id='logo' />
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
       <main className="main-grid">
-        {/* Рекомендации */}
         <section className="recommendations-section">
           <h3>Рекомендации</h3>
           <div className="recommendations-grid">
@@ -158,10 +150,10 @@ const openReader = useCallback((book) => {
               <div
                 key={book.id}
                 className="recommendation-card"
-                 onClick={(e) => {
-                   e.stopPropagation();
-                   openReader(book); // передаём книгу напрямую
-                 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openReader(book);
+                }}
               >
                 <h4>{book.title}</h4>
                 <p>{book.author}</p>
@@ -173,7 +165,7 @@ const openReader = useCallback((book) => {
         <BookList
           books={visibleBooks}
           visibleCount={showCount}
-          onSelect={(book) => setCurrentReadingBook(book)}
+          onSelect={(book) => openReader(book)}
           loadMore={loadMore}
           genreFilter={genreFilter}
           setGenreFilter={setGenreFilter}
