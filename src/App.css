@@ -108,6 +108,15 @@
 }
 
 /* ========== BOOK CARD ========== */
+
+.book-card__cover  {
+  width: 130px;
+  border-radius: 10px;
+}
+
+
+
+
 .book-card {
   background: transparent;
   padding: 0;

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './BookCard.css'
 
 export default function BookCard({ book, onSelect }) {
   return (

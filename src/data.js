@@ -15,7 +15,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Психология", "Философия"],
     description:
       "Бедный студент Раскольников убивает старуху‑процентщицу…",
-      cover: "./covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg",
+      cover: "../covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg",
     content: "/books/преступление-и-наказание111.txt",
   },
 
