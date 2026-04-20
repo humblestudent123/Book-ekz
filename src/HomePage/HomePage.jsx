@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import './HomePage.scss';
 import logo from '../assets/ReadNext-logo.png';
 
@@ -7,14 +8,17 @@ import logo from '../assets/ReadNext-logo.png';
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
+
 
   return (
     <div className="home-page">
       <div className="home-page__content">
-        <img 
-          className="home-page__logo" 
-          src={logo} 
-          alt="ReadNext" 
+        <img
+          src={logo}
+          alt="Логотип ReadNext"
+          className={`home-page__logo ${loaded ? 'loaded' : ''}`}
+          onLoad={() => setLoaded(true)}
         />
 
         <div className="home-page__buttons">

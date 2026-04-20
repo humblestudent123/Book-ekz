@@ -29,6 +29,16 @@
   height: auto;
   margin-bottom: 28px;
   filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+
+
+    &.loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 
