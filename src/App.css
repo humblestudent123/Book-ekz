@@ -78,39 +78,17 @@
   color: #fff;
 }
 
-.recommendations-grid {
+
+
+.books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
 }
 
-.recommendation-card {
-  background: var(--card-hover);
-  padding: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-  
-  h4 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  p {
-    margin: 0;
-    opacity: 0.8;
-    font-size: 14px;
-  }
-}
 
-.recommendation-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--primary);
-  background: #3a3a3a;
-}
 
 /* ========== BOOK LIST ========== */
 .book-list {
@@ -121,13 +99,7 @@
 }
 
 /* ========== BOOK GRID ========== */
-.books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 18px;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
-}
+
 
 @keyframes fadeIn {
   to {
@@ -137,11 +109,11 @@
 
 /* ========== BOOK CARD ========== */
 .book-card {
-  background: var(--card-bg);
-  padding: 15px;
-  border-radius: 12px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: none;
   transition: all 0.25s ease;
   opacity: 0;
   transform: translateY(10px);
@@ -162,40 +134,33 @@
   }
 }
 
+
+
 .book-card:hover {
   transform: translateY(-4px);
-  border-color: var(--primary);
-  background: var(--card-hover);
 }
 
-.book-card h3 {
-  margin: 0 0 6px 0;
-  font-size: 18px;
-  font-weight: 600;
+.book-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.book-card p {
-  margin: 0;
-  opacity: 0.8;
+.book-card:hover .book-cover,
+.recommendation-card:hover .book-cover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* TAGS */
-.tag {
-  display: inline-block;
-  padding: 4px 8px;
-  background: var(--tag-bg);
-  border-radius: 6px;
-  margin-right: 6px;
-  margin-bottom: 6px;
-  font-size: 12px;
-  opacity: 0.85;
-  transition: all 0.2s;
-}
 
-.tag:hover {
-  background: var(--primary);
-  opacity: 1;
-}
+
+
+
+
 
 /* ========== FOOTER ========== */
 .footer {
@@ -220,9 +185,25 @@
     padding: 15px;
   }
   
-  .recommendations-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+}
+
+
+.recommendation-card {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-4px);
 }
 
 /* ===== Reader modal (non-fullscreen, black theme) ===== */
@@ -397,5 +378,5 @@
   
   .reader-progress {
     text-align: center;
-  }
+  }  
 }
