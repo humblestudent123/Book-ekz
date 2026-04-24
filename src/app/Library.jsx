@@ -244,56 +244,31 @@ export default function Library() {
           ))}
         </select>
       </label>
-
-      {/* <label className="toolbar-field">
-        <span>Сколько показывать</span>
-        <input
-          type="number"
-          min="1"
-          max={filteredBooks.length || undefined}
-          value={visibleCountInput}
-          onChange={(event) => setVisibleCountInput(event.target.value)}
-          placeholder={`Все (${filteredBooks.length})`}
-        />
-      </label> */}
-
-      <div className="toolbar-actions">
-        {/* <button
-          type="button"
-          className="toolbar-button"
-          onClick={() => setVisibleCountInput(String(Math.min(12, filteredBooks.length || 12)))}
-        >
-          12 книг
-        </button> */}
-        {/* <button
-          type="button"
-          className="toolbar-button toolbar-button--accent"
-          onClick={() => setVisibleCountInput('')}
-        >
-          Показать все
-        </button> */}
-      </div>
     </div>
   );
 
   return (
     <div className="library-container">
       <header className="header">
+        <div className="header-bar">
+          <div className="logo-block">
+            <img src={logo} alt="ReadNext Logo" className="logo" />
+          </div>
+
+          <SearchBar query={query} setQuery={setQuery} />
+        </div>
+
         <section className="hero-banner">
           <div className="hero-banner__content">
             <div className="hero-banner__text">
               <span className="hero-banner__eyebrow">Твоя домашняя читалка</span>
-              <h1>Полки с книгами, как в нормальном сервисе чтения</h1>
               <p>
                 Подборки теперь разбиты на блоки: персональные рекомендации, новинки,
-                популярное и полный каталог. Количество карточек ты задаёшь сам.
+                популярное и полный каталог.
               </p>
             </div>
-            <img src={logo} alt="ReadNext Logo" id="logo" />
           </div>
         </section>
-
-        <SearchBar query={query} setQuery={setQuery} />
       </header>
 
       <main className="main-grid">

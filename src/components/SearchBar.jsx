@@ -6,7 +6,7 @@ export default function SearchBar({ query, setQuery }) {
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Поиск по названию, автору или тегам..."
+        placeholder="Книга или автор"
       />
     </div>
   );

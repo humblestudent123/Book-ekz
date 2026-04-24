@@ -7,7 +7,7 @@ export default function RootRoutes() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/library/*" element={<App />} /> {/* App.jsx рендерится здесь */}
+      <Route path="/library/*" element={<App />} /> 
     </Routes>
   );
 }
