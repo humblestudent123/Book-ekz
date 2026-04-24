@@ -29,7 +29,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Тоталитаризм", "Пропаганда", "Контроль"],
     description:
       "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
-      cover: "/covers/1984.jpg",
+      cover: "/covers/Jorge-Oryel-1984.jpg",
     content: "/books/Оруэлл-Джордж.-1984.txt",
   },
 
@@ -42,7 +42,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Средиземье ", "Квест", "Борьба добра и зла"],
     description:
       "Хоббит Фродо Бэггинс и его верные спутники отправляются в опасное путешествие через всё Средиземье, чтобы уничтожить древний артефакт абсолютной власти и остановить Тёмного Властелина.",
-      cover: "/covers/1984.jpg",
+      cover: "/covers/Vlastelin-Colec.jpg",
     content: "/books/Дж. Р. Р. Толкин — Властелин колец.txt" 
   },
 
@@ -56,7 +56,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Становления героя", "Пророчество", "Филосовское"],
     description:
       "Сага о нескольких поколениях семьи Буэндиа, чья судьба неразрывно связана с мистическим городком Макондо и фатальным, повторяющимся одиночеством.",
-      cover: "/covers/1984.jpg",
+      cover: "/covers/Gabriel-Garcia-100let.jpg",
     content: "/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
   },
 
@@ -70,7 +70,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Антиутопия", "Цензура", "Научная фантастика"],
     description:
       "История о пожарном, который в мире запретных знаний перестаёт сжигать книги и начинает их спасать.",
-      cover: "/covers/1984.jpg",
+      cover: "/covers/451-gradus-po-foringeity.jpg",
     content: "/books/Fahrenheit-451.txt"
   },
 
@@ -83,7 +83,7 @@ export const SAMPLE_BOOKS = [
     tags: ["Дьяволвмоскве", "Советскаясатира", "Вечнаялюбовь"],
     description:
       "Визит сатаны и его свиты в предвоенную Москву переворачивает жизнь горожан и дает шанс на спасение гениальному автору и его верной возлюбленной.",
-      cover: "/covers/1984.jpg",
+      cover: "/covers/master-i-margarita-bulgakov.jpg",
     content: "/books/Булгаков-Михаил-Мастер-и-Маргарита.txt"
   },
 
