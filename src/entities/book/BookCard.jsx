@@ -5,7 +5,6 @@ import './BookCard.css'
 export default function BookCard({ book, onSelect }) {
   return (
     <div className="book-card" onClick={() => onSelect(book)}>
-      
       <div className="book-card__image-wrapper">
         <img
           src={book.cover}
@@ -18,8 +17,25 @@ export default function BookCard({ book, onSelect }) {
       <div className="book-card__info">
         <h3>{book.title}</h3>
         <p>{book.author}</p>
+        <span className="book-card__year">{book.year}</span>
+        <div className="book-card__genres">
+          {(book.genres || []).slice(0, 2).map((genre) => (
+            <span key={genre} className="book-card__genre-chip">{genre}</span>
+          ))}
+        </div>
       </div>
-
     </div>
   );  
 }
+
+BookCard.propTypes = {
+  book: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cover: PropTypes.string,
+    genres: PropTypes.arrayOf(PropTypes.string)
+  }).isRequired,
+  onSelect: PropTypes.func.isRequired
+};

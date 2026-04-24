@@ -2,28 +2,25 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchBar from '../components/SearchBar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
-import { SAMPLE_BOOKS } from '../data';
+import booksCatalog from '../books.json';
 import '../App.css';
 import logo from '../assets/ReadNext-logo.png';
 import { useDebounce } from '../hooks/useDebounce';
 import { loadBookText } from '../utils/loadBook';
 
-const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
-
-
-
+const DEFAULT_VISIBLE_COUNT = '';
+const SECTION_SIZE = 4;
 
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
 
   const words = text.split(/\s+/);
   const pages = [];
-
   let current = '';
 
-  for (let word of words) {
+  for (const word of words) {
     if ((current + ' ' + word).length <= approxCharsPerPage || current.length === 0) {
       current = `${current} ${word}`.trim();
     } else {
@@ -37,68 +34,122 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   return pages.length ? pages : [text];
 };
 
+const getPreferredGenres = (books, readingPages, openedBooks) => {
+  const scoreByGenre = new Map();
 
+  books.forEach((book) => {
+    const progressScore = Number(readingPages[book.id] || 0);
+    const openedScore = Number(openedBooks[book.id] || 0) * 3;
+    const totalScore = progressScore + openedScore;
 
+    book.genres.forEach((genre) => {
+      scoreByGenre.set(genre, (scoreByGenre.get(genre) || 0) + totalScore);
+    });
+  });
 
+  return Array.from(scoreByGenre.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([genre]) => genre);
+};
+
+const getPopularityScore = (book, openedBooks, readingPages) => {
+  const opens = Number(openedBooks[book.id] || 0) * 100;
+  const progress = Number(readingPages[book.id] || 0) * 10;
+  const metadata = (book.tags?.length || 0) * 4 + (book.genres?.length || 0) * 3;
+  return opens + progress + metadata + Number(book.year || 0) / 1000;
+};
 
 export default function Library() {
+  const books = booksCatalog;
 
-  const books = SAMPLE_BOOKS;
-
- 
-  
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
-  const [showCount, setShowCount] = useState(LOAD_MORE_STEP);
+  const [visibleCountInput, setVisibleCountInput] = useState(DEFAULT_VISIBLE_COUNT);
   const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState(() => {
     const saved = localStorage.getItem('reading-pages');
     return saved ? JSON.parse(saved) : {};
   });
-
+  const [openedBooks, setOpenedBooks] = useState(() => {
+    const saved = localStorage.getItem('opened-books');
+    return saved ? JSON.parse(saved) : {};
+  });
 
   const debouncedQuery = useDebounce(query, 300);
-  const filtered = useMemo(() => {
+
+  const filteredBooks = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
 
-    return books.filter(b =>
-      (genreFilter === ALL_GENRE || b.genres.includes(genreFilter)) &&
+    return books.filter((book) =>
+      (genreFilter === ALL_GENRE || book.genres.includes(genreFilter)) &&
       (!q ||
-        b.title.toLowerCase().includes(q) ||
-        b.author.toLowerCase().includes(q) ||
-        b.tags.join(' ').toLowerCase().includes(q)
-      )
+        book.title.toLowerCase().includes(q) ||
+        book.author.toLowerCase().includes(q) ||
+        book.tags.join(' ').toLowerCase().includes(q))
     );
   }, [books, debouncedQuery, genreFilter]);
 
-  const visibleBooks = useMemo(() => filtered.slice(0, showCount), [filtered, showCount]);
+  const visibleBooks = useMemo(() => {
+    const parsed = Number(visibleCountInput);
+    if (!visibleCountInput || Number.isNaN(parsed) || parsed <= 0) {
+      return filteredBooks;
+    }
+
+    return filteredBooks.slice(0, parsed);
+  }, [filteredBooks, visibleCountInput]);
 
   const genres = useMemo(() => {
     const setG = new Set();
-    books.forEach(b => b.genres.forEach(g => setG.add(g)));
+    books.forEach((book) => book.genres.forEach((genre) => setG.add(genre)));
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
-  const recommendations = useMemo(() => {
-    return books.slice(0, 4);
-  }, [books]);
+  const preferredGenres = useMemo(
+    () => getPreferredGenres(books, readingPages, openedBooks),
+    [books, readingPages, openedBooks]
+  );
+
+  const recommendedBooks = useMemo(() => {
+    return [...filteredBooks]
+      .sort((a, b) => {
+        const aGenreScore = a.genres.reduce((total, genre) => {
+          const index = preferredGenres.indexOf(genre);
+          return total + (index === -1 ? 0 : preferredGenres.length - index);
+        }, 0);
+        const bGenreScore = b.genres.reduce((total, genre) => {
+          const index = preferredGenres.indexOf(genre);
+          return total + (index === -1 ? 0 : preferredGenres.length - index);
+        }, 0);
+
+        if (bGenreScore !== aGenreScore) return bGenreScore - aGenreScore;
+        return getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages);
+      })
+      .slice(0, SECTION_SIZE);
+  }, [filteredBooks, preferredGenres, openedBooks, readingPages]);
+
+  const newBooks = useMemo(() => {
+    return [...filteredBooks]
+      .sort((a, b) => Number(b.year || 0) - Number(a.year || 0))
+      .slice(0, SECTION_SIZE);
+  }, [filteredBooks]);
+
+  const popularBooks = useMemo(() => {
+    return [...filteredBooks]
+      .sort((a, b) => getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages))
+      .slice(0, SECTION_SIZE);
+  }, [filteredBooks, openedBooks, readingPages]);
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
 
-
-
   const pages = useMemo(() => {
-  if (!currentReadingBook) return [];
-  return bookPages[currentReadingBook.id] ?? [];
-}, [currentReadingBook, bookPages]);
-
-
-
+    if (!currentReadingBook) return [];
+    return bookPages[currentReadingBook.id] ?? [];
+  }, [currentReadingBook, bookPages]);
 
   const nextPage = useCallback(() => {
     if (!currentReadingBook) return;
-    setReadingPages(prev => ({
+    setReadingPages((prev) => ({
       ...prev,
       [currentReadingBook.id]: Math.min((prev[currentReadingBook.id] ?? 0) + 1, pages.length - 1)
     }));
@@ -106,121 +157,177 @@ export default function Library() {
 
   const prevPage = useCallback(() => {
     if (!currentReadingBook) return;
-    setReadingPages(prev => ({
+    setReadingPages((prev) => ({
       ...prev,
       [currentReadingBook.id]: Math.max((prev[currentReadingBook.id] ?? 0) - 1, 0)
     }));
-  }, [currentReadingBook, pages.length]);
+  }, [currentReadingBook]);
 
   const goToPage = useCallback((pageNum) => {
     if (!currentReadingBook) return;
     const clamped = Math.min(Math.max(pageNum, 0), pages.length - 1);
-    setReadingPages(prev => ({ ...prev, [currentReadingBook.id]: clamped }));
+    setReadingPages((prev) => ({ ...prev, [currentReadingBook.id]: clamped }));
   }, [currentReadingBook, pages.length]);
 
+  const openReader = useCallback(async (book) => {
+    if (!book) return;
 
+    let content = book.content;
 
-
-
-
-const openReader = useCallback(async (book) => {
-  if (!book) return;
-
-  let content = book.content;
-
-  try {
-    if (content?.endsWith('.txt')) {
-      content = await loadBookText(content);
+    try {
+      if (content?.endsWith('.txt')) {
+        content = await loadBookText(content);
+      }
+    } catch (error) {
+      content = 'Ошибка загрузки книги';
     }
-  } catch (e) {
-    content = "Ошибка загрузки книги";
-  }
 
-  const paginated = paginateText(content, PAGE_CHARS);
-  const savedPage = readingPages[book.id] ?? 0;
+    const paginated = paginateText(content, PAGE_CHARS);
+    const savedPage = readingPages[book.id] ?? 0;
 
-  setBookPages(prev => ({
-    ...prev,
-    [book.id]: paginated
-  }));
+    setBookPages((prev) => ({
+      ...prev,
+      [book.id]: paginated
+    }));
 
+    setReadingPages((prev) => ({
+      ...prev,
+      [book.id]: savedPage
+    }));
 
+    setOpenedBooks((prev) => ({
+      ...prev,
+      [book.id]: (prev[book.id] || 0) + 1
+    }));
 
-  setReadingPages(prev => ({
-    ...prev,
-    [book.id]: savedPage
-  }));
-
-  setCurrentReadingBook({ ...book, content });
-
-}, [readingPages]);
-  
-
-
-
-  
-
-
-
-
-
-
-
-
+    setCurrentReadingBook({ ...book, content });
+  }, [readingPages]);
 
   useEffect(() => {
-    const onKey = e => {
-      switch (e.key) {
-        case 'Escape': setCurrentReadingBook(null); break;
-        case 'ArrowRight': nextPage(); break;
-        case 'ArrowLeft': prevPage(); break;
+    const onKey = (event) => {
+      switch (event.key) {
+        case 'Escape':
+          setCurrentReadingBook(null);
+          break;
+        case 'ArrowRight':
+          nextPage();
+          break;
+        case 'ArrowLeft':
+          prevPage();
+          break;
+        default:
+          break;
       }
     };
+
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [nextPage, prevPage]);
-
-  const loadMore = () => setShowCount(prev => Math.min(prev + LOAD_MORE_STEP, filtered.length));
 
   useEffect(() => {
     localStorage.setItem('reading-pages', JSON.stringify(readingPages));
   }, [readingPages]);
 
+  useEffect(() => {
+    localStorage.setItem('opened-books', JSON.stringify(openedBooks));
+  }, [openedBooks]);
+
+  const toolbar = (
+    <div className="catalog-toolbar">
+      <label className="toolbar-field">
+        <span>Жанр</span>
+        <select value={genreFilter} onChange={(event) => setGenreFilter(event.target.value)}>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* <label className="toolbar-field">
+        <span>Сколько показывать</span>
+        <input
+          type="number"
+          min="1"
+          max={filteredBooks.length || undefined}
+          value={visibleCountInput}
+          onChange={(event) => setVisibleCountInput(event.target.value)}
+          placeholder={`Все (${filteredBooks.length})`}
+        />
+      </label> */}
+
+      <div className="toolbar-actions">
+        {/* <button
+          type="button"
+          className="toolbar-button"
+          onClick={() => setVisibleCountInput(String(Math.min(12, filteredBooks.length || 12)))}
+        >
+          12 книг
+        </button> */}
+        {/* <button
+          type="button"
+          className="toolbar-button toolbar-button--accent"
+          onClick={() => setVisibleCountInput('')}
+        >
+          Показать все
+        </button> */}
+      </div>
+    </div>
+  );
+
   return (
     <div className="library-container">
       <header className="header">
-        <img src={logo} alt="ReadNext Logo" id='logo' />
+        <section className="hero-banner">
+          <div className="hero-banner__content">
+            <div className="hero-banner__text">
+              <span className="hero-banner__eyebrow">Твоя домашняя читалка</span>
+              <h1>Полки с книгами, как в нормальном сервисе чтения</h1>
+              <p>
+                Подборки теперь разбиты на блоки: персональные рекомендации, новинки,
+                популярное и полный каталог. Количество карточек ты задаёшь сам.
+              </p>
+            </div>
+            <img src={logo} alt="ReadNext Logo" id="logo" />
+          </div>
+        </section>
+
         <SearchBar query={query} setQuery={setQuery} />
       </header>
 
       <main className="main-grid">
-        <section className="recommendations-section">
-          <h3>Рекомендации</h3>
-          <div className="recommendations-grid">
-            {recommendations.map(book => (
-              <div
-                key={book.id}
-                className="recommendation-card"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openReader(book);
-                }}
-              >
-                <h4>{book.title}</h4>
-                <p>{book.author}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <BookList
+          title="Рекомендации"
+          description="Подбираются по твоим открытиям книг, прогрессу чтения и жанрам, к которым ты чаще возвращаешься."
+          books={recommendedBooks}
+          onSelect={openReader}
+          emptyMessage="Для рекомендаций пока не хватает книг под текущий фильтр."
+        />
 
         <BookList
+          title="Новинки"
+          description="Самые свежие книги в каталоге по дате добавления."
+          books={newBooks}
+          onSelect={openReader}
+          emptyMessage="Новинок под текущий фильтр пока нет."
+        />
+
+        <BookList
+          title="Популярное"
+          description="Книги признанные сообществом."
+          books={popularBooks}
+          onSelect={openReader}
+          emptyMessage="Популярные книги появятся после нескольких открытий."
+        />
+
+        <BookList
+          title="Весь каталог"
+          description={`Сейчас найдено ${filteredBooks.length} книг. Можешь показывать все сразу или задать свой лимит.`}
           books={visibleBooks}
-          visibleCount={showCount}
-          onSelect={(book) => openReader(book)}
-          loadMore={loadMore}
-          genreFilter={genreFilter}
-          setGenreFilter={setGenreFilter}
-          genres={genres}
+          onSelect={openReader}
+          action={toolbar}
+          emptyMessage="По этому запросу книги не найдены."
         />
       </main>
 

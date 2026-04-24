@@ -103,12 +103,6 @@ const handleDeleteQuote = (index) => {
   }));
 };
 // Удаление всех цитат
-const clearQuotes = () => {
-  setQuotes({});
-};
-
-
-
   const handleInputChange = (e) => setInputPage(e.target.value);
 
   const handleKeyDown = (e) => {

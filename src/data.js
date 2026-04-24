@@ -97,7 +97,7 @@ export const SAMPLE_BOOKS = [
     description:
       "История о вчерашних школьниках, которые сталкиваются с беспощадной реальностью Первой мировой войны, превращаясь из восторженных добровольцев в «потерянное поколение» внутри кровавого ада окопов.",
       cover: "/covers/Na-zapodnom-fronte-bez-peremen.jpg",
-    content: "/books/Булгаков-Михаил-Мастер-и-Маргарита.txt"
+    content: "/books/Erig-maria-remark-na-zapadnom-fronte.txt"
   },
 
 

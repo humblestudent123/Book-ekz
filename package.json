@@ -17,6 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "add-book": "node scripts/add-book.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

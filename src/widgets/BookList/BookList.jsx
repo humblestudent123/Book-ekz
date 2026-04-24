@@ -1,36 +1,42 @@
-import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import BookCard from '../../entities/book/BookCard';
 
-export default function BookList({ books, visibleCount, onSelect, loadMore }) {
-  const scrollRef = useRef(null);
-
-  // прокрутка «ленивая»
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      if (container.scrollTop + container.clientHeight >= container.scrollHeight - 50)
-        loadMore();   // <-- вызываем правильный колл‑бек
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [loadMore]);
-
-  const visibleBooks = books.slice(0, visibleCount);
-
+export default function BookList({
+  title,
+  description,
+  books,
+  onSelect,
+  action,
+  emptyMessage = 'Пока нет книг в этом разделе.'
+}) {
   return (
-    <section>
-      {/* фильтры уже в App.jsx – можно вынести сюда тоже */}
-      <div className="books-scroll" ref={scrollRef}>
+    <section className="shelf-section">
+      <div className="shelf-section__header">
+        <div>
+          <h2>{title}</h2>
+          {description ? <p>{description}</p> : null}
+        </div>
+        {action ? <div className="shelf-section__action">{action}</div> : null}
+      </div>
+
+      {books.length ? (
         <div className="books-grid">
-          {visibleBooks.map(b => (
-            <BookCard key={b.id} book={b} onSelect={() => onSelect(b)} />
+          {books.map((book) => (
+            <BookCard key={book.id} book={book} onSelect={() => onSelect(book)} />
           ))}
         </div>
-      </div>
+      ) : (
+        <div className="empty-state">{emptyMessage}</div>
+      )}
     </section>
   );
 }
 
+BookList.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onSelect: PropTypes.func.isRequired,
+  action: PropTypes.node,
+  emptyMessage: PropTypes.string
+};
