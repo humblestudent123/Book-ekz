@@ -7,6 +7,7 @@ import '../App.css';
 import logo from '../assets/ReadNext-logo.png';
 import { useDebounce } from '../hooks/useDebounce';
 import { loadBookText } from '../utils/loadBook';
+import BookPreviewModal from '../widgets/BookPreviewModal/BookPreviewModal';
 
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
@@ -62,6 +63,7 @@ const getPopularityScore = (book, openedBooks, readingPages) => {
 export default function Library() {
   const books = booksCatalog;
 
+  const [previewBook, setPreviewBook] = useState(null);
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
@@ -272,11 +274,22 @@ export default function Library() {
       </header>
 
       <main className="main-grid">
+        {previewBook && (
+          <BookPreviewModal
+            book={previewBook}
+            onClose={() => setPreviewBook(null)}
+            onRead={(book) => {
+              setPreviewBook(null);
+              openReader(book);
+            }}
+          />
+        )}
+        
         <BookList
           title="Рекомендации"
           description="Подбираются по твоим открытиям книг, прогрессу чтения и жанрам, к которым ты чаще возвращаешься."
           books={recommendedBooks}
-          onSelect={openReader}
+          onSelect={(book) => setPreviewBook(book)}
           emptyMessage="Для рекомендаций пока не хватает книг под текущий фильтр."
         />
 
@@ -284,7 +297,7 @@ export default function Library() {
           title="Новинки"
           description="Самые свежие книги в каталоге по дате добавления."
           books={newBooks}
-          onSelect={openReader}
+          onSelect={(book) => setPreviewBook(book)}
           emptyMessage="Новинок под текущий фильтр пока нет."
         />
 
@@ -292,7 +305,7 @@ export default function Library() {
           title="Популярное"
           description="Книги признанные сообществом."
           books={popularBooks}
-          onSelect={openReader}
+          onSelect={(book) => setPreviewBook(book)}
           emptyMessage="Популярные книги появятся после нескольких открытий."
         />
 
@@ -300,7 +313,7 @@ export default function Library() {
           title="Весь каталог"
           description={`Сейчас найдено ${filteredBooks.length} книг. Можешь показывать все сразу или задать свой лимит.`}
           books={visibleBooks}
-          onSelect={openReader}
+          onSelect={(book) => setPreviewBook(book)}
           action={toolbar}
           emptyMessage="По этому запросу книги не найдены."
         />
