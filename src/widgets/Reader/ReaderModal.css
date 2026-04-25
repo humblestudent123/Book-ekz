@@ -1,13 +1,136 @@
 /* Стили для модалки */
 .reader-modal.black-theme {
-  background-color: #000;
-  color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 800px;
+  background-color: #0a0a0a; /* Чуть светлее чёрного — меньше усталости глаз */
+  color: #e5e5e5;
+  padding: 60px 40px;
+  border-radius: 24px;
+  max-width: 900px;
   margin: auto;
   position: relative;
+  box-shadow:
+    0 40px 80px -10px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px); /* glassmorphism эффект */
+  border: 1px solid rgba(34, 197, 94, 0.2); /* лёгкая подсветка зелёного */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.reader-modal::selection,
+.reader-modal *::selection {
+  background-color: #22c55e66; /* 40% прозрачный зелёный — мягко, без "кислоты" */
+  color: white;
+  text-shadow: none;
+}
+
+
+.reader-modal::selection,
+.reader-modal *::selection {
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
+}
+
+
+
+.reader-page {
+  font-family: 'Georgia', 'Times New Roman', serif; /* Классика для книг */
+  font-size: 21px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  padding-right: 40px; /* Чтобы текст не "прилипал" к правому краю */
+  margin-bottom: 60px;
+  user-select: text;
+}
+
+
+
+
+
+/* Альтернативный вариант: более мягкий, с прозрачностью (как в Apple) */
+.reader-modal::selection,
+.reader-modal *::selection {
+  background-color: #22c55e80; /* #22c55e с 50% прозрачности */
+}
+
+/* Если хочешь использовать градиент (более "дорого" и современно) */
+.reader-modal::selection,
+.reader-modal *::selection {
+  background: linear-gradient(90deg, rgba(34,197,94,0.8), rgba(52,211,152,0.6));
+  color: white;
+}
+
+/* Дополнительно: выделение ссылок (если они есть в тексте) */
+.reader-modal a::selection {
+  background-color: #3b82f6; /* Синий для ссылок */
+  color: white;
+}
+
+
+
+
+
+/* цвет выделения текста в мой модалочке */
+
+.reader-modal::selection,
+.reader-page::selection,
+.reader-modal *::selection {
+  background-color: #188f44; /* Используем ТВОЙ ЦВЕТ БЕЗ ПРОЗРАЧНОСТИ (работает стабильнее) */
+  color: white;
+}
+
+/* Альтернатива для "мягкости" — работает в Chrome/Safari/Firefox */
+.reader-modal::selection,
+.reader-page::selection {
+  background-color: #188f44;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Контент книги */
 .reader-page {
