@@ -136,7 +136,24 @@ const prevPage = () => {
         {/* ИНФА */}
         <div className="book-info">
           <h1>{book.title}</h1>
-          <h3>{book.author}</h3>
+          <h3>
+            <span>Автор:</span>
+            {book.author}
+          </h3>
+
+
+
+
+          <h3 className="book-author">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} style={{marginRight: '10px'}}>
+              <path d="M21.6 7.34a2.5 2.5 0 0 0-2.5-2.5l-.8.2a2.5 2.5 0 0 0-1.6.7L9.6 14.8a2.5 2.5 0 0 0 .7 3.6l.8.2a2.5 2.5 0 0 0 2.5-2.5l.2-.8c.2-.6.2-1.2-.2-1.8L14.6 9.8a2.5 2.5 0 0 0-3.6-.7l-.2.8a2.5 2.5 0 0 0 .7 3.6l.8.2c.6.2 1.2.2 1.8-.2L19.4 5.8a2.5 2.5 0 0 0-1.8-2.5z"/>
+              <path d="M7.8 18.6l-3.6-3.6 3.6-3.6"/>
+            </svg>
+            {book.author}
+          </h3>
+
+
+
 
           {/* МЕТА */}
           <div className="book-meta">
