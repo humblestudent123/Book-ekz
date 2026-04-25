@@ -1,0 +1,153 @@
+/* ФОН */
+.book-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 40px 60px;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Блюр фон от обложки */
+.book-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 0;
+}
+
+/* Затемнение */
+.book-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+  z-index: 1;
+}
+
+/* Всё поверх */
+.book-page > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* КНОПКА НАЗАД */
+.back-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  color: #fff;
+}
+
+/* ЛЕЙАУТ */
+.book-layout {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+/* ОБЛОЖКА */
+.book-cover img {
+  width: 280px;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* ПРАВАЯ ЧАСТЬ */
+.book-info {
+  max-width: 700px;
+}
+
+/* НАЗВАНИЕ */
+.book-info h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+/* АВТОР */
+.book-info h3 {
+  font-weight: 400;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+/* МЕТА */
+.book-meta {
+  display: flex;
+  gap: 20px;
+  color: #888;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* ЖАНРЫ */
+.book-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.book-genres span {
+  background: #2a2a2a;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #ddd;
+}
+
+/* ОПИСАНИЕ */
+.book-description {
+  line-height: 1.7;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+/* КНОПКИ */
+.book-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.read-btn {
+  background: #4caf50;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s;
+}
+
+.read-btn:hover {
+  background: #43a047;
+  transform: translateY(-2px);
+}
+
+/* ВТОРАЯ КНОПКА */
+.secondary-btn {
+  background: transparent;
+  border: 1px solid #444;
+  padding: 14px 24px;
+  border-radius: 12px;
+  color: #ddd;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.secondary-btn:hover {
+  border-color: #888;
+  color: #fff;
+}

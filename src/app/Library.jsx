@@ -7,16 +7,19 @@ import '../App.css';
 import logo from '../assets/ReadNext-logo.png';
 import { useDebounce } from '../hooks/useDebounce';
 import { loadBookText } from '../utils/loadBook';
-import BookPreviewModal from '../widgets/BookPreviewModal/BookPreviewModal';
+import { useNavigate } from 'react-router-dom';
+
 
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
 const DEFAULT_VISIBLE_COUNT = '';
 const SECTION_SIZE = 4;
 
+
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
 
+  
   const words = text.split(/\s+/);
   const pages = [];
   let current = '';
@@ -62,12 +65,12 @@ const getPopularityScore = (book, openedBooks, readingPages) => {
 
 export default function Library() {
   const books = booksCatalog;
-
-  const [previewBook, setPreviewBook] = useState(null);
+  
+  const navigate = useNavigate();
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [query, setQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
-  const [visibleCountInput, setVisibleCountInput] = useState(DEFAULT_VISIBLE_COUNT);
+  const [visibleCountInput] = useState(DEFAULT_VISIBLE_COUNT);
   const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState(() => {
     const saved = localStorage.getItem('reading-pages');
@@ -88,7 +91,7 @@ export default function Library() {
       (!q ||
         book.title.toLowerCase().includes(q) ||
         book.author.toLowerCase().includes(q) ||
-        book.tags.join(' ').toLowerCase().includes(q))
+        (book.tags ?? []).join(' ').toLowerCase().includes(q))
     );
   }, [books, debouncedQuery, genreFilter]);
 
@@ -145,23 +148,31 @@ export default function Library() {
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
 
   const pages = useMemo(() => {
-    if (!currentReadingBook) return [];
-    return bookPages[currentReadingBook.id] ?? [];
+    return currentReadingBook
+      ? (bookPages[currentReadingBook.id] ?? [])
+      : [];
   }, [currentReadingBook, bookPages]);
 
   const nextPage = useCallback(() => {
     if (!currentReadingBook) return;
+
+    const bookId = currentReadingBook.id;
+    const max = Math.max((pages?.length ?? 1) - 1, 0);
+
     setReadingPages((prev) => ({
       ...prev,
-      [currentReadingBook.id]: Math.min((prev[currentReadingBook.id] ?? 0) + 1, pages.length - 1)
+      [bookId]: Math.min((prev[bookId] ?? 0) + 1, max)
     }));
   }, [currentReadingBook, pages.length]);
 
   const prevPage = useCallback(() => {
     if (!currentReadingBook) return;
+
+    const bookId = currentReadingBook.id;
+
     setReadingPages((prev) => ({
       ...prev,
-      [currentReadingBook.id]: Math.max((prev[currentReadingBook.id] ?? 0) - 1, 0)
+      [bookId]: Math.max((prev[bookId] ?? 0) - 1, 0)
     }));
   }, [currentReadingBook]);
 
@@ -177,15 +188,14 @@ export default function Library() {
     let content = book.content;
 
     try {
-      if (content?.endsWith('.txt')) {
+      if (typeof content === 'string' && content.endsWith('.txt')) {
         content = await loadBookText(content);
       }
-    } catch (error) {
+    } catch {
       content = 'Ошибка загрузки книги';
     }
 
     const paginated = paginateText(content, PAGE_CHARS);
-    const savedPage = readingPages[book.id] ?? 0;
 
     setBookPages((prev) => ({
       ...prev,
@@ -194,7 +204,7 @@ export default function Library() {
 
     setReadingPages((prev) => ({
       ...prev,
-      [book.id]: savedPage
+      [book.id]: prev[book.id] ?? 0
     }));
 
     setOpenedBooks((prev) => ({
@@ -203,12 +213,13 @@ export default function Library() {
     }));
 
     setCurrentReadingBook({ ...book, content });
-  }, [readingPages]);
+  }, []);
 
   useEffect(() => {
     const onKey = (event) => {
       switch (event.key) {
         case 'Escape':
+          setCurrentReadingBook(null);
           setCurrentReadingBook(null);
           break;
         case 'ArrowRight':
@@ -224,7 +235,7 @@ export default function Library() {
 
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [nextPage, prevPage]);
+  }, [currentReadingBook, pages.length]);
 
   useEffect(() => {
     localStorage.setItem('reading-pages', JSON.stringify(readingPages));
@@ -274,30 +285,17 @@ export default function Library() {
       </header>
 
       <main className="main-grid">
-        {previewBook && (
-          <BookPreviewModal
-            book={previewBook}
-            onClose={() => setPreviewBook(null)}
-            onRead={(book) => {
-              setPreviewBook(null);
-              openReader(book);
-            }}
-          />
-        )}
         
         <BookList
           title="Рекомендации"
-          description="Подбираются по твоим открытиям книг, прогрессу чтения и жанрам, к которым ты чаще возвращаешься."
           books={recommendedBooks}
-          onSelect={(book) => setPreviewBook(book)}
-          emptyMessage="Для рекомендаций пока не хватает книг под текущий фильтр."
+          onSelect={(book) => navigate(`/book/${book.id}`)}
         />
 
         <BookList
           title="Новинки"
           description="Самые свежие книги в каталоге по дате добавления."
           books={newBooks}
-          onSelect={(book) => setPreviewBook(book)}
           emptyMessage="Новинок под текущий фильтр пока нет."
         />
 
@@ -305,7 +303,6 @@ export default function Library() {
           title="Популярное"
           description="Книги признанные сообществом."
           books={popularBooks}
-          onSelect={(book) => setPreviewBook(book)}
           emptyMessage="Популярные книги появятся после нескольких открытий."
         />
 
@@ -313,7 +310,6 @@ export default function Library() {
           title="Весь каталог"
           description={`Сейчас найдено ${filteredBooks.length} книг. Можешь показывать все сразу или задать свой лимит.`}
           books={visibleBooks}
-          onSelect={(book) => setPreviewBook(book)}
           action={toolbar}
           emptyMessage="По этому запросу книги не найдены."
         />
