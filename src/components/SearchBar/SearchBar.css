@@ -1,0 +1,33 @@
+.search-bar {
+  width: 40%; /* Или укажи конкретную ширину, если нужно */
+  padding-right: 530px; /* Важно: оставь как есть — это для адаптивности в твоей верстке */
+}
+
+/* Стилизация инпута */
+.search-bar input {
+  width: 100%;
+  max-width: 100%; /* Гарантия, что не вылезает за пределы */
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(18, 21, 28, 0.92);
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  /* Улучшение для мобильных */
+  -webkit-appearance: none; /* Safari/iOS */
+}
+
+/* Эффекты при фокусе */
+.search-bar input:focus {
+  background: rgba(18, 21, 28, 1);
+  border-color: var(--accent); /* Используем переменную из :root */
+  box-shadow:
+    0 0 0 4px rgba(74, 222, 128, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}

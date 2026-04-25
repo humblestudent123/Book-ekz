@@ -76,30 +76,32 @@ const handleMouseUp = () => {
 
 
 // Добавление цитаты + отображение даты и времени
-const now = new Date();
-const formatted = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
 const handleAddQuote = () => {
-  if (selectionText) {
-    setQuotes(prev => ({
-      ...prev,
-      [book.id]: [
-        ...(prev[book.id] || []),
-        {
-          text: selectionText,
-          date: formatted
-        }
-      ]
-    }));
+  if (!selectionText) return;
 
-    setShowAddBtn(false);
-    window.getSelection().removeAllRanges();
-  }
+  const now = new Date();
+  const formatted = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+
+  setQuotes(prev => ({
+    ...prev,
+    [book.id]: [
+      ...(prev[book.id] || []),
+      {
+        text: selectionText,
+        date: formatted
+      }
+    ]
+  }));
+
+  setShowAddBtn(false);
+  setSelectionText('');
+  window.getSelection().removeAllRanges();
 };
 // Удаление цитаты
 const handleDeleteQuote = (index) => {
   setQuotes(prev => ({
     ...prev,
-    [book.id]: prev[book.id].filter((_, i) => i !== index)
+    [book.id]: (prev[book.id] || []).filter((_, i) => i !== index)
   }));
 };
 // Удаление всех цитат

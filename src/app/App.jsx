@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
-import Library from './Library';
-import BookPage from '../pages/BookPage';
+import Library from '../pages/Library/Library';
+import BookPage from '../pages/BookPage/BookPage';
 
 export default function App() {
   return (

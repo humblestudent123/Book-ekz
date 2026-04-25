@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import SearchBar from '../components/SearchBar';
-import BookList from '../widgets/BookList/BookList';
-import ReaderModal from '../widgets/Reader/ReaderModal';
-import booksCatalog from '../books.json';
-import '../App.css';
-import logo from '../assets/ReadNext-logo.png';
-import { useDebounce } from '../hooks/useDebounce';
-import { loadBookText } from '../utils/loadBook';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import BookList from '../../widgets/BookList/BookList';
+import ReaderModal from '../../widgets/Reader/ReaderModal';
+import booksCatalog from '../../books.json';
+import '../../App.css';
+import logo from '../../assets/ReadNext-logo.png';
+import { useDebounce } from '../../hooks/useDebounce';
+import { loadBookText } from '../../utils/loadBook';
 import { useNavigate } from 'react-router-dom';
 
 

@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import booksCatalog from '../books.json';
+import booksCatalog from '../../books.json';
 import './BookPage.css';
 import { useState, useMemo, useCallback } from 'react';
-import ReaderModal from '../widgets/Reader/ReaderModal';
-import { loadBookText } from '../utils/loadBook';
+import ReaderModal from '../../widgets/Reader/ReaderModal';
+import { loadBookText } from '../../utils/loadBook';
 
 
 
