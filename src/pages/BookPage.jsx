@@ -122,9 +122,6 @@ const prevPage = () => {
 
       <div className="book-bg" style={{ backgroundImage: `url(${book.cover})` }} />
 
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Назад
-      </button>
 
       <div className="book-layout">
 
