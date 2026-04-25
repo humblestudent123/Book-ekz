@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import booksCatalog from '../../books.json';
 import './BookPage.css';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect  } from 'react';
 import ReaderModal from '../../widgets/Reader/ReaderModal';
 import { loadBookText } from '../../utils/loadBook';
 
@@ -10,10 +10,21 @@ import { loadBookText } from '../../utils/loadBook';
 export default function BookPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState({});
   
+  // возращения скрола в исходное сост.
+  useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'auto'
+  });
+}, []);
+
+
   const book = booksCatalog.find((b) => String(b.id) === id);
 
   const PAGE_CHARS = 1000;

@@ -8,7 +8,7 @@
   --muted: rgba(246, 247, 251, 0.72);
   --subtle: rgba(246, 247, 251, 0.5);
 
-  /* ✅ Новый акцент (из логотипа) */
+
   --accent: #4ade80;          /* мягкий зелёный */
   --accent-strong: #22c55e80;   /* основной зелёный */
   --accent-dark: #15803d;     /* тёмный зелёный */
@@ -86,24 +86,13 @@ body {
   box-shadow: var(--shadow);
 }
 
-.logo-block {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+
 
 .logo {
   height: 42px;
   width: auto;
 }
 
-.header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 16px 24px;
-}
 
 .logo-block {
   display: flex;
@@ -184,7 +173,7 @@ body {
 
 .search-bar {
   width: 40%;
-  padding-right: 530px;
+  padding-right: 50px;
 }
 
 .search-bar input {
@@ -316,9 +305,25 @@ body {
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, max-content));
   gap: 18px;
 }
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 6px;
+  background: var(--bg-soft);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: transform 0.2s ease;
+
+  
+}
+
+
+
 
 .empty-state {
   min-height: 140px;
@@ -495,6 +500,8 @@ body {
 @media (max-width: 768px) {
   .books-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    max-width: 100%;
+    overflow-x: auto; /* если всё же вылазит — скролл внутри */
   }
 
   .reader-modal {
