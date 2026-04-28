@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom';
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
 const DEFAULT_VISIBLE_COUNT = '';
-const SECTION_SIZE = 4;
+
+
 
 
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
@@ -154,35 +155,23 @@ books.forEach(b => {
     [books, readingPages, openedBooks]
   );
 
-  const recommendedBooks = useMemo(() => {
-    return [...searchableBooks]
-      .sort((a, b) => {
-        const aGenreScore = a.genres.reduce((total, genre) => {
-          const index = preferredGenres.indexOf(genre);
-          return total + (index === -1 ? 0 : preferredGenres.length - index);
-        }, 0);
-        const bGenreScore = b.genres.reduce((total, genre) => {
-          const index = preferredGenres.indexOf(genre);
-          return total + (index === -1 ? 0 : preferredGenres.length - index);
-        }, 0);
 
-        if (bGenreScore !== aGenreScore) return bGenreScore - aGenreScore;
-        return getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages);
-      })
-      .slice(0, SECTION_SIZE);
-  }, [searchableBooks, preferredGenres, openedBooks, readingPages]);
+const newBooks = useMemo(() => {
+  return books.filter((b) => b.isNew);
+}, [books]);
 
-  const newBooks = useMemo(() => {
-    return [...searchableBooks]
-      .sort((a, b) => Number(b.year || 0) - Number(a.year || 0))
-      .slice(0, SECTION_SIZE);
-  }, [searchableBooks]);
 
-  const popularBooks = useMemo(() => {
-    return [...searchableBooks]
-      .sort((a, b) => getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages))
-      .slice(0, SECTION_SIZE);
-  }, [searchableBooks, openedBooks, readingPages]);
+
+const recommendedBooks = useMemo(() => {
+  return books.filter((b) => b.featured);
+}, [books]);
+
+const popularBooks = useMemo(() => {
+  return books.filter((b) => b.isPopular);
+}, [books]);
+
+
+
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
 

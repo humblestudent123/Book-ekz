@@ -36,7 +36,7 @@ BookList.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onSelect: PropTypes.func, // ❌ убрали isRequired
+  onSelect: PropTypes.func, 
   action: PropTypes.node,
   emptyMessage: PropTypes.string
 };

@@ -16,6 +16,9 @@ export const SAMPLE_BOOKS = [
       "Бедный студент Родион Раскольников совершает убийство старухи-процентщицы, чтобы проверить свою теорию о «право имеющих» людях, но в итоге сталкивается с невыносимыми муками совести и находит путь к искуплению через страдание и любовь.",
       cover: "../covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg",
     content: "/books/преступление-и-наказание111.txt",
+    featured: false,
+    isNew: false,
+    isPopular: true
   },
 
 
@@ -29,6 +32,9 @@ export const SAMPLE_BOOKS = [
       "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
       cover: "/covers/Jorge-Oryel-1984.jpg",
     content: "/books/Оруэлл-Джордж.-1984.txt",
+    featured: false,
+    isNew: false,
+    isPopular: true
   },
 
   {
@@ -41,7 +47,10 @@ export const SAMPLE_BOOKS = [
     description:
       "Хоббит Фродо Бэггинс и его верные спутники отправляются в опасное путешествие через всё Средиземье, чтобы уничтожить древний артефакт абсолютной власти и остановить Тёмного Властелина.",
       cover: "/covers/Vlastelin-Colec.jpg",
-    content: "/books/Дж. Р. Р. Толкин — Властелин колец.txt" 
+    content: "/books/Дж. Р. Р. Толкин — Властелин колец.txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
   },
 
 
@@ -54,7 +63,10 @@ export const SAMPLE_BOOKS = [
     description:
       "Сага о нескольких поколениях семьи Буэндиа, чья судьба неразрывно связана с мистическим городком Макондо и фатальным, повторяющимся одиночеством.",
       cover: "/covers/Gabriel-Garcia-100let.jpg",
-    content: "/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+    content: "/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
   },
 
 
@@ -67,7 +79,10 @@ export const SAMPLE_BOOKS = [
     description:
       "История о пожарном, который в мире запретных знаний перестаёт сжигать книги и начинает их спасать.",
       cover: "/covers/451-gradus-po-foringeity.jpg",
-    content: "/books/Fahrenheit-451.txt"
+    content: "/books/Fahrenheit-451.txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
   },
 
   {
@@ -79,7 +94,10 @@ export const SAMPLE_BOOKS = [
     description:
       "Визит сатаны и его свиты в предвоенную Москву переворачивает жизнь горожан и дает шанс на спасение гениальному автору и его верной возлюбленной.",
       cover: "/covers/master-i-margarita-bulgakov.jpg",
-    content: "/books/Булгаков-Михаил-Мастер-и-Маргарита.txt"
+    content: "/books/Булгаков-Михаил-Мастер-и-Маргарита.txt",
+    featured: false,
+    isNew: false,
+    isPopular: true
   },
 
   {
@@ -92,7 +110,10 @@ export const SAMPLE_BOOKS = [
     description:
       "История о вчерашних школьниках, которые сталкиваются с беспощадной реальностью Первой мировой войны, превращаясь из восторженных добровольцев в «потерянное поколение» внутри кровавого ада окопов.",
       cover: "/covers/Na-zapodnom-fronte-bez-peremen.jpg",
-    content: "/books/Erig-maria-remark-na-zapadnom-fronte.txt"
+    content: "/books/Erig-maria-remark-na-zapadnom-fronte.txt",
+    featured: true,
+    isNew: false,
+    isPopular: false
   },
 
 
@@ -106,7 +127,10 @@ export const SAMPLE_BOOKS = [
     description:
       "История о вчерашних школьниках, которые сталкиваются с беспощадной реальностью Первой мировой войны, превращаясь из восторженных добровольцев в «потерянное поколение» внутри кровавого ада окопов.",
       cover: "/covers/nad_propasiy_rji.jpg",
-    content: "/books/nad-propastyu-vo-rzhi.txt"
+    content: "/books/nad-propastyu-vo-rzhi.txt",
+    featured: true,
+    isNew: false,
+    isPopular: false
   },
 
 
@@ -121,7 +145,10 @@ export const SAMPLE_BOOKS = [
     description:
       "«Тихий Дон» — масштабная эпопея о трагедии казачества и запретной любви Григория Мелехова в годы Гражданской войны.",
       cover: "/covers/tihiy-don.jpg",
-    content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt"
+    content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt",
+    featured: true,
+    isNew: false,
+    isPopular: false
   },
 
 
@@ -136,7 +163,10 @@ export const SAMPLE_BOOKS = [
     description:
       "«Сага о Форсайтах» — монументальный цикл о жизни нескольких поколений буржуазной семьи, запертой в тисках собственнических инстинктов, и о разрушительной силе красоты в мире холодного расчета.",
       cover: "/covers/saga-forsaity.jpg",
-    content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt"
+    content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
   },
 
 
@@ -150,7 +180,10 @@ export const SAMPLE_BOOKS = [
     description:
       "«Отверженные» — грандиозная эпопея о судьбе беглого каторжника Жана Вальжана, силе человеческого духа, борьбе добра со злом и жестокости законов парижского общества.",
       cover: "/covers/gugo-otverjenie.jpg",
-      content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt"
+      content: "/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt",
+    featured: true,
+    isNew: false,
+    isPopular: false
 
   },
 
@@ -165,7 +198,10 @@ export const SAMPLE_BOOKS = [
     description:
       "«Унесенные ветром» — легендарный роман о судьбе южанки Скарлетт О’Хара, чья беззаботная молодость оборвалась с началом Гражданской войны в США, заставив ее бороться за выживание, любовь и родное поместье Тара.",
     cover: "/covers/vetrom.jpg",
-    content: "/books/vetrom.txt"
+    content: "/books/vetrom.txt",
+    featured: false,
+    isNew: false,
+    isPopular: true
 },
 
 {
@@ -178,21 +214,27 @@ export const SAMPLE_BOOKS = [
     description:
       "Знаменитая история о британском моряке, который в результате кораблекрушения оказывается на необитаемом острове и благодаря силе духа, труду и изобретательности выживает там в полном одиночестве на протяжении 28 лет.",
     cover: "/covers/robinzon-kruzo.jpg",
-    content: "/books/robinzon-kruzo.txt"
+    content: "/books/robinzon-kruzo.txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
 },
 
 
 {
-    id: 14, // Установите нужный ID
+    id: 14, 
     title: "Божественная комедия",
     author: "Данте Алигьери",
-    year: 1320, // Год завершения работы над произведением
-    genres: [GENRES.POETRY], // Также часто классифицируется как классика или эпическая поэма
+    year: 1320, 
+    genres: [GENRES.POETRY], 
     tags: ["Ад", "Чистилище", "Рай", "Беатриче", "Италия"],
     description:
       "Монументальная поэма и вершина средневековой литературы, в которой автор отправляется в грандиозное путешествие по загробному миру через ужасы Ада, испытания Чистилища и блаженство Рая в поисках божественной истины и своей возлюбленной.",
-    cover: "/covers/comedia.jpg", // Замените на актуальный путь
-    content: "/books/Алигьери Данте. Божественная комедия.txt" // Замените на актуальный путь
+    cover: "/covers/comedia.jpg", 
+    content: "/books/Алигьери Данте. Божественная комедия.txt",
+    featured: false,
+    isNew: true,
+    isPopular: false
 },
 
 
