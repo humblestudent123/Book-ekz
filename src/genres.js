@@ -12,6 +12,8 @@ export const GENRES = {
   WAR_NOVEL: "war_novel",
   ANTI_WAR: "anti_war",
   REALISM: "realism",
+  HISTORIC_ROMAN: "historic_roman",
+  POETRY: "epic_poema"
 };
 
 
@@ -29,4 +31,6 @@ export const GENRE_LABELS = {
   war_novel: "Военный роман",
   anti_war: "Антивоенный роман",
   realism: "Реализм",
+  historic_roman: "Исторический романтизм",
+  poetry: "эпическая поэма"
 };
