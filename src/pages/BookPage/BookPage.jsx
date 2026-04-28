@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import booksCatalog from '../../books.json';
+import { SAMPLE_BOOKS as booksCatalog } from '../../data';
 import './BookPage.css';
 import { useState, useMemo, useCallback, useEffect  } from 'react';
 import ReaderModal from '../../widgets/Reader/ReaderModal';

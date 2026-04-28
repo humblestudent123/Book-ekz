@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import './BookCard.css'
 
 export default function BookCard({ book, onSelect }) {
+  
+  console.log(book.id, book.cover);
   return (
     <div className="book-card" onClick={() => onSelect(book)}>
       <div className="book-card__image-wrapper">
@@ -11,6 +13,9 @@ export default function BookCard({ book, onSelect }) {
           alt={book.title}
           className="book-card__cover"
           loading="lazy"
+          onError={(e) => {
+            e.target.src = '/covers/fallback.jpg';
+          }}
         />
       </div>
 

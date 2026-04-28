@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import BookList from '../../widgets/BookList/BookList';
 import ReaderModal from '../../widgets/Reader/ReaderModal';
-import booksCatalog from '../../books.json';
+import { SAMPLE_BOOKS as booksCatalog } from '../../data';
 import '../../App.css';
 import logo from '../../assets/ReadNext-logo.png';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -83,34 +83,54 @@ export default function Library() {
 
   const debouncedQuery = useDebounce(query, 300);
 
-  const filteredBooks = useMemo(() => {
-    const q = debouncedQuery.trim().toLowerCase();
-
-    return books.filter((book) =>
-      (genreFilter === ALL_GENRE || book.genres.includes(genreFilter)) &&
-      (!q ||
-        book.title.toLowerCase().includes(q) ||
-        book.author.toLowerCase().includes(q) ||
-        (book.tags ?? []).join(' ').toLowerCase().includes(q))
-    );
-  }, [books, debouncedQuery, genreFilter]);
 
 
+  
 
-
-  const searchableBooks = useMemo(() => {
+const filteredBooks = useMemo(() => {
   const q = debouncedQuery.trim().toLowerCase();
 
-  return books.filter((book) =>
-    !q ||
-    book.title.toLowerCase().includes(q) ||
-    book.author.toLowerCase().includes(q) ||
-    (book.tags ?? []).join(' ').toLowerCase().includes(q)
-  );
+  return books.filter((book) => {
+    const matchGenre =
+      genreFilter === ALL_GENRE || book.genres.includes(genreFilter);
+
+    const matchQuery =
+      !q ||
+      book.title?.toLowerCase().includes(q) ||
+      book.author?.toLowerCase().includes(q) ||
+      (book.tags ?? []).join(' ').toLowerCase().includes(q);
+
+    return matchGenre && matchQuery;
+  });
+}, [books, debouncedQuery, genreFilter]);
+
+
+
+
+const searchableBooks = useMemo(() => {
+  const q = debouncedQuery.trim().toLowerCase();
+
+  return books.filter((book) => {
+    const title = book.title?.toLowerCase() || '';
+    const author = book.author?.toLowerCase() || '';
+    const tags = (Array.isArray(book.tags) ? book.tags : [])
+      .join(' ')
+      .toLowerCase();
+
+    const matchQuery =
+      !q ||
+      title.includes(q) ||
+      author.includes(q) ||
+      tags.includes(q);
+
+    return matchQuery;
+  });
 }, [books, debouncedQuery]);
 
 
-
+books.forEach(b => {
+  console.log('BOOK CHECK:', b.id, b.title, Array.isArray(b.genres));
+});
 
 
 
@@ -234,6 +254,32 @@ export default function Library() {
     setCurrentReadingBook({ ...book, content });
   }, []);
 
+
+
+
+
+
+  useEffect(() => {
+  console.log("ALL BOOKS:", books.length);
+}, []);
+
+useEffect(() => {
+  console.log("FILTERED:", filteredBooks.length);
+}, [filteredBooks]);
+
+console.log(
+  books.map(b => ({
+    id: b.id,
+    title: b.title,
+    genres: b.genres
+  }))
+);
+
+
+
+
+
+
   useEffect(() => {
     const onKey = (event) => {
       switch (event.key) {
@@ -305,33 +351,30 @@ export default function Library() {
 
       <main className="main-grid">
         
-        <BookList
-          title="Рекомендации"
-          books={recommendedBooks}
-          onSelect={(book) => navigate(`/book/${book.id}`)}
-        />
+<BookList
+  title="Рекомендации"
+  books={recommendedBooks}
+  onSelect={(book) => navigate(`/book/${book.id}`)}
+/>
 
-        <BookList
-          title="Новинки"
-          description="Самые свежие книги в каталоге по дате добавления."
-          books={newBooks}
-          emptyMessage="Новинок под текущий фильтр пока нет."
-        />
+<BookList
+  title="Новинки"
+  books={newBooks}
+  onSelect={(book) => navigate(`/book/${book.id}`)}
+/>
 
-        <BookList
-          title="Популярное"
-          description="Книги признанные сообществом."
-          books={popularBooks}
-          emptyMessage="Популярные книги появятся после нескольких открытий."
-        />
+<BookList
+  title="Популярное"
+  books={popularBooks}
+  onSelect={(book) => navigate(`/book/${book.id}`)}
+/>
 
-        <BookList
-          title="Весь каталог"
-          description={`Сейчас найдено ${filteredBooks.length} книг.`}
-          books={visibleBooks}
-          action={toolbar}
-          emptyMessage="По этому запросу книги не найдены."
-        />
+<BookList
+  title="Весь каталог"
+  books={visibleBooks}
+  onSelect={(book) => navigate(`/book/${book.id}`)}
+  action={toolbar}
+/>
       </main>
 
       {currentReadingBook && (

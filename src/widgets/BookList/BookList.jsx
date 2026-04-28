@@ -5,10 +5,10 @@ export default function BookList({
   title,
   description,
   books,
-  onSelect,
+  onSelect = () => {},
   action,
   emptyMessage = 'Пока нет книг в этом разделе.'
-}) {
+})  {
   return (
     <section className="shelf-section">
       <div className="shelf-section__header">
@@ -36,7 +36,7 @@ BookList.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onSelect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func, // ❌ убрали isRequired
   action: PropTypes.node,
   emptyMessage: PropTypes.string
 };
