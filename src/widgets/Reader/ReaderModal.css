@@ -244,3 +244,140 @@
 .quotes-list::-webkit-scrollbar-thumb:hover {
   background-color: #cccccc;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.reader-book-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reader-book-meta {
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.quotes-toggle-btn {
+  padding: 7px 6px;
+  font-size: 12px;
+  border-radius: 11px;
+  border: 1px solid #555;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.quotes-toggle-btn:hover {
+  background: #2f2f2f;
+}
+
+.reader-page-input {
+  width: 50px;
+  margin: 0 5px;
+  background: #000;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.quotes-list-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.quotes-list {
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  color: #fff;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.quote-item {
+  padding: 8px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 6px;
+}
+
+.quote-date {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.quote-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.quote-text {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.quote-delete-btn {
+  background: transparent;
+  border: 1px solid #555;
+  color: #ff6b6b;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.quote-delete-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.add-quote-btn {
+  position: absolute;
+  z-index: 1400;
+  padding: 4px 8px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.add-quote-btn:hover {
+  transform: scale(1.05);
+}

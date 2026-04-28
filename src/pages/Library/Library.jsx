@@ -95,6 +95,25 @@ export default function Library() {
     );
   }, [books, debouncedQuery, genreFilter]);
 
+
+
+
+  const searchableBooks = useMemo(() => {
+  const q = debouncedQuery.trim().toLowerCase();
+
+  return books.filter((book) =>
+    !q ||
+    book.title.toLowerCase().includes(q) ||
+    book.author.toLowerCase().includes(q) ||
+    (book.tags ?? []).join(' ').toLowerCase().includes(q)
+  );
+}, [books, debouncedQuery]);
+
+
+
+
+
+
   const visibleBooks = useMemo(() => {
     const parsed = Number(visibleCountInput);
     if (!visibleCountInput || Number.isNaN(parsed) || parsed <= 0) {
@@ -116,7 +135,7 @@ export default function Library() {
   );
 
   const recommendedBooks = useMemo(() => {
-    return [...filteredBooks]
+    return [...searchableBooks]
       .sort((a, b) => {
         const aGenreScore = a.genres.reduce((total, genre) => {
           const index = preferredGenres.indexOf(genre);
@@ -131,19 +150,19 @@ export default function Library() {
         return getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages);
       })
       .slice(0, SECTION_SIZE);
-  }, [filteredBooks, preferredGenres, openedBooks, readingPages]);
+  }, [searchableBooks, preferredGenres, openedBooks, readingPages]);
 
   const newBooks = useMemo(() => {
-    return [...filteredBooks]
+    return [...searchableBooks]
       .sort((a, b) => Number(b.year || 0) - Number(a.year || 0))
       .slice(0, SECTION_SIZE);
-  }, [filteredBooks]);
+  }, [searchableBooks]);
 
   const popularBooks = useMemo(() => {
-    return [...filteredBooks]
+    return [...searchableBooks]
       .sort((a, b) => getPopularityScore(b, openedBooks, readingPages) - getPopularityScore(a, openedBooks, readingPages))
       .slice(0, SECTION_SIZE);
-  }, [filteredBooks, openedBooks, readingPages]);
+  }, [searchableBooks, openedBooks, readingPages]);
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
 
