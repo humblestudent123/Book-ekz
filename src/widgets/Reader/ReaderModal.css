@@ -56,11 +56,11 @@
 
 
 .reader-page {
-  font-family: 'Georgia', 'Times New Roman', serif; /* Классика для книг */
+  font-family: 'Georgia', 'Times New Roman', serif; 
   font-size: 21px;
   line-height: 1.8;
   white-space: pre-wrap;
-  padding-right: 40px; /* Чтобы текст не "прилипал" к правому краю */
+  padding-right: 40px; 
   margin-bottom: 60px;
   user-select: text;
 }
@@ -69,22 +69,22 @@
 
 
 
-/* Альтернативный вариант: более мягкий, с прозрачностью (как в Apple) */
+
 .reader-modal::selection,
 .reader-modal *::selection {
-  background-color: #22c55e80; /* #22c55e с 50% прозрачности */
+  background-color: #22c55e80; 
 }
 
-/* Если хочешь использовать градиент (более "дорого" и современно) */
+
 .reader-modal::selection,
 .reader-modal *::selection {
   background: linear-gradient(90deg, rgba(34,197,94,0.8), rgba(52,211,152,0.6));
   color: white;
 }
 
-/* Дополнительно: выделение ссылок (если они есть в тексте) */
+
 .reader-modal a::selection {
-  background-color: #3b82f6; /* Синий для ссылок */
+  background-color: #3b82f6; 
   color: white;
 }
 
@@ -92,16 +92,16 @@
 
 
 
-/* цвет выделения текста в мой модалочке */
+
 
 .reader-modal::selection,
 .reader-page::selection,
 .reader-modal *::selection {
-  background-color: #188f44; /* Используем ТВОЙ ЦВЕТ БЕЗ ПРОЗРАЧНОСТИ (работает стабильнее) */
+  background-color: #188f44; 
   color: white;
 }
 
-/* Альтернатива для "мягкости" — работает в Chrome/Safari/Firefox */
+
 .reader-modal::selection,
 .reader-page::selection {
   background-color: #188f44;

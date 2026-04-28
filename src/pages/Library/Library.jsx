@@ -308,7 +308,7 @@ export default function Library() {
 
         <BookList
           title="Весь каталог"
-          description={`Сейчас найдено ${filteredBooks.length} книг. Можешь показывать все сразу или задать свой лимит.`}
+          description={`Сейчас найдено ${filteredBooks.length} книг.`}
           books={visibleBooks}
           action={toolbar}
           emptyMessage="По этому запросу книги не найдены."

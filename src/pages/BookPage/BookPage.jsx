@@ -15,7 +15,7 @@ export default function BookPage() {
   const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState({});
   
-  // возращения скрола в исходное сост.
+  // возращения скрола в исходное сост. 
   useEffect(() => {
   window.scrollTo({
     top: 0,
