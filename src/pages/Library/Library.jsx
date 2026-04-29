@@ -69,6 +69,10 @@ export default function Library() {
   
   const navigate = useNavigate();
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
+  const [favoriteBooks, setFavoriteBooks] = useState(() => {
+  const saved = localStorage.getItem('favorite-books');
+  return saved ? JSON.parse(saved) : [];
+  });
   const [query, setQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_GENRE);
   const [visibleCountInput] = useState(DEFAULT_VISIBLE_COUNT);
@@ -171,6 +175,12 @@ const popularBooks = useMemo(() => {
 }, [books]);
 
 
+const favoriteBooksList = useMemo(() => {
+  return books.filter((book) =>
+    favoriteBooks.includes(book.id)
+  );
+}, [books, favoriteBooks]);
+
 
 
   const readingPage = currentReadingBook ? (readingPages[currentReadingBook.id] ?? 0) : 0;
@@ -210,6 +220,8 @@ const popularBooks = useMemo(() => {
     setReadingPages((prev) => ({ ...prev, [currentReadingBook.id]: clamped }));
   }, [currentReadingBook, pages.length]);
 
+
+  
   const openReader = useCallback(async (book) => {
     if (!book) return;
 
@@ -244,6 +256,18 @@ const popularBooks = useMemo(() => {
   }, []);
 
 
+
+
+
+  const toggleFavorite = (bookId) => {
+  setFavoriteBooks((prev) => {
+    if (prev.includes(bookId)) {
+      return prev.filter((id) => id !== bookId);
+    }
+
+    return [...prev, bookId];
+  });
+};
 
 
 
@@ -299,6 +323,16 @@ console.log(
     localStorage.setItem('opened-books', JSON.stringify(openedBooks));
   }, [openedBooks]);
 
+
+  useEffect(() => {
+  localStorage.setItem(
+    'favorite-books',
+    JSON.stringify(favoriteBooks)
+  );
+}, [favoriteBooks]);
+
+
+
   const toolbar = (
     <div className="catalog-toolbar">
       <label className="toolbar-field">
@@ -345,6 +379,16 @@ console.log(
   books={recommendedBooks}
   onSelect={(book) => navigate(`/book/${book.id}`)}
 />
+
+
+<BookList
+  title="Избранное"
+  description="Книги, которые ты сохранил."
+  books={favoriteBooksList}
+  onSelect={(book) => navigate(`/book/${book.id}`)}
+  emptyMessage="Ты ещё не добавил книги в избранное."
+/>
+
 
 <BookList
   title="Новинки"

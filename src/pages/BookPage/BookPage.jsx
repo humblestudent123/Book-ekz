@@ -15,6 +15,47 @@ export default function BookPage() {
   const [bookPages, setBookPages] = useState({});
   const [readingPages, setReadingPages] = useState({});
   
+
+const book = booksCatalog.find((b) => String(b.id) === id);
+
+const [favoriteBooks, setFavoriteBooks] = useState(() => {
+  const saved = localStorage.getItem('favorite-books');
+  return saved ? JSON.parse(saved) : [];
+});
+
+const isFavorite = book
+  ? favoriteBooks.includes(book.id)
+  : false;
+
+
+  
+
+
+
+
+
+  const toggleFavorite = () => {
+  let updated;
+
+  if (isFavorite) {
+    updated = favoriteBooks.filter((id) => id !== book.id);
+  } else {
+    updated = [...favoriteBooks, book.id];
+  }
+
+  setFavoriteBooks(updated);
+
+  localStorage.setItem(
+    'favorite-books',
+    JSON.stringify(updated)
+  );
+};
+
+
+
+
+
+
   // возращения скрола в исходное сост. 
   useEffect(() => {
   window.scrollTo({
@@ -25,7 +66,12 @@ export default function BookPage() {
 }, []);
 
 
-  const book = booksCatalog.find((b) => String(b.id) === id);
+
+
+
+
+
+
 
   const PAGE_CHARS = 1000;
 
@@ -187,8 +233,11 @@ const prevPage = () => {
               Читать
             </button>
 
-            <button className="secondary-btn">
-              В избранное
+            <button
+              className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+              onClick={toggleFavorite}
+            >
+              {isFavorite ? '♥ В избранном' : '♡ В избранное'}
             </button>
           </div>
             
