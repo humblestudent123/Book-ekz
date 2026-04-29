@@ -4,6 +4,7 @@ import './BookPage.css';
 import { useState, useMemo, useCallback, useEffect  } from 'react';
 import ReaderModal from '../../widgets/Reader/ReaderModal';
 import { loadBookText } from '../../utils/loadBook';
+import { GENRE_LABELS } from '../../genres';
 
 
 
@@ -29,7 +30,7 @@ const isFavorite = book
 
 
   
-
+  
 
 
 
@@ -218,7 +219,9 @@ const prevPage = () => {
           {/* ЖАНРЫ */}
           <div className="book-genres">
             {(book.genres || []).map((g) => (
-              <span key={g}>{g}</span>
+              <span key={g}>
+                {GENRE_LABELS[g] || g}
+              </span>
             ))}
           </div>
 
