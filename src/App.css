@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 :root {
   --bg: #0f1116;
   --bg-soft: #171a22;
@@ -17,6 +19,8 @@
   --accent-soft: rgba(74, 222, 128, 0.15);
 
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  
+  
 }
 
 body::selection,
@@ -34,6 +38,7 @@ body::-moz-selection,
 
 
 body {
+  font-family: 'Manrope', sans-serif;
   margin: 0;
   background:
     radial-gradient(circle at top left, rgba(0, 247, 62, 0.14), transparent 28%),

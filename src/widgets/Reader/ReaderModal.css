@@ -1,6 +1,11 @@
-/* Стили для модалки */
+/* =========================
+   MODAL
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+
 .reader-modal.black-theme {
-  background-color: #0a0a0a; /* Чуть светлее чёрного — меньше усталости глаз */
+  background-color: #0a0a0a;
   color: #e5e5e5;
   padding: 60px 40px;
   border-radius: 24px;
@@ -10,138 +15,41 @@
   box-shadow:
     0 40px 80px -10px rgba(0, 0, 0, 0.7),
     0 0 0 1px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px); /* glassmorphism эффект */
-  border: 1px solid rgba(34, 197, 94, 0.2); /* лёгкая подсветка зелёного */
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.reader-modal::selection,
-.reader-modal *::selection {
-  background-color: #22c55e66; /* 40% прозрачный зелёный — мягко, без "кислоты" */
-  color: white;
+/* =========================
+   TEXT SELECTION (ВАЖНО)
+   внутри модалки зелёное выделение
+========================= */
+.reader-modal ::selection,
+.reader-page ::selection {
+  background: rgba(34, 197, 94, 0.35);
+  color: #ffffff;
   text-shadow: none;
 }
 
-
-.reader-modal::selection,
-.reader-modal *::selection {
-  transition: background-color 0.15s ease-out, color 0.15s ease-out;
-}
-
-
-
-.reader-page {
-  font-family: 'Georgia', 'Times New Roman', serif; 
-  font-size: 21px;
-  line-height: 1.8;
-  white-space: pre-wrap;
-  padding-right: 40px; 
-  margin-bottom: 60px;
-  user-select: text;
-}
-
-
-
-
-
-
-.reader-modal::selection,
-.reader-modal *::selection {
-  background-color: #22c55e80; 
-}
-
-
-.reader-modal::selection,
-.reader-modal *::selection {
-  background: linear-gradient(90deg, rgba(34,197,94,0.8), rgba(52,211,152,0.6));
-  color: white;
-}
-
-
+/* ссылки при выделении */
 .reader-modal a::selection {
-  background-color: #3b82f6; 
+  background: #3b82f6;
   color: white;
 }
 
-
-
-
-
-
-
-.reader-modal::selection,
-.reader-page::selection,
-.reader-modal *::selection {
-  background-color: #188f44; 
-  color: white;
-}
-
-
-.reader-modal::selection,
-.reader-page::selection {
-  background-color: #188f44;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Контент книги */
+/* =========================
+   READER TEXT
+========================= */
 .reader-page {
-  
-  font-size: 19.5px;
-  line-height: 1.6;
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
   white-space: pre-wrap;
   margin-bottom: 20px;
 }
 
-/* Контролы внизу модалки */
+/* =========================
+   CONTROLS
+========================= */
 .reader-controls {
   display: flex;
   align-items: center;
@@ -150,27 +58,28 @@
   margin-top: 10px;
 }
 
-/* Инпут для страницы */
-.reader-controls input[type="number"] {
+/* input страниц */
+.reader-controls input[type="number"],
+.reader-page-input {
   width: 50px;
-  margin: 0 5px;
-  background-color: #000; 
-  color: #fff;           
+  background: #000;
+  color: #fff;
   border: 1px solid #555;
   border-radius: 4px;
-  padding: 2px 5px;
+  padding: 4px;
   text-align: center;
+  font-family: inherit;
 
-
-  -moz-appearance: textfield;  /* Firefox */
+  -moz-appearance: textfield;
 }
+
 .reader-controls input[type="number"]::-webkit-outer-spin-button,
 .reader-controls input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;    /* Chrome, Safari, Edge */
+  -webkit-appearance: none;
   margin: 0;
 }
 
-/* Кнопки */
+/* buttons */
 .reader-controls button {
   background-color: #222;
   color: #fff;
@@ -185,123 +94,22 @@
   cursor: default;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/* OVERLAY */
+/* =========================
+   OVERLAY
+========================= */
 .reader-overlay {
   position: fixed;
   inset: 0;
-
   background: rgba(0, 0, 0, 0.85);
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   z-index: 99999;
 }
 
-
-
-
-
-
-
-
-
-
-/* Кастомный скроллбар для цитатника */
-.quotes-list {
-  overflow-y: auto;
-  scrollbar-width: thin;              /* Firefox */
-  scrollbar-color: #fff transparent;  /* Firefox */
-}
-
-/* Chrome, Edge, Safari */
-.quotes-list::-webkit-scrollbar {
-  width: 4px; /* тонкий */
-}
-
-.quotes-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.quotes-list::-webkit-scrollbar-thumb {
-  background-color: #ffffff; /* белый */
-  border-radius: 10px;
-}
-
-/* при наведении можно чуть ярче */
-.quotes-list::-webkit-scrollbar-thumb:hover {
-  background-color: #cccccc;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.reader-book-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.reader-book-meta {
-  opacity: 0.8;
-  font-size: 13px;
-}
-
-.quotes-toggle-btn {
-  padding: 7px 6px;
-  font-size: 12px;
-  border-radius: 11px;
-  border: 1px solid #555;
-  background: #222;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.quotes-toggle-btn:hover {
-  background: #2f2f2f;
-}
-
-.reader-page-input {
-  width: 50px;
-  margin: 0 5px;
-  background: #000;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 2px 4px;
-}
-
+/* =========================
+   QUOTES MODAL
+========================= */
 .quotes-list-overlay {
   position: fixed;
   inset: 0;
@@ -325,6 +133,32 @@
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
+/* scroll */
+.quotes-list {
+  scrollbar-width: thin;
+  scrollbar-color: #fff transparent;
+}
+
+.quotes-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.quotes-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quotes-list::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.quotes-list::-webkit-scrollbar-thumb:hover {
+  background-color: #ccc;
+}
+
+/* =========================
+   QUOTES ITEMS
+========================= */
 .quote-item {
   padding: 8px;
   border-bottom: 1px solid #333;
@@ -364,6 +198,9 @@
   background: rgba(255, 107, 107, 0.1);
 }
 
+/* =========================
+   ADD QUOTE BUTTON
+========================= */
 .add-quote-btn {
   position: absolute;
   z-index: 1400;
@@ -380,4 +217,33 @@
 
 .add-quote-btn:hover {
   transform: scale(1.05);
+}
+
+/* =========================
+   META INFO
+========================= */
+.reader-book-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reader-book-meta {
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.quotes-toggle-btn {
+  padding: 7px 6px;
+  font-size: 12px;
+  border-radius: 11px;
+  border: 1px solid #555;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.quotes-toggle-btn:hover {
+  background: #2f2f2f;
 }

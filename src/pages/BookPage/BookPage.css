@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+
 .book-author {
   font-weight: 400;
   color: var(--primary);
@@ -8,8 +11,28 @@
 }
 
 
+
+
 /* === GLOBAL STYLES === */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap');
+
+/* шрифт */
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
+}
+  
+
+
+
+
+
+
 
 :root {
   --primary: #22c55e;
@@ -26,7 +49,6 @@
   min-height: 100vh;
   padding: 60px 40px;
   color: var(--text-main);
-  font-family: 'Inter', sans-serif;
   background-color: var(--dark-bg);
   overflow-x: hidden;
 }
