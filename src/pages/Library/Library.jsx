@@ -8,7 +8,7 @@ import logo from '../../assets/ReadNext-logo.png';
 import { useDebounce } from '../../hooks/useDebounce';
 import { loadBookText } from '../../utils/loadBook';
 import { useNavigate } from 'react-router-dom';
-import { GENRES, GENRE_LABELS } from '../../genres'; // или где они лежат
+import { GENRE_LABELS } from '../../genres'; 
 
 
 
@@ -138,6 +138,21 @@ const searchableBooks = useMemo(() => {
 books.forEach(b => {
   console.log('BOOK CHECK:', b.id, b.title, Array.isArray(b.genres));
 });
+
+
+
+
+
+
+
+  const isSearching = debouncedQuery.trim().length > 0;
+
+
+
+
+
+
+
 
 
 
@@ -349,7 +364,7 @@ const toolbar = (
             );
           }
 
-          // Для жанров — берём метку из GENRE_LABELS
+   
           const label = GENRE_LABELS[genreKey] || genreKey;
           return (
             <option key={genreKey} value={genreKey}>
@@ -387,43 +402,45 @@ const toolbar = (
         </section>
       </header>
 
-      <main className="main-grid">
-        
-<BookList
-  title="Рекомендации"
-  books={recommendedBooks}
-  onSelect={(book) => navigate(`/book/${book.id}`)}
-/>
+<main className="main-grid">
 
+  {isSearching ? (
+    <BookList
+      title="Весь каталог"
+      books={visibleBooks}
+      onSelect={(book) => navigate(`/book/${book.id}`)}
+      action={toolbar}
+    />
+  ) : (
+    <>
+      <BookList
+        title="Рекомендации"
+        books={recommendedBooks}
+        onSelect={(book) => navigate(`/book/${book.id}`)}
+      />
 
-<BookList
-  title="Избранное"
-  description="Книги, которые ты сохранил."
-  books={favoriteBooksList}
-  onSelect={(book) => navigate(`/book/${book.id}`)}
-  emptyMessage="Ты ещё не добавил книги в избранное."
-/>
+      <BookList
+        title="Избранное"
+        books={favoriteBooksList}
+        onSelect={(book) => navigate(`/book/${book.id}`)}
+        emptyMessage="Ты ещё не добавил книги в избранное."
+      />
 
+      <BookList
+        title="Новинки"
+        books={newBooks}
+        onSelect={(book) => navigate(`/book/${book.id}`)}
+      />
 
-<BookList
-  title="Новинки"
-  books={newBooks}
-  onSelect={(book) => navigate(`/book/${book.id}`)}
-/>
+      <BookList
+        title="Популярное"
+        books={popularBooks}
+        onSelect={(book) => navigate(`/book/${book.id}`)}
+      />
+    </>
+  )}
 
-<BookList
-  title="Популярное"
-  books={popularBooks}
-  onSelect={(book) => navigate(`/book/${book.id}`)}
-/>
-
-<BookList
-  title="Весь каталог"
-  books={visibleBooks}
-  onSelect={(book) => navigate(`/book/${book.id}`)}
-  action={toolbar}
-/>
-      </main>
+</main>
 
       {currentReadingBook && (
         <ReaderModal
