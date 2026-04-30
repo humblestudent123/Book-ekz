@@ -8,6 +8,8 @@ import logo from '../../assets/ReadNext-logo.png';
 import { useDebounce } from '../../hooks/useDebounce';
 import { loadBookText } from '../../utils/loadBook';
 import { useNavigate } from 'react-router-dom';
+import { GENRES, GENRE_LABELS } from '../../genres'; // или где они лежат
+
 
 
 const PAGE_CHARS = 1000;
@@ -333,20 +335,33 @@ console.log(
 
 
 
-  const toolbar = (
-    <div className="catalog-toolbar">
-      <label className="toolbar-field">
-        <span>Жанр</span>
-        <select value={genreFilter} onChange={(event) => setGenreFilter(event.target.value)}>
-          {genres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
+const toolbar = (
+  <div className="catalog-toolbar">
+    <label className="toolbar-field">
+      <span>Жанр</span>
+      <select value={genreFilter} onChange={(event) => setGenreFilter(event.target.value)}>
+        {genres.map((genreKey) => {
+          if (genreKey === ALL_GENRE) {
+            return (
+              <option key={genreKey} value={genreKey}>
+                {ALL_GENRE}
+              </option>
+            );
+          }
+
+          // Для жанров — берём метку из GENRE_LABELS
+          const label = GENRE_LABELS[genreKey] || genreKey;
+          return (
+            <option key={genreKey} value={genreKey}>
+              {label}
             </option>
-          ))}
-        </select>
-      </label>
-    </div>
-  );
+          );
+        })}
+      </select>
+    </label>
+  </div>
+);
+
 
   return (
     <div className="library-container">

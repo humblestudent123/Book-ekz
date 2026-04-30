@@ -81,7 +81,6 @@ body {
 .header-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
 
   padding: 16px 24px;
@@ -100,9 +99,17 @@ body {
 
 
 .logo-block {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  justify-self: start;
+}
+
+
+.search-bar {
+  flex: 1;          
+  min-width: 0;     
+}
+
+.search-bar input {
+  box-sizing: border-box;
 }
 
 .logo {
@@ -176,13 +183,9 @@ body {
   filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.28));
 }
 
-.search-bar {
-  width: 40%;
-  padding-right: 520px;
-}
 
 .search-bar input {
-  width: 40%;
+  width: 100%;
   padding: 16px 18px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
