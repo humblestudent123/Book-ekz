@@ -1,6 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import '../Reader/ReaderModal.css';
+
+const QUOTES_STORAGE_KEY = 'quotes';
+
+const readQuotes = () => {
+  try {
+    const savedQuotes = localStorage.getItem(QUOTES_STORAGE_KEY);
+    return savedQuotes ? JSON.parse(savedQuotes) : {};
+  } catch {
+    return {};
+  }
+};
+
+const formatDate = (date) =>
+  new Intl.DateTimeFormat('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
 
 export default function ReaderModal({
   book,
@@ -12,64 +33,54 @@ export default function ReaderModal({
   goToPage,
 }) {
   const modalRef = useRef(null);
+  const safePages = Array.isArray(pages) ? pages : [];
+  const safePageIndex = safePages.length
+    ? Math.min(Math.max(pageIndex, 0), safePages.length - 1)
+    : 0;
 
-  const [inputPage, setInputPage] = useState(pageIndex + 1);
-
+  const [inputPage, setInputPage] = useState(String(safePageIndex + 1));
   const [showQuotesList, setShowQuotesList] = useState(false);
-
   const [selectionText, setSelectionText] = useState('');
   const [showAddBtn, setShowAddBtn] = useState(false);
+  const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
+  const [quotes, setQuotes] = useState(readQuotes);
 
-  const [btnPos, setBtnPos] = useState({
-    x: 0,
-    y: 0,
-  });
+  const currentBookQuotes = useMemo(() => quotes[book.id] || [], [book.id, quotes]);
 
-  const [quotes, setQuotes] = useState(() => {
-    const savedQuotes = localStorage.getItem('quotes');
-
-    return savedQuotes ? JSON.parse(savedQuotes) : {};
-  });
-
-  // Сохраняем цитаты
   useEffect(() => {
-    localStorage.setItem('quotes', JSON.stringify(quotes));
+    localStorage.setItem(QUOTES_STORAGE_KEY, JSON.stringify(quotes));
   }, [quotes]);
 
-  // Обновляем номер страницы в input
   useEffect(() => {
-    setInputPage(pageIndex + 1);
-  }, [pageIndex]);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
-  // Если выделение пропало — скрываем кнопку
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  useEffect(() => {
+    setInputPage(String(safePageIndex + 1));
+  }, [safePageIndex]);
+
   useEffect(() => {
     const handleSelectionChange = () => {
-      const selection = window.getSelection();
-      const selectedText = selection?.toString().trim();
+      const selectedText = window.getSelection()?.toString().trim();
 
       if (!selectedText) {
         setShowAddBtn(false);
       }
     };
 
-    document.addEventListener(
-      'selectionchange',
-      handleSelectionChange
-    );
-
-    return () => {
-      document.removeEventListener(
-        'selectionchange',
-        handleSelectionChange
-      );
-    };
+    document.addEventListener('selectionchange', handleSelectionChange);
+    return () => document.removeEventListener('selectionchange', handleSelectionChange);
   }, []);
 
-  // Показываем кнопку добавления цитаты
   const handleMouseUp = () => {
     const selection = window.getSelection();
 
-    if (!selection || selection.rangeCount === 0) {
+    if (!selection || selection.rangeCount === 0 || !modalRef.current) {
       setShowAddBtn(false);
       return;
     }
@@ -81,119 +92,72 @@ export default function ReaderModal({
       return;
     }
 
-    const range = selection.getRangeAt(0);
-
-    const rect = range.getBoundingClientRect();
-    const modalRect =
-      modalRef.current.getBoundingClientRect();
+    const rect = selection.getRangeAt(0).getBoundingClientRect();
+    const modalRect = modalRef.current.getBoundingClientRect();
 
     setSelectionText(selectedText);
-
     setBtnPos({
-      x: Math.min(
-        rect.right - modalRect.left + 8,
-        modalRect.width - 50
-      ),
-
-      y: Math.max(
-        rect.bottom - modalRect.top + 8,
-        10
-      ),
+      x: Math.min(rect.right - modalRect.left + 8, modalRect.width - 50),
+      y: Math.max(rect.bottom - modalRect.top + 8, 10),
     });
-
     setShowAddBtn(true);
   };
 
-  // Добавление цитаты
   const handleAddQuote = () => {
     if (!selectionText) return;
 
-    const now = new Date();
-
-    const formattedDate = `
-${now.getDate().toString().padStart(2, '0')}.
-${(now.getMonth() + 1)
-  .toString()
-  .padStart(2, '0')}.
-${now.getFullYear()}
-
-${now.getHours().toString().padStart(2, '0')}:
-${now.getMinutes().toString().padStart(2, '0')}:
-${now.getSeconds().toString().padStart(2, '0')}
-`.replace(/\s/g, '');
-
     const newQuote = {
       text: selectionText,
-      date: formattedDate,
+      date: formatDate(new Date()),
+      page: safePageIndex + 1,
     };
 
     setQuotes((prev) => ({
       ...prev,
-
-      [book.id]: [
-        ...(prev[book.id] || []),
-        newQuote,
-      ],
+      [book.id]: [...(prev[book.id] || []), newQuote],
     }));
 
     setSelectionText('');
     setShowAddBtn(false);
-
-    window.getSelection().removeAllRanges();
+    window.getSelection()?.removeAllRanges();
   };
 
-  // Удаление цитаты
   const handleDeleteQuote = (quoteIndex) => {
     setQuotes((prev) => ({
       ...prev,
-
-      [book.id]: (prev[book.id] || []).filter(
-        (_, index) => index !== quoteIndex
-      ),
+      [book.id]: (prev[book.id] || []).filter((_, index) => index !== quoteIndex),
     }));
   };
 
-  // Изменение input страницы
-  const handleInputChange = (event) => {
-    setInputPage(event.target.value);
-  };
-
-  // Переход по Enter
-  const handleKeyDown = (event) => {
-    if (event.key !== 'Enter') return;
-
+  const submitPage = () => {
     const pageNumber = Number(inputPage);
 
-    const isValidPage =
-      !isNaN(pageNumber) &&
-      pageNumber >= 1 &&
-      pageNumber <= pages.length;
+    if (!Number.isFinite(pageNumber) || pageNumber < 1 || pageNumber > safePages.length) {
+      setInputPage(String(safePageIndex + 1));
+      return;
+    }
 
-    if (isValidPage) {
-      goToPage(pageNumber - 1);
+    goToPage(pageNumber - 1);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      submitPage();
     }
   };
 
-  return (
-    <div
-      className="reader-overlay"
-      onClick={onClose}
-    >
+  const modal = (
+    <div className="reader-overlay" onClick={onClose}>
       <div
         ref={modalRef}
         className="reader-modal black-theme"
         onClick={(event) => event.stopPropagation()}
         onMouseUp={handleMouseUp}
       >
-        {/* Кнопка закрытия */}
-        <button
-          className="reader-close"
-          onClick={onClose}
-        >
-          ✕
+        <button className="reader-close" type="button" onClick={onClose} aria-label="Закрыть">
+          ×
         </button>
 
-        {/* Верхняя панель */}
         <div className="reader-header">
           <strong>{book.title}</strong>
 
@@ -204,111 +168,76 @@ ${now.getSeconds().toString().padStart(2, '0')}
 
             <button
               className="quotes-toggle-btn"
-              onClick={() =>
-                setShowQuotesList((prev) => !prev)
-              }
+              type="button"
+              onClick={() => setShowQuotesList((prev) => !prev)}
             >
-              {showQuotesList
-                ? 'Скрыть цитаты'
-                : 'Показать цитаты'}
+              {showQuotesList ? 'Скрыть цитаты' : 'Показать цитаты'}
             </button>
           </div>
         </div>
 
-        {/* Контент */}
         <div className="reader-content">
-          {pages.length > 0 ? (
-            <div className="reader-page">
-              {pages[pageIndex]}
-            </div>
-          ) : (
-            <div className="reader-page">
-              Нет содержания для чтения.
-            </div>
-          )}
+          <div className="reader-page">
+            {safePages.length ? safePages[safePageIndex] : 'Нет содержания для чтения.'}
+          </div>
         </div>
 
-        {/* Навигация */}
         <div className="reader-controls">
-          <button
-            onClick={prevPage}
-            disabled={pageIndex === 0}
-          >
+          <button type="button" onClick={prevPage} disabled={safePageIndex === 0}>
             ←
           </button>
 
           <div className="reader-progress">
             Стр.
-
             <input
               type="number"
               min="1"
-              max={pages.length}
+              max={Math.max(safePages.length, 1)}
               value={inputPage}
-              onChange={handleInputChange}
+              onChange={(event) => setInputPage(event.target.value)}
+              onBlur={submitPage}
               onKeyDown={handleKeyDown}
               className="reader-page-input"
             />
-
-            / {pages.length}
+            / {safePages.length || 1}
           </div>
 
           <button
+            type="button"
             onClick={nextPage}
-            disabled={
-              pageIndex >= pages.length - 1
-            }
+            disabled={!safePages.length || safePageIndex >= safePages.length - 1}
           >
             →
           </button>
         </div>
 
-        {/* Модалка цитат */}
         {showQuotesList && (
-          <div
-            className="quotes-list-overlay"
-            onClick={() =>
-              setShowQuotesList(false)
-            }
-          >
-            <div
-              className="quotes-list"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
-            >
+          <div className="quotes-list-overlay" onClick={() => setShowQuotesList(false)}>
+            <div className="quotes-list" onClick={(event) => event.stopPropagation()}>
               <h3>Цитаты</h3>
 
-              {quotes[book.id]?.length ? (
-                quotes[book.id].map(
-                  (quote, index) => (
-                    <div
-                      key={index}
-                      className="quote-item"
-                    >
-                      {quote.date && (
-                        <div className="quote-date">
-                          {quote.date}
-                        </div>
-                      )}
-
-                      <div className="quote-row">
-                        <span className="quote-text">
-                          {quote.text}
-                        </span>
-
-                        <button
-                          className="quote-delete-btn"
-                          onClick={() =>
-                            handleDeleteQuote(index)
-                          }
-                        >
-                          ✕
-                        </button>
-                      </div>
+              {currentBookQuotes.length ? (
+                currentBookQuotes.map((quote, index) => (
+                  <div key={`${quote.date}-${index}`} className="quote-item">
+                    <div className="quote-date">
+                      {quote.date}
+                      {quote.page ? ` · стр. ${quote.page}` : ''}
                     </div>
-                  )
-                )
+
+                    <div className="quote-row">
+                      <span className="quote-text">{quote.text}</span>
+
+                      <button
+                        className="quote-delete-btn"
+                        type="button"
+                        onClick={() => handleDeleteQuote(index)}
+                        aria-label="Удалить цитату"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))
               ) : (
                 <p>Нет цитат</p>
               )}
@@ -316,15 +245,13 @@ ${now.getSeconds().toString().padStart(2, '0')}
           </div>
         )}
 
-        {/* Кнопка добавления цитаты */}
         {showAddBtn && (
           <button
             className="add-quote-btn"
+            type="button"
             onClick={handleAddQuote}
-            style={{
-              left: btnPos.x,
-              top: btnPos.y,
-            }}
+            style={{ left: btnPos.x, top: btnPos.y }}
+            aria-label="Добавить цитату"
           >
             +
           </button>
@@ -332,17 +259,16 @@ ${now.getSeconds().toString().padStart(2, '0')}
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
 
 ReaderModal.propTypes = {
   book: PropTypes.object.isRequired,
   pages: PropTypes.array.isRequired,
   pageIndex: PropTypes.number.isRequired,
-
   onClose: PropTypes.func.isRequired,
-
   nextPage: PropTypes.func.isRequired,
   prevPage: PropTypes.func.isRequired,
-
   goToPage: PropTypes.func.isRequired,
 };

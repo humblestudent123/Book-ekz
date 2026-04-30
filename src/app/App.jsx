@@ -1,14 +1,14 @@
-import { Routes, Route } from 'react-router-dom';
-import Library from '../pages/Library/Library';
-import BookPage from '../pages/BookPage/BookPage';
+import { Route, Routes } from 'react-router-dom';
 import Layout from '../layout/Layout';
+import BookPage from '../pages/BookPage/BookPage';
+import Library from '../pages/Library/Library';
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Library />} />
-        <Route path="/book/:id" element={<BookPage />} />
+        <Route index element={<Library />} />
+        <Route path="book/:id" element={<BookPage />} />
       </Route>
     </Routes>
   );

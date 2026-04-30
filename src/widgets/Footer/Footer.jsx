@@ -5,21 +5,13 @@ import FooterSection from './FooterSection';
 export default function Footer() {
   return (
     <footer className="footer">
-
-      {/* Верхняя часть (колонки) */}
       <div className="footer-top">
         {FOOTER_SECTIONS.map((section) => (
-          <FooterSection
-            key={section.title}
-            title={section.title}
-            links={section.links}
-          />
+          <FooterSection key={section.title} title={section.title} links={section.links} />
         ))}
       </div>
 
-      {/* Нижняя панель */}
       <div className="footer-bottom">
-        
         <div className="footer-support">
           <div>Служба поддержки</div>
           <div>8 800 333 27 37</div>
@@ -37,7 +29,6 @@ export default function Footer() {
           <span>MasterCard</span>
           <span>PayPal</span>
         </div>
-
       </div>
     </footer>
   );

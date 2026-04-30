@@ -44,10 +44,15 @@
   gap: 10px;
 }
 
-.footer-section a {
+.footer-section button {
   font-size: 14px;
   color: var(--text);
   text-decoration: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
 
   opacity: 0.7;
   transition: all 0.2s ease;
@@ -55,7 +60,7 @@
   width: fit-content;
 }
 
-.footer-section a::after {
+.footer-section button::after {
   content: '';
   position: absolute;
   left: 0;
@@ -66,12 +71,14 @@
   transition: 0.25s ease;
 }
 
-.footer-section a:hover {
+.footer-section button:hover,
+.footer-section button:focus-visible {
   opacity: 1;
   color: var(--text);
 }
 
-.footer-section a:hover::after {
+.footer-section button:hover::after,
+.footer-section button:focus-visible::after {
   width: 100%;
 }
 

@@ -89,33 +89,9 @@ input, button, textarea, select {
 }
 
 /* === Z-INDEX LAYERS === */
-.book-page > * {
+.book-page > *:not(.reader-overlay) {
   position: relative;
   z-index: 2;
-}
-
-/* === NAVIGATION === */
-.back-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
-  color: #a1a1aa;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-size: 14px;
-  font-family: inherit;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateX(-4px);
 }
 
 /* === LAYOUT === */

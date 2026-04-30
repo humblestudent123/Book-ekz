@@ -6,7 +6,7 @@ export default function SearchBar({ query, setQuery }) {
       <input
         type="text"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(event) => setQuery(event.target.value)}
         placeholder="Книга или автор"
         autoComplete="off"
         spellCheck={false}

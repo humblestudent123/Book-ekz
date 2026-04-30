@@ -1,21 +1,30 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import './BookCard.css'
+import './BookCard.css';
 import { GENRE_LABELS } from '../../genres';
 
 export default function BookCard({ book, onSelect }) {
-  
-  console.log(book.id, book.cover);
   return (
-    <div className="book-card" onClick={() => onSelect(book)}>
+    <div
+      className="book-card"
+      onClick={() => onSelect(book)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onSelect(book);
+        }
+      }}
+    >
       <div className="book-card__image-wrapper">
         <img
           src={book.cover}
           alt={book.title}
           className="book-card__cover"
           loading="lazy"
-          onError={(e) => {
-            e.target.src = '/covers/fallback.jpg';
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = '/logo192.png';
           }}
         />
       </div>

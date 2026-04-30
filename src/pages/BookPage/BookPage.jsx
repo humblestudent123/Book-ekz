@@ -1,273 +1,289 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
-import './BookPage.css';
-import { useState, useMemo, useCallback, useEffect  } from 'react';
-import ReaderModal from '../../widgets/Reader/ReaderModal';
-import { loadBookText } from '../../utils/loadBook';
 import { GENRE_LABELS } from '../../genres';
+import { loadBookText } from '../../utils/loadBook';
+import ReaderModal from '../../widgets/Reader/ReaderModal';
+import './BookPage.css';
 
+const PAGE_CHARS = 1000;
+const FAVORITES_STORAGE_KEY = 'favorite-books';
+const READING_PAGES_STORAGE_KEY = 'reading-pages';
+const OPENED_BOOKS_STORAGE_KEY = 'opened-books';
 
+const readJsonFromStorage = (key, fallback) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
+  if (!text) return ['Текст книги пока недоступен.'];
+
+  const words = text.replace(/\s+/g, ' ').trim().split(' ');
+  const pages = [];
+  let current = '';
+
+  words.forEach((word) => {
+    if (!current) {
+      current = word;
+      return;
+    }
+
+    const candidate = `${current} ${word}`;
+
+    if (candidate.length <= approxCharsPerPage) {
+      current = candidate;
+    } else {
+      pages.push(current);
+      current = word;
+    }
+  });
+
+  if (current) pages.push(current);
+
+  return pages.length ? pages : ['Текст книги пока недоступен.'];
+};
+
+const getFallbackBookText = (book, errorMessage) => {
+  const parts = [book.title, book.author, '', book.description || 'Описание пока отсутствует.'];
+
+  if (!book.content) {
+    parts.push('', 'Полный текст этой книги пока не добавлен в каталог.');
+  } else if (errorMessage) {
+    parts.push('', `Не получилось загрузить файл книги. ${errorMessage}`);
+  }
+
+  return parts.join('\n');
+};
+
+const clampPage = (page, pagesCount) => {
+  const maxPage = Math.max(pagesCount - 1, 0);
+  return Math.min(Math.max(Number(page) || 0, 0), maxPage);
+};
 
 export default function BookPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+
+  const book = useMemo(
+    () => booksCatalog.find((item) => String(item.id) === String(id)),
+    [id]
+  );
 
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [bookPages, setBookPages] = useState({});
-  const [readingPages, setReadingPages] = useState({});
-  
-
-const book = booksCatalog.find((b) => String(b.id) === id);
-
-const [favoriteBooks, setFavoriteBooks] = useState(() => {
-  const saved = localStorage.getItem('favorite-books');
-  return saved ? JSON.parse(saved) : [];
-});
-
-const isFavorite = book
-  ? favoriteBooks.includes(book.id)
-  : false;
-
-
-  
-  
-
-
-
-
-  const toggleFavorite = () => {
-  let updated;
-
-  if (isFavorite) {
-    updated = favoriteBooks.filter((id) => id !== book.id);
-  } else {
-    updated = [...favoriteBooks, book.id];
-  }
-
-  setFavoriteBooks(updated);
-
-  localStorage.setItem(
-    'favorite-books',
-    JSON.stringify(updated)
+  const [readingPages, setReadingPages] = useState(() =>
+    readJsonFromStorage(READING_PAGES_STORAGE_KEY, {})
   );
-};
+  const [openedBooks, setOpenedBooks] = useState(() =>
+    readJsonFromStorage(OPENED_BOOKS_STORAGE_KEY, {})
+  );
+  const [favoriteBooks, setFavoriteBooks] = useState(() =>
+    readJsonFromStorage(FAVORITES_STORAGE_KEY, [])
+  );
 
+  const favoriteBookIds = Array.isArray(favoriteBooks) ? favoriteBooks : [];
+  const isFavorite = book
+    ? favoriteBookIds.some((favoriteId) => String(favoriteId) === String(book.id))
+    : false;
 
-
-
-
-
-  // возращения скрола в исходное сост. 
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'auto'
-  });
-}, []);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [id]);
 
+  useEffect(() => {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteBooks));
+  }, [favoriteBooks]);
 
+  useEffect(() => {
+    localStorage.setItem(READING_PAGES_STORAGE_KEY, JSON.stringify(readingPages));
+  }, [readingPages]);
 
+  useEffect(() => {
+    localStorage.setItem(OPENED_BOOKS_STORAGE_KEY, JSON.stringify(openedBooks));
+  }, [openedBooks]);
 
+  const toggleFavorite = useCallback(() => {
+    if (!book) return;
 
+    setFavoriteBooks((prev) => {
+      const safePrev = Array.isArray(prev) ? prev : [];
+      const hasBook = safePrev.some((favoriteId) => String(favoriteId) === String(book.id));
 
-
-
-
-  const PAGE_CHARS = 1000;
-
-  const paginateText = (text, approx = PAGE_CHARS) => {
-    if (!text) return [''];
-
-    const words = text.split(/\s+/);
-    const pages = [];
-    let current = '';
-
-    for (const word of words) {
-      if ((current + ' ' + word).length <= approx || current.length === 0) {
-        current = `${current} ${word}`.trim();
-      } else {
-        pages.push(current);
-        current = word;
-      }
-    }
-
-    if (current) pages.push(current);
-    return pages;
-  };
-
-
-
-
-
-  const openReader = useCallback(async () => {
-  let content = book.content;
-
-  try {
-    if (typeof content === 'string' && content.endsWith('.txt')) {
-      content = await loadBookText(content);
-    }
-  } catch {
-    content = 'Ошибка загрузки книги';
-  }
-
-  const paginated = paginateText(content);
-
-  setBookPages((prev) => ({
-    ...prev,
-    [book.id]: paginated
-  }));
-
-  setReadingPages((prev) => ({
-    ...prev,
-    [book.id]: prev[book.id] ?? 0
-  }));
-
-  setCurrentReadingBook({ ...book, content });
-}, [book]);
-
-
-
-
-
-
+      return hasBook
+        ? safePrev.filter((favoriteId) => String(favoriteId) !== String(book.id))
+        : [...safePrev, book.id];
+    });
+  }, [book]);
 
   const pages = useMemo(() => {
-  return currentReadingBook
-    ? (bookPages[currentReadingBook.id] ?? [])
-    : [];
-}, [currentReadingBook, bookPages]);
+    if (!currentReadingBook) return [];
+    return bookPages[currentReadingBook.id] || [];
+  }, [bookPages, currentReadingBook]);
 
-const readingPage = currentReadingBook
-  ? (readingPages[currentReadingBook.id] ?? 0)
-  : 0;
+  const readingPage = currentReadingBook
+    ? clampPage(readingPages[currentReadingBook.id], pages.length)
+    : 0;
 
+  const openReader = useCallback(async () => {
+    if (!book) return;
 
+    let content = '';
 
+    try {
+      content =
+        typeof book.content === 'string' && book.content.trim()
+          ? await loadBookText(book.content)
+          : getFallbackBookText(book);
+    } catch (error) {
+      content = getFallbackBookText(book, error.message);
+    }
 
+    const paginated = paginateText(content);
 
-  const nextPage = () => {
-  if (!currentReadingBook) return;
+    setBookPages((prev) => ({
+      ...prev,
+      [book.id]: paginated,
+    }));
 
-  const id = currentReadingBook.id;
+    setReadingPages((prev) => ({
+      ...prev,
+      [book.id]: clampPage(prev[book.id], paginated.length),
+    }));
 
-  setReadingPages((prev) => ({
-    ...prev,
-    [id]: Math.min((prev[id] ?? 0) + 1, pages.length - 1)
-  }));
-};
+    setOpenedBooks((prev) => ({
+      ...prev,
+      [book.id]: (prev[book.id] || 0) + 1,
+    }));
 
-const prevPage = () => {
-  if (!currentReadingBook) return;
+    setCurrentReadingBook({
+      ...book,
+      content,
+      pagesCount: paginated.length,
+    });
+  }, [book]);
 
-  const id = currentReadingBook.id;
+  const nextPage = useCallback(() => {
+    if (!currentReadingBook) return;
 
-  setReadingPages((prev) => ({
-    ...prev,
-    [id]: Math.max((prev[id] ?? 0) - 1, 0)
-  }));
-};
+    setReadingPages((prev) => ({
+      ...prev,
+      [currentReadingBook.id]: clampPage((prev[currentReadingBook.id] || 0) + 1, pages.length),
+    }));
+  }, [currentReadingBook, pages.length]);
 
+  const prevPage = useCallback(() => {
+    if (!currentReadingBook) return;
 
+    setReadingPages((prev) => ({
+      ...prev,
+      [currentReadingBook.id]: clampPage((prev[currentReadingBook.id] || 0) - 1, pages.length),
+    }));
+  }, [currentReadingBook, pages.length]);
 
+  const goToPage = useCallback(
+    (pageNumber) => {
+      if (!currentReadingBook) return;
+
+      setReadingPages((prev) => ({
+        ...prev,
+        [currentReadingBook.id]: clampPage(pageNumber, pages.length),
+      }));
+    },
+    [currentReadingBook, pages.length]
+  );
+
+  useEffect(() => {
+    if (!currentReadingBook) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setCurrentReadingBook(null);
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        nextPage();
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevPage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentReadingBook, nextPage, prevPage]);
 
   if (!book) {
-    return <div className="book-page">Книга не найдена</div>;
+    return (
+      <div className="book-page">
+        <div className="book-not-found">Книга не найдена.</div>
+      </div>
+    );
   }
 
   return (
     <div className="book-page">
-
       <div className="book-bg" style={{ backgroundImage: `url(${book.cover})` }} />
 
-
       <div className="book-layout">
-
-        {/* ОБЛОЖКА */}
         <div className="book-cover">
           <img src={book.cover} alt={book.title} />
         </div>
 
-        {/* ИНФА */}
         <div className="book-info">
           <h1>{book.title}</h1>
-          <h3>
+
+          <h3 className="book-author">
             <span>Автор:</span>
             {book.author}
           </h3>
 
-
-
-
-          <h3 className="book-author">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} style={{marginRight: '10px'}}>
-              <path d="M21.6 7.34a2.5 2.5 0 0 0-2.5-2.5l-.8.2a2.5 2.5 0 0 0-1.6.7L9.6 14.8a2.5 2.5 0 0 0 .7 3.6l.8.2a2.5 2.5 0 0 0 2.5-2.5l.2-.8c.2-.6.2-1.2-.2-1.8L14.6 9.8a2.5 2.5 0 0 0-3.6-.7l-.2.8a2.5 2.5 0 0 0 .7 3.6l.8.2c.6.2 1.2.2 1.8-.2L19.4 5.8a2.5 2.5 0 0 0-1.8-2.5z"/>
-              <path d="M7.8 18.6l-3.6-3.6 3.6-3.6"/>
-            </svg>
-            {book.author}
-          </h3>
-
-
-
-
-          {/* МЕТА */}
           <div className="book-meta">
-            <span>{book.year || '—'} год</span>
-            <span>{book.pages || '—'} стр.</span>
+            <span>{book.year || 'Год неизвестен'}</span>
+            <span>{book.content ? 'Текст доступен' : 'Текст скоро будет добавлен'}</span>
           </div>
 
-          {/* ЖАНРЫ */}
           <div className="book-genres">
-            {(book.genres || []).map((g) => (
-              <span key={g}>
-                {GENRE_LABELS[g] || g}
-              </span>
+            {(book.genres || []).map((genre) => (
+              <span key={genre}>{GENRE_LABELS[genre] || genre}</span>
             ))}
           </div>
 
-          {/* ОПИСАНИЕ */}
-          <p className="book-description">
-            {book.description || "Описание отсутствует"}
-          </p>
+          <p className="book-description">{book.description || 'Описание отсутствует.'}</p>
 
-          {/* КНОПКИ */}
           <div className="book-actions">
-            <button className="read-btn" onClick={openReader}>
+            <button className="read-btn" type="button" onClick={openReader}>
               Читать
             </button>
 
             <button
               className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+              type="button"
               onClick={toggleFavorite}
             >
-              {isFavorite ? '♥ В избранном' : '♡ В избранное'}
+              {isFavorite ? 'В избранном' : 'В избранное'}
             </button>
           </div>
-            
-
         </div>
-
-
-                    
-              {currentReadingBook && (
-                <ReaderModal
-                  book={currentReadingBook}
-                  pages={pages}
-                  pageIndex={readingPage}
-                  onClose={() => setCurrentReadingBook(null)}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                  goToPage={(p) =>
-                    setReadingPages((prev) => ({
-                      ...prev,
-                      [currentReadingBook.id]: p
-                    }))
-                  }
-                />
-              )}
-
-
       </div>
+
+      {currentReadingBook && (
+        <ReaderModal
+          book={currentReadingBook}
+          pages={pages}
+          pageIndex={readingPage}
+          onClose={() => setCurrentReadingBook(null)}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          goToPage={goToPage}
+        />
+      )}
     </div>
   );
 }

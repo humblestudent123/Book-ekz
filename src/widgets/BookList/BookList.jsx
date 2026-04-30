@@ -7,8 +7,8 @@ export default function BookList({
   books,
   onSelect = () => {},
   action,
-  emptyMessage = 'Пока нет книг в этом разделе.'
-})  {
+  emptyMessage = 'Пока нет книг в этом разделе.',
+}) {
   return (
     <section className="shelf-section">
       <div className="shelf-section__header">
@@ -22,7 +22,7 @@ export default function BookList({
       {books.length ? (
         <div className="books-grid">
           {books.map((book) => (
-            <BookCard key={book.id} book={book} onSelect={() => onSelect(book)} />
+            <BookCard key={book.id} book={book} onSelect={onSelect} />
           ))}
         </div>
       ) : (
@@ -36,7 +36,7 @@ BookList.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onSelect: PropTypes.func, 
+  onSelect: PropTypes.func,
   action: PropTypes.node,
-  emptyMessage: PropTypes.string
+  emptyMessage: PropTypes.string,
 };

@@ -6,7 +6,7 @@ export default function FooterSection({ title, links }) {
       <ul>
         {links.map((link) => (
           <li key={link}>
-            <a href="#">{link}</a>
+            <button type="button">{link}</button>
           </li>
         ))}
       </ul>
