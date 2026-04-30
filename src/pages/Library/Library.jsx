@@ -145,7 +145,7 @@ books.forEach(b => {
 
 
 
-  const isSearching = debouncedQuery.trim().length > 0;
+
 
 
 
@@ -377,6 +377,8 @@ const toolbar = (
   </div>
 );
 
+const isSearching = debouncedQuery.trim().length > 0;
+
 
   return (
     <div className="library-container">
@@ -404,14 +406,16 @@ const toolbar = (
 
 <main className="main-grid">
 
-  {isSearching ? (
+  {isSearching && (
     <BookList
-      title="Весь каталог"
-      books={visibleBooks}
+      title={debouncedQuery.trim() ? "Результаты поиска" : "Весь каталог"}
+      books={filteredBooks}
       onSelect={(book) => navigate(`/book/${book.id}`)}
       action={toolbar}
     />
-  ) : (
+  )}
+
+  {!isSearching && (
     <>
       <BookList
         title="Рекомендации"
@@ -436,6 +440,14 @@ const toolbar = (
         title="Популярное"
         books={popularBooks}
         onSelect={(book) => navigate(`/book/${book.id}`)}
+      />
+
+
+      <BookList
+        title="Весь каталог"
+        books={filteredBooks}
+        onSelect={(book) => navigate(`/book/${book.id}`)}
+        action={toolbar}
       />
     </>
   )}
