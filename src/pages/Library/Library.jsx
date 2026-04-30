@@ -406,15 +406,17 @@ const isSearching = debouncedQuery.trim().length > 0;
 
 <main className="main-grid">
 
+  {/* 🔍 ПОИСК */}
   {isSearching && (
     <BookList
-      title={debouncedQuery.trim() ? "Результаты поиска" : "Весь каталог"}
+      title="Результаты поиска"
       books={filteredBooks}
       onSelect={(book) => navigate(`/book/${book.id}`)}
       action={toolbar}
     />
   )}
 
+  {/* 📚 ГЛАВНАЯ СТРАНИЦА (только когда нет поиска) */}
   {!isSearching && (
     <>
       <BookList
@@ -442,10 +444,9 @@ const isSearching = debouncedQuery.trim().length > 0;
         onSelect={(book) => navigate(`/book/${book.id}`)}
       />
 
-
       <BookList
         title="Весь каталог"
-        books={filteredBooks}
+        books={books}   // 👈 ВАЖНО: НЕ filteredBooks
         onSelect={(book) => navigate(`/book/${book.id}`)}
         action={toolbar}
       />
