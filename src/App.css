@@ -11,11 +11,11 @@
   --subtle: rgba(246, 247, 251, 0.5);
 
 
-  --accent: #4ade80;          /* мягкий зелёный */
-  --accent-strong: #22c55e80;   /* основной зелёный */
-  --accent-dark: #15803d;     /* тёмный зелёный */
+  --accent: #4ade80;          
+  --accent-strong: #22c55e80;   
+  --accent-dark: #15803d;     
 
-  /* glow / эффекты */
+  /* glow  эффекты */
   --accent-soft: rgba(74, 222, 128, 0.15);
 
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
@@ -29,7 +29,7 @@ body::selection,
   color: white;
 }
 
-/* Для Firefox (требует отдельного правила) */
+
 body::-moz-selection,
 *::-moz-selection {
   background-color: #22c55e80;
@@ -59,17 +59,6 @@ body {
   margin-bottom: 28px;
 }
 
-/* .hero-banner {
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  padding: 28px;
-  background:
-    linear-gradient(135deg, rgba(255, 192, 71, 0.2), rgba(69, 126, 255, 0.12)),
-    rgba(20, 23, 31, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: var(--shadow);
-} */
 
 .header {
   display: flex;
@@ -509,7 +498,7 @@ body {
   .books-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     max-width: 100%;
-    overflow-x: auto; /* если всё же вылазит — скролл внутри */
+    overflow-x: auto; 
   }
 
   .reader-modal {
