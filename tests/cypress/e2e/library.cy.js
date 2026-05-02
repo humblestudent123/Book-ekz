@@ -22,7 +22,7 @@ describe('Library page', () => {
   });
 
   it('filters books by genre and shows only matching cards', () => {
-    // antiutopia есть у книг 1984 и 451 градус по Фаренгейту.
+
     cy.get('[data-testid="genre-filter"]').select('antiutopia');
 
     cy.get('[data-testid="book-card"]').should('have.length', 2);
