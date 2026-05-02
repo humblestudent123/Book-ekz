@@ -130,29 +130,13 @@ export default function Library() {
               ))}
             </select>
           </label>
-
-          {isFiltering ? (
-            <div className="toolbar-actions">
-              <button
-                className="toolbar-button"
-                type="button"
-                onClick={() => {
-                  setQuery('');
-                  setSelectedGenre('all');
-                }}
-                data-testid="reset-filters"
-              >
-                Сбросить
-              </button>
-            </div>
-          ) : null}
         </section>
       </header>
 
       <main className="main-grid">
         {isFiltering ? (
           <BookList
-            title="Результаты фильтрации"
+            title="Результаты поиска"
             books={filteredBooks}
             onSelect={openBookPreview}
             emptyMessage="По этим условиям ничего не найдено."

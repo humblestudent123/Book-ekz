@@ -194,6 +194,12 @@
   transition: 0.2s;
 }
 
+
+
+.quote-delete-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
 .quote-delete-btn:hover {
   background: rgba(255, 107, 107, 0.1);
 }
@@ -246,4 +252,32 @@
 
 .quotes-toggle-btn:hover {
   background: #2f2f2f;
+}
+
+
+
+/* крестик */
+
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+.reader-modal.black-theme .reader-close {
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  transition: color 0.2s, transform 0.2s !important;
+  line-height: 1 !important;
+}
+
+.reader-modal.black-theme .reader-close:hover {
+  color: #22c55e !important; /* зелёный при наведении */
+  transform: rotate(90deg) scale(1.2) !important;
 }

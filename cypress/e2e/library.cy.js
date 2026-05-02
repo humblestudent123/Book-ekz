@@ -35,7 +35,8 @@ describe('Library page', () => {
       expect(ids).to.deep.equal(['2', '5']);
     });
 
-    cy.get('[data-testid="reset-filters"]').click();
+    cy.get('[data-testid="reset-filters"]').should('not.exist');
+    cy.get('[data-testid="genre-filter"]').select('all');
     cy.get('[data-testid="genre-filter"]').should('have.value', 'all');
     cy.get('[data-testid="book-card"]').should('have.length.greaterThan', 2);
   });
