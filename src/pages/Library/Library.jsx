@@ -34,10 +34,18 @@ const getSearchText = (book) =>
 export default function Library() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('all');
   const [favoriteBookIds, setFavoriteBookIds] = useState(readFavoriteBookIds);
 
   const debouncedQuery = useDebounce(query, 300);
   const books = booksCatalog;
+  const genreOptions = useMemo(
+    () =>
+      Object.entries(GENRE_LABELS).filter(([genre]) =>
+        books.some((book) => (book.genres || []).includes(genre))
+      ),
+    [books]
+  );
 
   useEffect(() => {
     const syncFavorites = () => setFavoriteBookIds(readFavoriteBookIds());
@@ -60,10 +68,15 @@ export default function Library() {
 
   const filteredBooks = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
-    if (!q) return books;
 
-    return books.filter((book) => getSearchText(book).includes(q));
-  }, [books, debouncedQuery]);
+    return books.filter((book) => {
+      const matchesQuery = !q || getSearchText(book).includes(q);
+      const matchesGenre =
+        selectedGenre === 'all' || (book.genres || []).includes(selectedGenre);
+
+      return matchesQuery && matchesGenre;
+    });
+  }, [books, debouncedQuery, selectedGenre]);
 
   const recommendedBooks = useMemo(() => books.filter((book) => book.featured), [books]);
   const newBooks = useMemo(() => books.filter((book) => book.isNew), [books]);
@@ -76,7 +89,7 @@ export default function Library() {
     [books, favoriteBookIds]
   );
 
-  const isSearching = debouncedQuery.trim().length > 0;
+  const isFiltering = debouncedQuery.trim().length > 0 || selectedGenre !== 'all';
 
   return (
     <div className="library-container">
@@ -99,15 +112,50 @@ export default function Library() {
             </div>
           </div>
         </section>
+
+        <section className="catalog-toolbar" aria-label="Фильтры каталога" data-testid="catalog-filters">
+          <label className="toolbar-field" htmlFor="genre-filter">
+            <span>Жанр</span>
+            <select
+              id="genre-filter"
+              value={selectedGenre}
+              onChange={(event) => setSelectedGenre(event.target.value)}
+              data-testid="genre-filter"
+            >
+              <option value="all">Все жанры</option>
+              {genreOptions.map(([genre, label]) => (
+                <option key={genre} value={genre}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {isFiltering ? (
+            <div className="toolbar-actions">
+              <button
+                className="toolbar-button"
+                type="button"
+                onClick={() => {
+                  setQuery('');
+                  setSelectedGenre('all');
+                }}
+                data-testid="reset-filters"
+              >
+                Сбросить
+              </button>
+            </div>
+          ) : null}
+        </section>
       </header>
 
       <main className="main-grid">
-        {isSearching ? (
+        {isFiltering ? (
           <BookList
-            title="Результаты поиска"
+            title="Результаты фильтрации"
             books={filteredBooks}
             onSelect={openBookPreview}
-            emptyMessage="По этому запросу ничего не найдено."
+            emptyMessage="По этим условиям ничего не найдено."
           />
         ) : (
           <>

@@ -15,8 +15,15 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start:ci": "cross-env BROWSER=none PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "cypress:install": "cypress install",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "e2e": "concurrently -k --success first -n app,cypress \"npm run start:ci\" \"wait-on http://localhost:3000 && npm run cypress:run\"",
+    "e2e:open": "concurrently -k --success first -n app,cypress \"npm run start:ci\" \"wait-on http://localhost:3000 && npm run cypress:open\"",
     "add-book": "node scripts/add-book.js",
     "eject": "react-scripts eject"
   },
@@ -39,6 +46,10 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
+    "cypress": "^13.17.0",
+    "wait-on": "^8.0.3",
     "sass": "^1.99.0"
   }
 }

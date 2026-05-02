@@ -6,6 +6,9 @@ export default function BookCard({ book, onSelect }) {
   return (
     <div
       className="book-card"
+      data-testid="book-card"
+      data-book-id={book.id}
+      data-genres={(book.genres || []).join(',')}
       onClick={() => onSelect(book)}
       role="button"
       tabIndex={0}

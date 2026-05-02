@@ -258,7 +258,7 @@ export default function BookPage() {
           <p className="book-description">{book.description || 'Описание отсутствует.'}</p>
 
           <div className="book-actions">
-            <button className="read-btn" type="button" onClick={openReader}>
+            <button className="read-btn" type="button" onClick={openReader} data-testid="open-reader">
               Читать
             </button>
 

@@ -147,14 +147,21 @@ export default function ReaderModal({
   };
 
   const modal = (
-    <div className="reader-overlay" onClick={onClose}>
+    <div className="reader-overlay" onClick={onClose} data-testid="reader-overlay">
       <div
         ref={modalRef}
         className="reader-modal black-theme"
+        data-testid="reader-modal"
         onClick={(event) => event.stopPropagation()}
         onMouseUp={handleMouseUp}
       >
-        <button className="reader-close" type="button" onClick={onClose} aria-label="Закрыть">
+        <button
+          className="reader-close"
+          type="button"
+          onClick={onClose}
+          aria-label="Закрыть"
+          data-testid="close-reader"
+        >
           ×
         </button>
 
@@ -183,13 +190,19 @@ export default function ReaderModal({
         </div>
 
         <div className="reader-controls">
-          <button type="button" onClick={prevPage} disabled={safePageIndex === 0}>
+          <button
+            type="button"
+            onClick={prevPage}
+            disabled={safePageIndex === 0}
+            data-testid="prev-page"
+          >
             ←
           </button>
 
           <div className="reader-progress">
             Стр.
             <input
+              data-testid="reader-page-input"
               type="number"
               min="1"
               max={Math.max(safePages.length, 1)}
@@ -206,6 +219,7 @@ export default function ReaderModal({
             type="button"
             onClick={nextPage}
             disabled={!safePages.length || safePageIndex >= safePages.length - 1}
+            data-testid="next-page"
           >
             →
           </button>
