@@ -4,18 +4,18 @@
   border-radius: 22px;
   padding: 14px;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
   min-height: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  contain: layout paint style;
 }
 
 .book-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-3px);
   border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
 }
 
 .book-card__image-wrapper {
@@ -56,7 +56,7 @@
 .book-card__year {
   font-size: 12px;
   color: rgba(246, 247, 251, 0.55);
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 

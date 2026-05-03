@@ -233,7 +233,7 @@ export default function BookPage() {
 
       <div className="book-layout">
         <div className="book-cover">
-          <img src={book.cover} alt={book.title} />
+          <img src={book.cover} alt={book.title} decoding="async" fetchPriority="high" />
         </div>
 
         <div className="book-info">

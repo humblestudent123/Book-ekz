@@ -1,18 +1,30 @@
+// footer.data.js
 export const FOOTER_SECTIONS = [
   {
     title: 'О проекте',
-    links: ['Что такое ReadNext', 'Помощь', 'Документация'],
+    links: [
+      { text: 'Что такое ReadNext', href: 'about' },
+      { text: 'Помощь', href: 'help' },
+      { text: 'Документация', href: 'docs' },
+    ],
   },
   {
     title: 'О подписке',
-    links: ['Купить подписку',],
+    links: [
+      { text: 'Купить подписку', href: 'pricing' },
+    ],
   },
   {
     title: 'Правовая информация',
-    links: ['Политика конфиденциальности', 'Правообладателям'],
+    links: [
+      { text: 'Политика конфиденциальности', href: 'privacy' },
+      { text: 'Правообладателям', href: 'dmca' },
+    ],
   },
   {
     title: 'Другие проекты',
-    links: ['Опубликовать книгу'],
+    links: [
+      { text: 'Опубликовать книгу', href: 'publish' },
+    ],
   },
 ];

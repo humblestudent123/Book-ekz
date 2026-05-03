@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import BookCard from '../../entities/book/BookCard';
 
-export default function BookList({
+function BookList({
   title,
   description,
   books,
@@ -40,3 +41,5 @@ BookList.propTypes = {
   action: PropTypes.node,
   emptyMessage: PropTypes.string,
 };
+
+export default memo(BookList);

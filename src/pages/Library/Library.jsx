@@ -6,7 +6,6 @@ import { SAMPLE_BOOKS as booksCatalog } from '../../data';
 import { GENRE_LABELS } from '../../genres';
 import { useDebounce } from '../../hooks/useDebounce';
 import logo from '../../assets/ReadNext-logo.png';
-import '../../App.css';
 
 const FAVORITES_STORAGE_KEY = 'favorite-books';
 

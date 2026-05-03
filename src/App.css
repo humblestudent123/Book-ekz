@@ -18,7 +18,7 @@
   /* glow  эффекты */
   --accent-soft: rgba(74, 222, 128, 0.15);
 
-  --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
   
   
 }
@@ -41,10 +41,17 @@ body {
   font-family: 'Manrope', sans-serif;
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(0, 247, 62, 0.14), transparent 28%),
-    radial-gradient(circle at top right, rgba(69, 126, 255, 0.16), transparent 24%),
+    radial-gradient(circle at top left, rgba(0, 247, 62, 0.1), transparent 24%),
+    radial-gradient(circle at top right, rgba(69, 126, 255, 0.1), transparent 22%),
     linear-gradient(180deg, #0b0d12 0%, #11141c 100%);
   color: var(--text);
+}
+
+.route-fallback {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
 }
 
 .library-container {
@@ -128,7 +135,7 @@ body {
   height: 220px;
   border-radius: 50%;
   background: rgba(86, 255, 71, 0.2);
-  filter: blur(6px);
+  opacity: 0.55;
 }
 
 .hero-banner__content {
@@ -169,7 +176,7 @@ body {
 
 #logo {
   width: min(220px, 45vw);
-  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.2));
 }
 
 
@@ -208,7 +215,7 @@ body {
   font-size: 12px;
   color: var(--subtle);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
 }
 
 .toolbar-field select,
@@ -254,7 +261,7 @@ body {
   border-radius: inherit;
   background: radial-gradient(circle, rgba(74, 222, 128, 0.4), transparent 70%);
   opacity: 0;
-  transition: 0.3s;
+  transition: opacity 0.2s ease;
 }
 
 .toolbar-button--accent:hover::after {
@@ -278,6 +285,9 @@ body {
   border-radius: 28px;
   padding: 22px;
   box-shadow: var(--shadow);
+  content-visibility: auto;
+  contain-intrinsic-size: 520px;
+  contain: layout paint style;
 }
 
 .shelf-section__header {
@@ -305,6 +315,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, max-content));
   gap: 18px;
+  align-items: stretch;
 }
 
 .book-card {
@@ -418,7 +429,7 @@ body {
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.16s ease, opacity 0.16s ease;
 }
 
 .reader-controls button:hover {
@@ -451,7 +462,7 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.16s ease, opacity 0.16s ease;
   font-weight: 500;
 }
 
@@ -523,5 +534,16 @@ body {
   
   .reader-progress {
     text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
   }
 }

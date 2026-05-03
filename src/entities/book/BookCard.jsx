@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import './BookCard.css';
 import { GENRE_LABELS } from '../../genres';
 
-export default function BookCard({ book, onSelect }) {
+function BookCard({ book, onSelect }) {
   return (
     <div
       className="book-card"
@@ -25,6 +26,7 @@ export default function BookCard({ book, onSelect }) {
           alt={book.title}
           className="book-card__cover"
           loading="lazy"
+          decoding="async"
           onError={(event) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = '/logo192.png';
@@ -62,3 +64,5 @@ BookCard.propTypes = {
   }).isRequired,
   onSelect: PropTypes.func.isRequired
 };
+
+export default memo(BookCard);
