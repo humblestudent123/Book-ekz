@@ -53,7 +53,7 @@ function PersonalRecommendations({ books, courses, onSelectBook, onSelectCourse 
     <section className="shelf-section personal-recommendations">
       <div className="shelf-section__header">
         <div>
-          <h2>🤖 Персональные рекомендации</h2>
+          <h2>Персональные рекомендации</h2>
           <p>Подборка учитывает последние просмотры, избранное и совпадение категорий.</p>
         </div>
       </div>

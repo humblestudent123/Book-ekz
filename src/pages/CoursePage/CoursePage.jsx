@@ -1,16 +1,22 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import RelatedBooks from '../../components/RelatedBooks/RelatedBooks';
 import { useLibraryState } from '../../context/LibraryContext';
-import { COURSES as coursesCatalog } from '../../data/courses';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
+import { COURSES as coursesCatalog } from '../../data/courses';
 import { GENRE_LABELS } from '../../genres';
+import { buildCourseLessons } from '../../utils/courseContent';
 import { normalizeId } from '../../utils/recommendations';
 import './CoursePage.css';
 
 export default function CoursePage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const learningRef = useRef(null);
+  const [isLearningOpen, setIsLearningOpen] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
+
   const {
     favoriteCourseIds,
     courseProgress,
@@ -24,16 +30,23 @@ export default function CoursePage() {
     [id]
   );
 
+  const courseLessons = useMemo(() => (course ? buildCourseLessons(course) : []), [course]);
   const completedLessons = course
     ? Math.min(Number(courseProgress?.[course.id] || 0), course.lessons)
     : 0;
   const progressPercent = course?.lessons
     ? Math.round((completedLessons / course.lessons) * 100)
     : 0;
-
+  const currentLessonIndex = courseLessons.length
+    ? Math.min(completedLessons, courseLessons.length - 1)
+    : 0;
+  const currentLesson = courseLessons[currentLessonIndex];
+  const isCourseCompleted = course ? completedLessons >= course.lessons : false;
   const isFavorite = course
     ? favoriteCourseIds.some((courseId) => normalizeId(courseId) === normalizeId(course.id))
     : false;
+  const isAnswerCorrect =
+    currentLesson?.quiz && selectedAnswer === currentLesson.quiz.correctIndex;
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -44,6 +57,12 @@ export default function CoursePage() {
       recordCourseView(course.id);
     }
   }, [course, recordCourseView]);
+
+  useEffect(() => {
+    setIsLearningOpen(false);
+    setSelectedAnswer(null);
+    setIsAnswerChecked(false);
+  }, [id]);
 
   const openBookPreview = useCallback(
     (book) => {
@@ -58,14 +77,28 @@ export default function CoursePage() {
     }
   }, [course, toggleCourseFavorite]);
 
-  const markNextLesson = useCallback(() => {
+  const openLearning = useCallback(() => {
     if (!course) return;
+
+    setIsLearningOpen(true);
+    window.setTimeout(() => {
+      learningRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
+  }, [course]);
+
+  const completeCurrentLesson = useCallback(() => {
+    if (!course) return;
+
     setCourseLessonProgress(course.id, Math.min(completedLessons + 1, course.lessons));
+    setSelectedAnswer(null);
+    setIsAnswerChecked(false);
   }, [completedLessons, course, setCourseLessonProgress]);
 
   const resetProgress = useCallback(() => {
     if (course) {
       setCourseLessonProgress(course.id, 0);
+      setSelectedAnswer(null);
+      setIsAnswerChecked(false);
     }
   }, [course, setCourseLessonProgress]);
 
@@ -124,11 +157,15 @@ export default function CoursePage() {
             <button
               className="read-btn"
               type="button"
-              onClick={markNextLesson}
+              onClick={openLearning}
               data-testid="course-progress-action"
-              disabled={completedLessons >= course.lessons}
+              disabled={isCourseCompleted}
             >
-              {completedLessons > 0 ? 'Следующий урок' : 'Начать курс'}
+              {isCourseCompleted
+                ? 'Курс завершен'
+                : completedLessons > 0
+                  ? 'Продолжить курс'
+                  : 'Начать курс'}
             </button>
 
             <button
@@ -147,6 +184,97 @@ export default function CoursePage() {
           </div>
         </div>
       </div>
+
+      {isLearningOpen && currentLesson ? (
+        <section className="course-learning" ref={learningRef} data-testid="course-learning">
+          <div className="course-learning__header">
+            <div>
+              <span className="course-learning__eyebrow">
+                Урок {currentLessonIndex + 1} из {course.lessons}
+              </span>
+              <h2>{currentLesson.title}</h2>
+            </div>
+            <strong>{progressPercent}%</strong>
+          </div>
+
+          <div className="course-learning__grid">
+            <article className="course-learning__panel">
+              <h3>Теория</h3>
+              {currentLesson.theory.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </article>
+
+            <article className="course-learning__panel course-learning__panel--practice">
+              <h3>Практика</h3>
+              <p>{currentLesson.practice}</p>
+            </article>
+
+            <article className="course-learning__panel course-learning__panel--quiz">
+              <h3>Тест</h3>
+              <p>{currentLesson.quiz.question}</p>
+
+              <div className="course-quiz" role="radiogroup" aria-label="Ответ на тест">
+                {currentLesson.quiz.options.map((option, optionIndex) => (
+                  <button
+                    key={option}
+                    className={`course-quiz__option ${
+                      selectedAnswer === optionIndex ? 'is-selected' : ''
+                    } ${
+                      isAnswerChecked && optionIndex === currentLesson.quiz.correctIndex
+                        ? 'is-correct'
+                        : ''
+                    } ${
+                      isAnswerChecked &&
+                      selectedAnswer === optionIndex &&
+                      optionIndex !== currentLesson.quiz.correctIndex
+                        ? 'is-wrong'
+                        : ''
+                    }`}
+                    type="button"
+                    role="radio"
+                    aria-checked={selectedAnswer === optionIndex}
+                    onClick={() => {
+                      setSelectedAnswer(optionIndex);
+                      setIsAnswerChecked(false);
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+
+              {isAnswerChecked ? (
+                <div className={`course-quiz__feedback ${isAnswerCorrect ? 'is-correct' : 'is-wrong'}`}>
+                  {isAnswerCorrect
+                    ? currentLesson.quiz.explanation
+                    : 'Пока не совсем. Вернитесь к теории и выберите более точный вариант.'}
+                </div>
+              ) : null}
+
+              <div className="course-learning__actions">
+                <button
+                  className="secondary-btn"
+                  type="button"
+                  onClick={() => setIsAnswerChecked(true)}
+                  disabled={selectedAnswer === null}
+                >
+                  Проверить тест
+                </button>
+
+                <button
+                  className="read-btn"
+                  type="button"
+                  onClick={completeCurrentLesson}
+                  disabled={!isAnswerChecked || !isAnswerCorrect}
+                >
+                  Далее
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      ) : null}
 
       <div className="course-page__recommendations">
         <RelatedBooks course={course} books={booksCatalog} onSelectBook={openBookPreview} />
