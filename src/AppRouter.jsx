@@ -5,7 +5,8 @@ export default function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<App />} />
-      <Route path="/library/*" element={<App />} />
+      <Route path="/library/*" element={<App root="library" />} />
+      <Route path="/courses/*" element={<App root="courses" />} />
     </Routes>
   );
 }

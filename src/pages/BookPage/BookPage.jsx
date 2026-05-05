@@ -1,24 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import RelatedCourses from '../../components/RelatedCourses/RelatedCourses';
+import { useLibraryState } from '../../context/LibraryContext';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
+import { COURSES as coursesCatalog } from '../../data/courses';
 import { GENRE_LABELS } from '../../genres';
 import { loadBookText } from '../../utils/loadBook';
 import ReaderModal from '../../widgets/Reader/ReaderModal';
 import './BookPage.css';
 
 const PAGE_CHARS = 1000;
-const FAVORITES_STORAGE_KEY = 'favorite-books';
-const READING_PAGES_STORAGE_KEY = 'reading-pages';
-const OPENED_BOOKS_STORAGE_KEY = 'opened-books';
-
-const readJsonFromStorage = (key, fallback) => {
-  try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
-  } catch {
-    return fallback;
-  }
-};
 
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return ['Текст книги пока недоступен.'];
@@ -67,6 +58,18 @@ const clampPage = (page, pagesCount) => {
 
 export default function BookPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const {
+    favoriteBookIds,
+    favoriteCourseIds,
+    readingPages,
+    courseProgress,
+    setReadingPages,
+    toggleBookFavorite,
+    toggleCourseFavorite,
+    recordBookView,
+    incrementOpenedBook,
+  } = useLibraryState();
 
   const book = useMemo(
     () => booksCatalog.find((item) => String(item.id) === String(id)),
@@ -75,17 +78,7 @@ export default function BookPage() {
 
   const [currentReadingBook, setCurrentReadingBook] = useState(null);
   const [bookPages, setBookPages] = useState({});
-  const [readingPages, setReadingPages] = useState(() =>
-    readJsonFromStorage(READING_PAGES_STORAGE_KEY, {})
-  );
-  const [openedBooks, setOpenedBooks] = useState(() =>
-    readJsonFromStorage(OPENED_BOOKS_STORAGE_KEY, {})
-  );
-  const [favoriteBooks, setFavoriteBooks] = useState(() =>
-    readJsonFromStorage(FAVORITES_STORAGE_KEY, [])
-  );
 
-  const favoriteBookIds = Array.isArray(favoriteBooks) ? favoriteBooks : [];
   const isFavorite = book
     ? favoriteBookIds.some((favoriteId) => String(favoriteId) === String(book.id))
     : false;
@@ -95,29 +88,30 @@ export default function BookPage() {
   }, [id]);
 
   useEffect(() => {
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteBooks));
-  }, [favoriteBooks]);
-
-  useEffect(() => {
-    localStorage.setItem(READING_PAGES_STORAGE_KEY, JSON.stringify(readingPages));
-  }, [readingPages]);
-
-  useEffect(() => {
-    localStorage.setItem(OPENED_BOOKS_STORAGE_KEY, JSON.stringify(openedBooks));
-  }, [openedBooks]);
+    if (book) {
+      recordBookView(book.id);
+    }
+  }, [book, recordBookView]);
 
   const toggleFavorite = useCallback(() => {
-    if (!book) return;
+    if (book) {
+      toggleBookFavorite(book.id);
+    }
+  }, [book, toggleBookFavorite]);
 
-    setFavoriteBooks((prev) => {
-      const safePrev = Array.isArray(prev) ? prev : [];
-      const hasBook = safePrev.some((favoriteId) => String(favoriteId) === String(book.id));
+  const openCoursePreview = useCallback(
+    (course) => {
+      navigate(`/courses/${course.id}`);
+    },
+    [navigate]
+  );
 
-      return hasBook
-        ? safePrev.filter((favoriteId) => String(favoriteId) !== String(book.id))
-        : [...safePrev, book.id];
-    });
-  }, [book]);
+  const handleToggleCourseFavorite = useCallback(
+    (course) => {
+      toggleCourseFavorite(course.id);
+    },
+    [toggleCourseFavorite]
+  );
 
   const pages = useMemo(() => {
     if (!currentReadingBook) return [];
@@ -154,17 +148,14 @@ export default function BookPage() {
       [book.id]: clampPage(prev[book.id], paginated.length),
     }));
 
-    setOpenedBooks((prev) => ({
-      ...prev,
-      [book.id]: (prev[book.id] || 0) + 1,
-    }));
+    incrementOpenedBook(book.id);
 
     setCurrentReadingBook({
       ...book,
       content,
       pagesCount: paginated.length,
     });
-  }, [book]);
+  }, [book, incrementOpenedBook, setReadingPages]);
 
   const nextPage = useCallback(() => {
     if (!currentReadingBook) return;
@@ -173,7 +164,7 @@ export default function BookPage() {
       ...prev,
       [currentReadingBook.id]: clampPage((prev[currentReadingBook.id] || 0) + 1, pages.length),
     }));
-  }, [currentReadingBook, pages.length]);
+  }, [currentReadingBook, pages.length, setReadingPages]);
 
   const prevPage = useCallback(() => {
     if (!currentReadingBook) return;
@@ -182,7 +173,7 @@ export default function BookPage() {
       ...prev,
       [currentReadingBook.id]: clampPage((prev[currentReadingBook.id] || 0) - 1, pages.length),
     }));
-  }, [currentReadingBook, pages.length]);
+  }, [currentReadingBook, pages.length, setReadingPages]);
 
   const goToPage = useCallback(
     (pageNumber) => {
@@ -193,7 +184,7 @@ export default function BookPage() {
         [currentReadingBook.id]: clampPage(pageNumber, pages.length),
       }));
     },
-    [currentReadingBook, pages.length]
+    [currentReadingBook, pages.length, setReadingPages]
   );
 
   useEffect(() => {
@@ -271,6 +262,17 @@ export default function BookPage() {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="book-page__recommendations">
+        <RelatedCourses
+          book={book}
+          courses={coursesCatalog}
+          favoriteCourseIds={favoriteCourseIds}
+          progressById={courseProgress}
+          onSelectCourse={openCoursePreview}
+          onToggleFavorite={handleToggleCourseFavorite}
+        />
       </div>
 
       {currentReadingBook && (

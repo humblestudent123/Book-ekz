@@ -219,6 +219,11 @@ input, button, textarea, select {
   flex-wrap: wrap;
 }
 
+.book-page__recommendations {
+  max-width: 1400px;
+  margin: 52px auto 0;
+}
+
 .read-btn {
   background: var(--primary);
   border: none;
@@ -247,6 +252,13 @@ input, button, textarea, select {
   background: var(--primary-hover);
   box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
   transform: translateY(-2px);
+}
+
+.read-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
 }
 
 .read-btn:hover::after {

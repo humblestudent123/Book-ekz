@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default function SearchBar({ query, setQuery }) {
+export default function SearchBar({ query, setQuery, placeholder = 'Книга или автор' }) {
   return (
     <div className="search-bar">
       <input
@@ -8,7 +8,7 @@ export default function SearchBar({ query, setQuery }) {
         type="text"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Книга или автор"
+        placeholder={placeholder}
         autoComplete="off"
         spellCheck={false}
       />
@@ -19,4 +19,5 @@ export default function SearchBar({ query, setQuery }) {
 SearchBar.propTypes = {
   query: PropTypes.string.isRequired,
   setQuery: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
 };

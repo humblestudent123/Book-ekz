@@ -1,22 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CatalogTabs from '../../components/CatalogTabs/CatalogTabs';
+import PersonalRecommendations from '../../components/PersonalRecommendations/PersonalRecommendations';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import BookList from '../../widgets/BookList/BookList';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
+import { COURSES as coursesCatalog } from '../../data/courses';
+import { useLibraryState } from '../../context/LibraryContext';
 import { GENRE_LABELS } from '../../genres';
 import { useDebounce } from '../../hooks/useDebounce';
 import logo from '../../assets/ReadNext-logo.png';
-
-const FAVORITES_STORAGE_KEY = 'favorite-books';
-
-const readFavoriteBookIds = () => {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]');
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
 
 const getSearchText = (book) =>
   [
@@ -34,10 +27,13 @@ export default function Library() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
-  const [favoriteBookIds, setFavoriteBookIds] = useState(readFavoriteBookIds);
-
   const debouncedQuery = useDebounce(query, 300);
+
+  const { favoriteBookIds } = useLibraryState();
+
   const books = booksCatalog;
+  const courses = coursesCatalog;
+
   const genreOptions = useMemo(
     () =>
       Object.entries(GENRE_LABELS).filter(([genre]) =>
@@ -46,21 +42,16 @@ export default function Library() {
     [books]
   );
 
-  useEffect(() => {
-    const syncFavorites = () => setFavoriteBookIds(readFavoriteBookIds());
-
-    window.addEventListener('storage', syncFavorites);
-    window.addEventListener('focus', syncFavorites);
-
-    return () => {
-      window.removeEventListener('storage', syncFavorites);
-      window.removeEventListener('focus', syncFavorites);
-    };
-  }, []);
-
   const openBookPreview = useCallback(
     (book) => {
       navigate(`/library/book/${book.id}`);
+    },
+    [navigate]
+  );
+
+  const openCoursePreview = useCallback(
+    (course) => {
+      navigate(`/courses/${course.id}`);
     },
     [navigate]
   );
@@ -80,13 +71,10 @@ export default function Library() {
   const recommendedBooks = useMemo(() => books.filter((book) => book.featured), [books]);
   const newBooks = useMemo(() => books.filter((book) => book.isNew), [books]);
   const popularBooks = useMemo(() => books.filter((book) => book.isPopular), [books]);
-  const favoriteBooks = useMemo(
-    () => {
-      const normalizedFavoriteIds = favoriteBookIds.map(String);
-      return books.filter((book) => normalizedFavoriteIds.includes(String(book.id)));
-    },
-    [books, favoriteBookIds]
-  );
+  const favoriteBooks = useMemo(() => {
+    const normalizedFavoriteIds = favoriteBookIds.map(String);
+    return books.filter((book) => normalizedFavoriteIds.includes(String(book.id)));
+  }, [books, favoriteBookIds]);
 
   const isFiltering = debouncedQuery.trim().length > 0 || selectedGenre !== 'all';
 
@@ -97,6 +85,7 @@ export default function Library() {
           <div className="logo-block">
             <img src={logo} alt="ReadNext" className="logo" />
           </div>
+          <CatalogTabs />
           <SearchBar query={query} setQuery={setQuery} />
         </div>
 
@@ -104,15 +93,20 @@ export default function Library() {
           <div className="hero-banner__content">
             <div className="hero-banner__text">
               <span className="hero-banner__eyebrow">Твоя домашняя читалка</span>
+              <h1>Книги и курсы в одном маршруте обучения</h1>
               <p>
-                Открывай карточку книги, смотри описание, добавляй в избранное и продолжай чтение
-                с сохраненной страницы.
+                Открывай карточку книги, смотри описание, добавляй в избранное и
+                продолжай чтение с сохраненной страницы.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="catalog-toolbar" aria-label="Фильтры каталога" data-testid="catalog-filters">
+        <section
+          className="catalog-toolbar"
+          aria-label="Фильтры каталога"
+          data-testid="catalog-filters"
+        >
           <label className="toolbar-field" htmlFor="genre-filter">
             <span>Жанр</span>
             <select
@@ -142,6 +136,13 @@ export default function Library() {
           />
         ) : (
           <>
+            <PersonalRecommendations
+              books={books}
+              courses={courses}
+              onSelectBook={openBookPreview}
+              onSelectCourse={openCoursePreview}
+            />
+
             <BookList
               title="Рекомендации"
               books={recommendedBooks}

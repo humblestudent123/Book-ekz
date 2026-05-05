@@ -16,6 +16,11 @@ export const GENRES = {
   EPIC_POETRY: 'epic_poetry',
   ADVENTURE: 'adventure',
   FAMILY_SAGA: 'family_saga',
+  FRONTEND: 'frontend',
+  BACKEND: 'backend',
+  ALGORITHMS: 'algorithms',
+  FANTASY: 'fantasy',
+  ETC: 'etc',
 };
 
 export const GENRE_LABELS = {
@@ -36,6 +41,11 @@ export const GENRE_LABELS = {
   [GENRES.EPIC_POETRY]: 'Эпическая поэма',
   [GENRES.ADVENTURE]: 'Приключения',
   [GENRES.FAMILY_SAGA]: 'Семейная сага',
+  [GENRES.FRONTEND]: 'Frontend',
+  [GENRES.BACKEND]: 'Backend',
+  [GENRES.ALGORITHMS]: 'Алгоритмы',
+  [GENRES.FANTASY]: 'Фэнтези',
+  [GENRES.ETC]: 'Разное',
 };
 
 export const getGenreLabel = (key) => GENRE_LABELS[key] || key;

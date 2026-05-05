@@ -47,6 +47,10 @@ body {
   color: var(--text);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .route-fallback {
   min-height: 280px;
   display: grid;
@@ -84,6 +88,7 @@ body {
   border: 1px solid var(--panel-border);
   border-radius: 18px;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 
@@ -318,6 +323,13 @@ body {
   align-items: stretch;
 }
 
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
 .book-card {
   display: flex;
   flex-direction: column;
@@ -342,6 +354,13 @@ body {
   border-radius: 20px;
   border: 1px dashed rgba(255, 255, 255, 0.12);
   color: var(--muted);
+  text-align: center;
+  padding: 18px;
+}
+
+.related-section {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
 }
 
 .reader-overlay {
@@ -504,13 +523,29 @@ body {
   .toolbar-actions {
     margin-left: 0;
   }
+
+  .header-bar {
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 768px) {
   .books-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     max-width: 100%;
-    overflow-x: auto; 
+    overflow-x: visible;
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-bar {
+    padding: 14px;
+  }
+
+  .logo-block {
+    flex: 1;
   }
 
   .reader-modal {
