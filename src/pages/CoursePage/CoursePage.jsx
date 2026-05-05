@@ -11,6 +11,7 @@ export default function CoursePage() {
   const { id } = useParams();
   const [isLearningOpen, setIsLearningOpen] = useState(false);
   const [lessonStep, setLessonStep] = useState('theory');
+  const [activeLessonIndex, setActiveLessonIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const {
@@ -34,7 +35,7 @@ export default function CoursePage() {
     ? Math.round((completedLessons / course.lessons) * 100)
     : 0;
   const currentLessonIndex = courseLessons.length
-    ? Math.min(completedLessons, courseLessons.length - 1)
+    ? Math.min(Math.max(activeLessonIndex, 0), courseLessons.length - 1)
     : 0;
   const currentLesson = courseLessons[currentLessonIndex];
   const isCourseCompleted = course ? completedLessons >= course.lessons : false;
@@ -58,6 +59,7 @@ export default function CoursePage() {
   useEffect(() => {
     setIsLearningOpen(false);
     setLessonStep('theory');
+    setActiveLessonIndex(0);
     setSelectedAnswer(null);
   }, [id]);
 
@@ -69,29 +71,44 @@ export default function CoursePage() {
 
   const openLearning = useCallback(() => {
     if (!course || isCourseCompleted) return;
+
     setIsLearningOpen(true);
     setLessonStep('theory');
+    setActiveLessonIndex(Math.min(completedLessons, courseLessons.length - 1));
     setSelectedAnswer(null);
-  }, [course, isCourseCompleted]);
+  }, [completedLessons, course, courseLessons.length, isCourseCompleted]);
 
   const goToQuiz = useCallback(() => {
     setLessonStep('quiz');
     setSelectedAnswer(null);
   }, []);
 
+  const selectLesson = useCallback((lessonIndex) => {
+    setActiveLessonIndex(lessonIndex);
+    setLessonStep('theory');
+    setSelectedAnswer(null);
+  }, []);
+
   const completeCurrentLesson = useCallback(() => {
     if (!course || !isAnswerCorrect) return;
 
-    setCourseLessonProgress(course.id, Math.min(completedLessons + 1, course.lessons));
+    const nextProgress = Math.min(
+      Math.max(completedLessons, currentLessonIndex + 1),
+      course.lessons
+    );
+
+    setCourseLessonProgress(course.id, nextProgress);
+    setActiveLessonIndex(Math.min(currentLessonIndex + 1, course.lessons - 1));
     setLessonStep('theory');
     setSelectedAnswer(null);
-  }, [completedLessons, course, isAnswerCorrect, setCourseLessonProgress]);
+  }, [completedLessons, course, currentLessonIndex, isAnswerCorrect, setCourseLessonProgress]);
 
   const resetProgress = useCallback(() => {
     if (course) {
       setCourseLessonProgress(course.id, 0);
       setIsLearningOpen(false);
       setLessonStep('theory');
+      setActiveLessonIndex(0);
       setSelectedAnswer(null);
     }
   }, [course, setCourseLessonProgress]);
@@ -111,6 +128,7 @@ export default function CoursePage() {
           <button
             className="course-study-back"
             type="button"
+            data-testid="course-study-back"
             onClick={() => setIsLearningOpen(false)}
           >
             К описанию курса
@@ -134,85 +152,124 @@ export default function CoursePage() {
             <span>{lessonStep === 'theory' ? 'Теория' : 'Тест'}</span>
           </div>
 
-          {lessonStep === 'theory' ? (
-            <section className="course-study-card">
-              <h1>{currentLesson.title}</h1>
-              <div className="course-study-content">
-                {currentLesson.theory.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
+          <div className="course-study-layout">
+            <aside className="course-lesson-nav" aria-label="Темы курса">
+              <div className="course-lesson-nav__header">
+                <h2>Темы курса</h2>
+                <span>{course.lessons} уроков</span>
               </div>
 
-              <div className="course-study-practice">
-                <h2>Практика перед тестом</h2>
-                <p>{currentLesson.practice}</p>
-              </div>
+              <div className="course-lesson-nav__list">
+                {courseLessons.map((lesson, lessonIndex) => {
+                  const isCurrent = lessonIndex === currentLessonIndex;
+                  const isCompleted = lessonIndex < completedLessons;
 
-              <div className="course-study-actions">
-                <button className="read-btn" type="button" onClick={goToQuiz}>
-                  Далее
-                </button>
+                  return (
+                    <button
+                      key={lesson.id}
+                      className={`course-lesson-nav__item ${isCurrent ? 'is-current' : ''} ${
+                        isCompleted ? 'is-completed' : ''
+                      }`}
+                      type="button"
+                      data-testid="course-lesson-item"
+                      aria-current={isCurrent ? 'step' : undefined}
+                      onClick={() => selectLesson(lessonIndex)}
+                    >
+                      <span>{lessonIndex + 1}</span>
+                      <strong>{lesson.title.replace(/^\d+\.\s*/, '')}</strong>
+                    </button>
+                  );
+                })}
               </div>
-            </section>
-          ) : (
-            <section className="course-study-card">
-              <h1>Тест по уроку</h1>
-              <p className="course-study-question">{currentLesson.quiz.question}</p>
+            </aside>
 
-              <div className="course-quiz" role="radiogroup" aria-label="Ответ на тест">
-                {currentLesson.quiz.options.map((option, optionIndex) => (
-                  <button
-                    key={option}
-                    className={`course-quiz__option ${
-                      selectedAnswer === optionIndex ? 'is-selected' : ''
-                    } ${
-                      hasAnswered && optionIndex === currentLesson.quiz.correctIndex
-                        ? 'is-correct'
-                        : ''
-                    } ${
-                      hasAnswered &&
-                      selectedAnswer === optionIndex &&
-                      optionIndex !== currentLesson.quiz.correctIndex
-                        ? 'is-wrong'
-                        : ''
-                    }`}
-                    type="button"
-                    role="radio"
-                    aria-checked={selectedAnswer === optionIndex}
-                    disabled={hasAnswered}
-                    onClick={() => setSelectedAnswer(optionIndex)}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-
-              {hasAnswered ? (
-                <div className={`course-quiz__feedback ${isAnswerCorrect ? 'is-correct' : 'is-wrong'}`}>
-                  {isAnswerCorrect
-                    ? currentLesson.quiz.explanation
-                    : 'Ответ неверный. Правильный вариант подсвечен зеленым, перечитайте теорию и попробуйте следующий урок внимательнее.'}
+            {lessonStep === 'theory' ? (
+              <section className="course-study-card" data-testid="course-theory-step">
+                <h1>{currentLesson.title}</h1>
+                <div className="course-study-content">
+                  {currentLesson.theory.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
                 </div>
-              ) : null}
 
-              <div className="course-study-actions">
-                <button className="secondary-btn" type="button" onClick={() => setLessonStep('theory')}>
-                  Назад к теории
-                </button>
+                <div className="course-study-practice">
+                  <h2>Практика перед тестом</h2>
+                  <p>{currentLesson.practice}</p>
+                </div>
 
-                {hasAnswered ? (
+                <div className="course-study-actions">
                   <button
                     className="read-btn"
                     type="button"
-                    onClick={completeCurrentLesson}
-                    disabled={!isAnswerCorrect}
+                    onClick={goToQuiz}
+                    data-testid="course-next-step"
                   >
-                    {completedLessons + 1 >= course.lessons ? 'Завершить курс' : 'Следующий урок'}
+                    Далее
                   </button>
+                </div>
+              </section>
+            ) : (
+              <section className="course-study-card" data-testid="course-quiz-step">
+                <h1>Тест по уроку</h1>
+                <p className="course-study-question">{currentLesson.quiz.question}</p>
+
+                <div className="course-quiz" role="radiogroup" aria-label="Ответ на тест">
+                  {currentLesson.quiz.options.map((option, optionIndex) => (
+                    <button
+                      key={option}
+                      className={`course-quiz__option ${
+                        selectedAnswer === optionIndex ? 'is-selected' : ''
+                      } ${
+                        hasAnswered && optionIndex === currentLesson.quiz.correctIndex
+                          ? 'is-correct'
+                          : ''
+                      } ${
+                        hasAnswered &&
+                        selectedAnswer === optionIndex &&
+                        optionIndex !== currentLesson.quiz.correctIndex
+                          ? 'is-wrong'
+                          : ''
+                      }`}
+                      type="button"
+                      data-testid="course-quiz-option"
+                      role="radio"
+                      aria-checked={selectedAnswer === optionIndex}
+                      disabled={hasAnswered}
+                      onClick={() => setSelectedAnswer(optionIndex)}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                {hasAnswered ? (
+                  <div className={`course-quiz__feedback ${isAnswerCorrect ? 'is-correct' : 'is-wrong'}`}>
+                    {isAnswerCorrect
+                      ? currentLesson.quiz.explanation
+                      : 'Ответ неверный. Правильный вариант подсвечен зеленым, перечитайте теорию и попробуйте следующий урок внимательнее.'}
+                  </div>
                 ) : null}
-              </div>
-            </section>
-          )}
+
+                <div className="course-study-actions">
+                  <button className="secondary-btn" type="button" onClick={() => setLessonStep('theory')}>
+                    Назад к теории
+                  </button>
+
+                  {hasAnswered ? (
+                    <button
+                      className="read-btn"
+                      type="button"
+                      onClick={completeCurrentLesson}
+                      data-testid="course-complete-lesson"
+                      disabled={!isAnswerCorrect}
+                    >
+                      {currentLessonIndex + 1 >= course.lessons ? 'Завершить курс' : 'Следующий урок'}
+                    </button>
+                  ) : null}
+                </div>
+              </section>
+            )}
+          </div>
         </main>
       </div>
     );
