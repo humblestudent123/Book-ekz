@@ -170,15 +170,15 @@
 .course-page .read-btn,
 .course-page .favorite-btn,
 .course-page .secondary-btn {
-  min-height: 50px;
+  min-height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
-  padding: 0 22px;
+  border-radius: 14px;
+  padding: 16px 32px;
   font-family: inherit;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 600;
   letter-spacing: 0;
   cursor: pointer;
   transition:
@@ -191,25 +191,38 @@
 
 .course-page .read-btn {
   border: 0;
-  color: #07110a;
-  background: linear-gradient(135deg, #86efac, #22c55e);
-  box-shadow:
-    0 12px 26px rgba(34, 197, 94, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: var(--primary, #22c55e);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+}
+
+.course-page .read-btn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.35s ease;
 }
 
 .course-page .read-btn:hover:not(:disabled),
 .course-page .read-btn:focus-visible:not(:disabled) {
+  background: var(--primary-hover, #16a34a);
   transform: translateY(-2px);
-  box-shadow:
-    0 16px 32px rgba(34, 197, 94, 0.36),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+}
+
+.course-page .read-btn:hover:not(:disabled)::after,
+.course-page .read-btn:focus-visible:not(:disabled)::after {
+  transform: translateX(100%);
 }
 
 .course-page .read-btn:disabled {
   cursor: not-allowed;
-  color: rgba(246, 247, 251, 0.55);
-  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(34, 197, 94, 0.35);
   box-shadow: none;
   transform: none;
 }
@@ -232,10 +245,17 @@
 }
 
 .course-page .favorite-btn.active {
-  color: #07110a;
-  border-color: rgba(134, 239, 172, 0.72);
-  background: linear-gradient(135deg, #bbf7d0, #4ade80);
-  box-shadow: 0 12px 26px rgba(34, 197, 94, 0.22);
+  color: #fff;
+  border-color: rgba(255, 77, 109, 0.72);
+  background: #ff4d6d;
+  box-shadow: 0 0 18px rgba(255, 77, 109, 0.4);
+}
+
+.course-page .favorite-btn.active:hover,
+.course-page .favorite-btn.active:focus-visible {
+  border-color: rgba(255, 77, 109, 0.82);
+  background: #ff4d6d;
+  box-shadow: 0 0 22px rgba(255, 77, 109, 0.48);
 }
 
 .course-page .secondary-btn:disabled {
@@ -520,15 +540,15 @@
 
 .course-study-page .read-btn,
 .course-study-page .secondary-btn {
-  min-height: 50px;
+  min-height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
-  padding: 0 22px;
+  border-radius: 14px;
+  padding: 16px 32px;
   font-family: inherit;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 600;
   letter-spacing: 0;
   cursor: pointer;
   transition:
@@ -541,11 +561,20 @@
 
 .course-study-page .read-btn {
   border: 0;
-  color: #07110a;
-  background: linear-gradient(135deg, #86efac, #22c55e);
-  box-shadow:
-    0 12px 26px rgba(34, 197, 94, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: var(--primary, #22c55e);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+}
+
+.course-study-page .read-btn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.35s ease;
 }
 
 .course-study-page .secondary-btn {
@@ -555,7 +584,17 @@
 }
 
 .course-study-page .read-btn:hover:not(:disabled),
-.course-study-page .read-btn:focus-visible:not(:disabled),
+.course-study-page .read-btn:focus-visible:not(:disabled) {
+  background: var(--primary-hover, #16a34a);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+}
+
+.course-study-page .read-btn:hover:not(:disabled)::after,
+.course-study-page .read-btn:focus-visible:not(:disabled)::after {
+  transform: translateX(100%);
+}
+
 .course-study-page .secondary-btn:hover:not(:disabled),
 .course-study-page .secondary-btn:focus-visible:not(:disabled) {
   transform: translateY(-2px);
