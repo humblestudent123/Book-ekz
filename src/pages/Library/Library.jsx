@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CatalogTabs from '../../components/CatalogTabs/CatalogTabs';
-import PersonalRecommendations from '../../components/PersonalRecommendations/PersonalRecommendations';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import BookList from '../../widgets/BookList/BookList';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
@@ -127,42 +126,38 @@ export default function Library() {
       </header>
 
       <main className="main-grid">
-        {isFiltering ? (
-          <BookList
-            title="Результаты поиска"
-            books={filteredBooks}
-            onSelect={openBookPreview}
-            emptyMessage="По этим условиям ничего не найдено."
-          />
-        ) : (
-          <>
-            <PersonalRecommendations
-              books={books}
-              courses={courses}
-              onSelectBook={openBookPreview}
-              onSelectCourse={openCoursePreview}
-            />
+          {!isFiltering && (
+            <>
+              {/* Блок рекомендаций (только книги) */}
+              <BookList
+                title="Рекомендации"
+                books={recommendedBooks}
+                onSelect={openBookPreview}
+                // Можно добавить: emptyMessage="Нет рекомендаций" 
+              />
+          
+              {/* Остальные полки — уже только книги */}
+              <BookList
+                title="Избранное"
+                books={favoriteBooks}
+                onSelect={openBookPreview}
+                emptyMessage="Ты еще не добавил книги в избранное."
+              />
+          
+              <BookList 
+                title="Новинки" 
+                books={newBooks} 
+                onSelect={openBookPreview} 
+              />
+          
+              <BookList 
+                title="Популярное" 
+                books={popularBooks} 
+                onSelect={openBookPreview} 
+              />
+            </>
+          )}
 
-            <BookList
-              title="Рекомендации"
-              books={recommendedBooks}
-              onSelect={openBookPreview}
-            />
-
-            <BookList
-              title="Избранное"
-              books={favoriteBooks}
-              onSelect={openBookPreview}
-              emptyMessage="Ты еще не добавил книги в избранное."
-            />
-
-            <BookList title="Новинки" books={newBooks} onSelect={openBookPreview} />
-
-            <BookList title="Популярное" books={popularBooks} onSelect={openBookPreview} />
-
-            <BookList title="Весь каталог" books={books} onSelect={openBookPreview} />
-          </>
-        )}
       </main>
     </div>
   );
