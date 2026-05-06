@@ -135,7 +135,7 @@ export default function Library() {
                 onSelect={openBookPreview}
                 // Можно добавить: emptyMessage="Нет рекомендаций" 
               />
-          
+
               {/* Остальные полки — уже только книги */}
               <BookList
                 title="Избранное"
@@ -143,17 +143,25 @@ export default function Library() {
                 onSelect={openBookPreview}
                 emptyMessage="Ты еще не добавил книги в избранное."
               />
-          
+
               <BookList 
                 title="Новинки" 
                 books={newBooks} 
                 onSelect={openBookPreview} 
               />
-          
+
               <BookList 
                 title="Популярное" 
                 books={popularBooks} 
                 onSelect={openBookPreview} 
+              />
+
+
+              <BookList
+                title="Весь каталог"
+                books={books}
+                onSelect={openBookPreview}
+                emptyMessage="Книги в каталоге отсутствуют."
               />
             </>
           )}
