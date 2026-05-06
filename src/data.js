@@ -211,4 +211,38 @@ export const SAMPLE_BOOKS = [
     isNew: true,
     isPopular: false,
   },
+
+
+  {
+    id: 14,
+    title: 'Божественная комедия',
+    author: 'Данте Алигьери',
+    year: 1320,
+    genres: [GENRES.EPIC_POETRY],
+    tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
+    description:
+      'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
+    cover: '/covers/comedia.jpg',
+    content: '/books/Алигьери Данте. Божественная комедия.txt',
+    featured: false,
+    isNew: false,
+    isPopular: false,
+  },
+
+
+  {
+    id: 14,
+    title: 'Божественная комедия',
+    author: 'Данте Алигьери',
+    year: 1320,
+    genres: [GENRES.EPIC_POETRY],
+    tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
+    description:
+      'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
+    cover: '/covers/comedia.jpg',
+    content: '/books/Алигьери Данте. Божественная комедия.txt',
+    featured: false,
+    isNew: false,
+    isPopular: false,
+  },
 ];

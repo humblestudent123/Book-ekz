@@ -1,10 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import CatalogTabs from '../../components/CatalogTabs/CatalogTabs';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import BookList from '../../widgets/BookList/BookList';
 import { SAMPLE_BOOKS as booksCatalog } from '../../data';
-import { COURSES as coursesCatalog } from '../../data/courses';
 import { useLibraryState } from '../../context/LibraryContext';
 import { GENRE_LABELS } from '../../genres';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -27,12 +26,20 @@ export default function Library() {
   const [query, setQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
   const debouncedQuery = useDebounce(query, 300);
-
   const { favoriteBookIds } = useLibraryState();
 
-  const books = booksCatalog;
-  const courses = coursesCatalog;
 
+
+  const ITEMS_PER_PAGE = 9;
+  const [visibleCount, setVisibleCount] = useState(7); // начальные книги: 2 ряда
+
+  const books = booksCatalog;
+
+
+
+
+
+ 
   const genreOptions = useMemo(
     () =>
       Object.entries(GENRE_LABELS).filter(([genre]) =>
@@ -42,27 +49,16 @@ export default function Library() {
   );
 
   const openBookPreview = useCallback(
-    (book) => {
-      navigate(`/library/book/${book.id}`);
-    },
-    [navigate]
-  );
-
-  const openCoursePreview = useCallback(
-    (course) => {
-      navigate(`/courses/${course.id}`);
-    },
+    (book) => navigate(`/library/book/${book.id}`),
     [navigate]
   );
 
   const filteredBooks = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
-
     return books.filter((book) => {
       const matchesQuery = !q || getSearchText(book).includes(q);
       const matchesGenre =
         selectedGenre === 'all' || (book.genres || []).includes(selectedGenre);
-
       return matchesQuery && matchesGenre;
     });
   }, [books, debouncedQuery, selectedGenre]);
@@ -77,6 +73,12 @@ export default function Library() {
 
   const isFiltering = debouncedQuery.trim().length > 0 || selectedGenre !== 'all';
 
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, books.length));
+  };
+
+ 
   return (
     <div className="library-container">
       <header className="header">
@@ -101,11 +103,7 @@ export default function Library() {
           </div>
         </section>
 
-        <section
-          className="catalog-toolbar"
-          aria-label="Фильтры каталога"
-          data-testid="catalog-filters"
-        >
+        <section className="catalog-toolbar" aria-label="Фильтры каталога">
           <label className="toolbar-field" htmlFor="genre-filter">
             <span>Жанр</span>
             <select
@@ -125,47 +123,49 @@ export default function Library() {
         </section>
       </header>
 
+ 
       <main className="main-grid">
-          {!isFiltering && (
-            <>
-              {/* Блок рекомендаций (только книги) */}
-              <BookList
-                title="Рекомендации"
-                books={recommendedBooks}
-                onSelect={openBookPreview}
-                // Можно добавить: emptyMessage="Нет рекомендаций" 
-              />
+        {!isFiltering ? (
+          <>
+            <BookList title="Рекомендации" books={recommendedBooks} onSelect={openBookPreview} />
+            <BookList
+              title="Избранное"
+              books={favoriteBooks}
+              onSelect={openBookPreview}
+              emptyMessage="Ты еще не добавил книги в избранное."
+            />
+            <BookList title="Новинки" books={newBooks} onSelect={openBookPreview} />
+            <BookList title="Популярное" books={popularBooks} onSelect={openBookPreview} />
 
-              {/* Остальные полки — уже только книги */}
-              <BookList
-                title="Избранное"
-                books={favoriteBooks}
-                onSelect={openBookPreview}
-                emptyMessage="Ты еще не добавил книги в избранное."
-              />
+            {/* === Оптимизированный "Весь каталог" === */}
+            <BookList
+              title="Весь каталог"
+              books={books.slice(0, visibleCount)}
+              onSelect={openBookPreview}
+              emptyMessage="Книги в каталоге отсутствуют."
+            />
 
-              <BookList 
-                title="Новинки" 
-                books={newBooks} 
-                onSelect={openBookPreview} 
-              />
-
-              <BookList 
-                title="Популярное" 
-                books={popularBooks} 
-                onSelect={openBookPreview} 
-              />
-
-
-              <BookList
-                title="Весь каталог"
-                books={books}
-                onSelect={openBookPreview}
-                emptyMessage="Книги в каталоге отсутствуют."
-              />
-            </>
-          )}
-
+            {visibleCount < books.length && (
+              <div className="show-more-wrapper">
+                <button 
+                  onClick={handleShowMore} 
+                  className="btn-secondary"
+                  aria-label="Загрузить ещё книги"
+                >
+                  Показать ещё
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+        
+          <BookList
+            title="Результаты поиска"
+            books={filteredBooks}
+            onSelect={openBookPreview}
+            emptyMessage="По этим условиям ничего не найдено."
+          />
+        )}
       </main>
     </div>
   );
