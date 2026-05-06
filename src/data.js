@@ -211,38 +211,236 @@ export const SAMPLE_BOOKS = [
     isNew: true,
     isPopular: false,
   },
-
+  {
+    id: 15,
+    title: 'Мартин Иден',
+    author: 'Джек Лондон',
+    year: 1909,
+    genres: [GENRES.ROMAN_VOSPITANIYA, GENRES.REALISM],
+    tags: ['Самообразование', 'Любовь', 'Классовая борьба', 'Писательство', 'Трагедия'],
+    description:
+      'История простого моряка, который благодаря железной воле и любви к женщине из высшего общества проходит тернистый путь к литературной славе, разочаровываясь в своих идеалах.',
+    cover: '/covers/martin-aiden.jpg',
+    content: '/books/Лондон Джек. Мартин Иден.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 16,
+    title: 'Фауст',
+    author: 'Иоганн Вольфганг фон Гёте',
+    year: 1808,
+    genres: [GENRES.PHILOSOPHICAL_TRAGEDY, GENRES.DRAMA],
+    tags: ['Мефистофель', 'Сделка с дьяволом', 'Поиск смысла', 'Маргарита', 'Душа'],
+    description:
+      'Философская трагедия о великом ученом, который продал душу Мефистофелю в обмен на безграничные знания, молодость и мимолетное земное счастье.',
+    cover: '/covers/Faust-gete.jpg',
+    content: '/books/Faust - gette.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
 
   {
-    id: 14,
-    title: 'Божественная комедия',
-    author: 'Данте Алигьери',
-    year: 1320,
-    genres: [GENRES.EPIC_POETRY],
-    tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
+    id: 17,
+    title: 'донки хот',
+    author: 'Илья Ильф, Евгений Петров',
+    year: 1928,
+    genres: [GENRES.SATIRE, GENRES.ADVENTURE],
+    tags: ['Остап Бендер', 'Киса Воробьянинов', 'Бриллианты', 'Поиск сокровищ', 'СССР'],
     description:
-      'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
-    cover: '/covers/comedia.jpg',
-    content: '/books/Алигьери Данте. Божественная комедия.txt',
+      'Блестящий сатирический роман о похождениях «великого комбинатора» Остапа Бендера и бывшего дворянина Ипполита Матвеевича, разыскивающих сокровища мадам Петуховой, спрятанные в одном из двенадцати стульев гарнитура мастера Гамбса.',
+    cover: '/covers/don-kihot.jpg',
+    content: '/books/Сервантес Сааведра Мигель де. Хитроумный идальго Дон Кихот Ламанчский.txt',
+    featured: true,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 18,
+    title: 'Мертвые души',
+    author: 'Николай Гоголь',
+    year: 1842,
+    genres: [GENRES.SATIRE, GENRES.EPIC_POETRY],
+    tags: ['Чичиков', 'Помещики', 'Афера', 'Дорога', 'Россия'],
+    description:
+      'Поэма в прозе о предприимчивом дельце Чичикове, который путешествует по России, скупая у помещиков «мертвые души» ради собственного обогащения и статуса.',
+    cover: '/covers/dushi-gogol.jpg',
+    content: '/books/Гоголь Николай. Мертвые души.txt',
     featured: false,
     isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 19,
+    title: 'Портрет Дориана Грея (сборник)',
+    author: 'Оскар Уайльд',
+    year: 1890,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.GOTHIC_FICTION],
+    tags: ['Вечная молодость', 'Искушение', 'Искусство', 'Порок', 'Лорд Генри'],
+    description:
+      'Единственный опубликованный роман Уайльда, рассказывающий о юноше, чей портрет стареет и принимает на себя все следы его пороков, в то время как сам Дориан сохраняет ангельскую красоту.',
+    cover: '/covers/dorian-grey.jpg',
+    content: '/books/Уайльд Оскар. Портрет Дориана Грея.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 20,
+    title: 'Приключения Оливера Твиста',
+    author: 'Чарльз Диккенс',
+    year: 1838,
+    genres: [GENRES.SOCIAL_NOVEL, GENRES.ADVENTURE],
+    tags: ['Сирота', 'Лондон', 'Криминал', 'Фейгин', 'Трущобы'],
+    description:
+      'История маленького сироты, который сбегает из работного дома и попадает в дебри лондонского преступного мира, но вопреки всему сохраняет чистоту души и находит свой путь к свету.',
+    cover: '/covers/oliver-tvist.jpg',
+    content: '/books/Диккенс Чарльз. Приключения Оливера Твиста.txt',
+    featured: false,
+    isNew: true,
     isPopular: false,
   },
 
 
   {
-    id: 14,
-    title: 'Божественная комедия',
-    author: 'Данте Алигьери',
-    year: 1320,
-    genres: [GENRES.EPIC_POETRY],
-    tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
+    id: 21,
+    title: 'Темные аллеи',
+    author: 'Иван Бунин',
+    year: 1943,
+    genres: [GENRES.SHORT_STORY_COLLECTION, GENRES.ROMAN],
+    tags: ['Любовь', 'Страсть', 'Ностальгия', 'Россия', 'Драма'],
     description:
-      'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
-    cover: '/covers/comedia.jpg',
-    content: '/books/Алигьери Данте. Божественная комедия.txt',
+      'Цикл рассказов о любви — трагической, мимолетной и роковой. Шедевр русской психологической прозы, исследующий самые потаенные уголки человеческой души.',
+    cover: '/covers/dark-alleys-bunin.jpg',
+    content: '/books/Бунин Иван. Темные аллеи.txt',
+    featured: true,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 22,
+    title: 'Три мушкетера',
+    author: 'Александр Дюма',
+    year: 1844,
+    genres: [GENRES.ADVENTURE, GENRES.HISTORICAL_FICTION],
+    tags: ['д’Артаньян', 'Дружба', 'Париж', 'Дуэли', 'Ришелье'],
+    description:
+      'Бессмертный роман о приключениях молодого гасконца д’Артаньяна и его верных друзей-мушкетеров, полных опасностей, придворных интриг и истинной верности девизу «Один за всех, и все за одного!»',
+    cover: '/covers/3-muskitera.jpg',
+    content: '/books/Дюма Александр. Три мушкетёра.txt',
     featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+
+  {
+    id: 23,
+    title: 'Идиот',
+    author: 'Фёдор Достоевский',
+    year: 1869,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.REALISM],
+    tags: ['Князь Мышкин', 'Настасья Филипповна', 'Милосердие', 'Общество', 'Трагедия'],
+    description:
+      'Роман о «положительно прекрасном человеке» — князе Мышкине, чья детская искренность и доброта сталкиваются с жестоким, эгоистичным и порочным миром петербургского общества.',
+    cover: '/covers/idiot.jpg',
+    content: '/books/Достоевский Федор. ИДИОТ.txt',
+    featured: true,
     isNew: false,
     isPopular: false,
   },
+    
+  
+  {
+    id: 24,
+    title: 'Человек-амфибия',
+    author: 'Александр Беляев',
+    year: 1928,
+    genres: [GENRES.SCIENCE_FICTION, GENRES.ADVENTURE],
+    tags: ['Ихтиандр', 'Океан', 'Эксперимент', 'Любовь', 'Наука'],
+    description:
+      'Захватывающая история о юноше Ихтиандре, который в результате смелой операции профессора Сальватора обрел способность дышать под водой, и о его трагическом столкновении с жестоким миром людей.',
+    cover: '/covers/chelovek-amfibia.jpg',
+    content: '/books/Беляев Александр. Человек-амфибия.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+
+  {
+    id: 25,
+    title: 'Евгений Онегин',
+    author: 'Александр Пушкин',
+    year: 1833,
+    genres: [GENRES.ROMAN, GENRES.REALISM],
+    tags: ['Татьяна Ларина', 'Дуэль', 'Лишний человек', 'Энциклопедия русской жизни', 'Дворянство'],
+    description:
+      'Бессмертный роман в стихах, повествующий о драматической судьбе светского денди, искренней любви провинциальной девушки и утраченных идеалах на фоне блестящей и противоречивой эпохи.',
+    cover: '/covers/evgeney-onegyn.jpg',
+    content: '/books/Пушкин Александр. Евгений Онегин.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+
+  {
+    id: 26,
+    title: 'Герой нашего времени',
+    author: 'Михаил Лермонтов',
+    year: 1840,
+    genres: [GENRES.PSYCHOLOGICAL_FICTION, GENRES.REALISM],
+    tags: ['Печорин', 'Лишний человек', 'Кавказ', 'Дуэль', 'Фатализм'],
+    description:
+      'Первый в русской прозе психологический роман, представляющий собой портрет целого поколения в лице Григория Печорина — человека с глубокой душой, чей ум и воля не находят достойного применения.',
+    cover: '/covers/lermontov-geroi-nashego.jpg',
+    content: '/books/Лермонтов Михаил. Герой нашего времени.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  
+  {
+    id: 27,
+    title: 'Палата № 6',
+    author: 'Антон Чехов',
+    year: 1892,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.REALISM],
+    tags: ['Андрей Рагин', 'Безумие', 'Философия', 'Интеллигенция', 'Больница'],
+    description:
+      'Глубокая и пугающая повесть о докторе и пациенте, чьи философские беседы о смысле страдания и жизни приводят к трагическому столкновению с жестокой реальностью системы.',
+    cover: '/covers/palata-6.jpg',
+    content: '/books/Чехов Антон. Палата   6.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 28,
+    title: 'След смерти',
+    author: 'Блейк Пирс',
+    year: 2016,
+    genres: [GENRES.DETECTIVE, GENRES.THRILLER],
+    tags: ['Райли Пейдж', 'ФБР', 'Серийный убийца', 'Расследование', 'Триллер'],
+    description:
+      'Первая книга в захватывающей серии о специальном агенте ФБР Райли Пейдж, которая должна проникнуть в сознание жестокого маньяка, чтобы остановить серию загадочных убийств.',
+    cover: '/covers/sled-smerti.jpg',
+    content: '/books/Пирс Блейк. След смерти.txt',
+    featured: false,
+    isNew: true,
+    isPopular: true,
+  },
+
+
+
+
+
+
 ];

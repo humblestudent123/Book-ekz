@@ -30,7 +30,7 @@ export default function Library() {
 
 
 
-  const ITEMS_PER_PAGE = 9;
+  const ITEMS_PER_PAGE = 7;
   const [visibleCount, setVisibleCount] = useState(7); // начальные книги: 2 ряда
 
   const books = booksCatalog;
