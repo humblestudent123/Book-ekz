@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/Book-ekz/static/css/main.95ccd07a.css",
+    "main.js": "/Book-ekz/static/js/main.de30267f.js",
+    "static/css/644.bdf5c0bb.chunk.css": "/Book-ekz/static/css/644.bdf5c0bb.chunk.css",
+    "static/js/644.3b7f85de.chunk.js": "/Book-ekz/static/js/644.3b7f85de.chunk.js",
+    "static/css/333.8126a682.chunk.css": "/Book-ekz/static/css/333.8126a682.chunk.css",
+    "static/js/333.8df436b6.chunk.js": "/Book-ekz/static/js/333.8df436b6.chunk.js",
+    "static/css/540.d270f943.chunk.css": "/Book-ekz/static/css/540.d270f943.chunk.css",
+    "static/js/540.b6d75068.chunk.js": "/Book-ekz/static/js/540.b6d75068.chunk.js",
+    "static/media/ReadNext-logo.png": "/Book-ekz/static/media/ReadNext-logo.f8a68a27f3d8c11724dd.png",
+    "index.html": "/Book-ekz/index.html",
+    "main.95ccd07a.css.map": "/Book-ekz/static/css/main.95ccd07a.css.map",
+    "main.de30267f.js.map": "/Book-ekz/static/js/main.de30267f.js.map",
+    "644.bdf5c0bb.chunk.css.map": "/Book-ekz/static/css/644.bdf5c0bb.chunk.css.map",
+    "644.3b7f85de.chunk.js.map": "/Book-ekz/static/js/644.3b7f85de.chunk.js.map",
+    "333.8126a682.chunk.css.map": "/Book-ekz/static/css/333.8126a682.chunk.css.map",
+    "333.8df436b6.chunk.js.map": "/Book-ekz/static/js/333.8df436b6.chunk.js.map",
+    "540.d270f943.chunk.css.map": "/Book-ekz/static/css/540.d270f943.chunk.css.map",
+    "540.b6d75068.chunk.js.map": "/Book-ekz/static/js/540.b6d75068.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.95ccd07a.css",
+    "static/js/main.de30267f.js"
+  ]
+}
