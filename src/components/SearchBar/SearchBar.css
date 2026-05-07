@@ -1,0 +1,49 @@
+.header-bar {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  padding: 0 24px;
+
+  gap: 20px;
+}
+
+/* логотип не сжимается */
+.header-bar .logo {
+  flex-shrink: 0;
+}
+
+/* ВАЖНО: центрируем search нормально */
+.search-bar {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* было flex-end → стало center */
+  min-width: 0;
+}
+
+/* инпут остаётся фиксированной ширины */
+.search-bar input {
+  width: 100%;
+  max-width: 520px;
+  height: 52px;
+
+  padding: 0 18px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(18, 21, 28, 0.92);
+  color: #fff;
+
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition: border-color 0.16s ease, background-color 0.16s ease;
+
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}

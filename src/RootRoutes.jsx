@@ -1,13 +1,25 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import HomePage from './HomePage/HomePage';
-import App from './app/App'; // <-- твоя библиотека со всеми стилями
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import App from './app/App';
+
+function LegacyBookRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/library/book/${id}`} replace />;
+}
+
+function LegacyCourseRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/courses/${id}`} replace />;
+}
 
 export default function RootRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/library/*" element={<App />} /> {/* App.jsx рендерится здесь */}
+      <Route path="/" element={<Navigate to="/library" replace />} />
+      <Route path="/library/*" element={<App root="library" />} />
+      <Route path="/courses/*" element={<App root="courses" />} />
+      <Route path="/book/:id" element={<LegacyBookRedirect />} />
+      <Route path="/course/:id" element={<LegacyCourseRedirect />} />
+      <Route path="*" element={<Navigate to="/library" replace />} />
     </Routes>
   );
 }
