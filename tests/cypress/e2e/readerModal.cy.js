@@ -11,7 +11,6 @@ describe('Reader modal', () => {
     cy.get('[data-testid="open-reader"]').click();
     cy.get('[data-testid="reader-modal"]', { timeout: 10000 }).should('be.visible');
 
-    // На первой странице кнопка назад выключена, а вперед доступна.
     cy.get('[data-testid="reader-page-input"]').should('have.value', '1');
     cy.get('[data-testid="prev-page"]').should('be.disabled');
     cy.get('[data-testid="next-page"]').should('not.be.disabled').click();

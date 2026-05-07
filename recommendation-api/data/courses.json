@@ -1,0 +1,34 @@
+[
+  {
+    "id": "coursera-classics",
+    "title": "Классическая литература: от Достоевского до Оруэлла",
+    "provider": "Coursera",
+    "level": "начальный",
+    "url": "https://www.coursera.org/",
+    "relatedGenres": ["roman", "philosophy", "antiutopia"]
+  },
+  {
+    "id": "stepik-python",
+    "title": "Программирование на Python для начинающих",
+    "provider": "Stepik",
+    "level": "начальный",
+    "url": "https://stepik.org/",
+    "relatedGenres": []
+  },
+  {
+    "id": "arzamas-poetry",
+    "title": "Лекции по поэзии и эпосу",
+    "provider": "Арзамас",
+    "level": "любой",
+    "url": "https://arzamas.academy/",
+    "relatedGenres": ["epic_poetry", "classic_prose"]
+  },
+  {
+    "id": "history-mooc",
+    "title": "История и культура Европы XIX века",
+    "provider": "edX",
+    "level": "средний",
+    "url": "https://www.edx.org/",
+    "relatedGenres": ["historic_roman", "realism", "war_novel"]
+  }
+]
