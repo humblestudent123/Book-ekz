@@ -57,9 +57,7 @@ export default function Library() {
     return [ALL_GENRE, ...Array.from(setG)];
   }, [books]);
 
-  // Рекомендации теперь всегда доступны, но можно задать свои
   const recommendations = useMemo(() => {
-    // Возвращаем 4 книги из SAMPLE_BOOKS как рекомендации
     return books.slice(0, 4);
   }, [books]);
 
@@ -134,8 +132,6 @@ export default function Library() {
       </header>
       
       <main className="main-grid">
-        {/* Рекомендации теперь всегда доступны */}
-      {/* Рекомендации теперь всегда доступны */}
       <section className="recommendations-section">
         <h3>Рекомендации</h3>
         <div className="recommendations-grid">
@@ -145,7 +141,6 @@ export default function Library() {
               className="recommendation-card"
               onClick={(e) => {
                 e.stopPropagation();
-                // Просто открываем модалку с этой книгой, но не меняем selected
                 setSelected(book);
               }}
             >

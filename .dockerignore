@@ -1,0 +1,8 @@
+node_modules
+build
+npm-debug.log
+.git
+coverage
+recommendation-api/node_modules
+tests/playwright/artifacts
+test-results

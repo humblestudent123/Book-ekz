@@ -1,0 +1,42 @@
+# GitLab CI: тесты API, unit/e2e фронта (при необходимости), сборка CRA
+# Требуется runner с Node.js 20+ (образ задаётся ниже).
+
+default:
+  image: node:20-bookworm
+
+stages:
+  - test
+  - smoke
+
+variables:
+  CI: "true"
+
+cache:
+  key:
+    files:
+      - package-lock.json
+      - recommendation-api/package-lock.json
+  paths:
+    - .npm/
+
+install_and_test:
+  stage: test
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - cd recommendation-api && npm ci --cache ../.npm --prefer-offline && npm test
+    - cd .. && npm run test:ci
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
+
+# Дымовая проверка API (без Redis — сервис должен отвечать /health)
+smoke_api:
+  stage: smoke
+  needs: ["install_and_test"]
+  script:
+    - cd recommendation-api && npm ci --cache ../.npm --prefer-offline
+    - nohup env SKIP_REDIS=1 PORT=4010 node src/index.js >/tmp/reco-api.log 2>&1 &
+    - sleep 2
+    - node -e "fetch('http://127.0.0.1:4010/health').then(r=>r.json()).then(j=>{if(j.status!=='ok')process.exit(1)}).catch(()=>process.exit(1))"

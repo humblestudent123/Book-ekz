@@ -10,7 +10,6 @@ describe('Library page', () => {
   it('shows the library catalog with books and user controls', () => {
     cy.location('pathname').should('eq', '/library');
 
-    // Проверяем базовую точку входа пользователя: поиск, фильтр и карточки книг.
     cy.get('[data-testid="search-input"]').should('be.visible');
     cy.get('[data-testid="genre-filter"]').should('be.visible').and('have.value', 'all');
     cy.get('.book-card').should('have.length.greaterThan', 0);
