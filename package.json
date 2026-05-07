@@ -19,6 +19,7 @@
     "start:ci": "cross-env BROWSER=none PORT=3100 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:ci": "react-scripts test --watchAll=false --passWithNoTests",
     "cypress:install": "cypress install",
     "cypress:open": "cypress open --config-file tests/cypress/cypress.config.js",
     "cypress:run": "cypress run --config-file tests/cypress/cypress.config.js",
@@ -31,6 +32,9 @@
     "e2e:playwright": "npm run playwright:run",
     "e2e:playwright:open": "npm run playwright:open",
     "e2e:open": "npm run e2e:cypress:open",
+    "api:install": "npm install --prefix recommendation-api",
+    "api:start": "npm start --prefix recommendation-api",
+    "api:test": "npm test --prefix recommendation-api",
     "add-book": "node scripts/add-book.js",
     "eject": "react-scripts eject"
   },

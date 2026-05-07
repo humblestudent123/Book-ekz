@@ -1,6 +1,3 @@
-/* =========================
-   MODAL
-========================= */
 .reader-modal.black-theme {
   background-color: #0a0a0a;
   color: #e5e5e5;
@@ -16,10 +13,6 @@
   contain: layout paint style;
 }
 
-/* =========================
-   TEXT SELECTION (ВАЖНО)
-   внутри модалки зелёное выделение
-========================= */
 .reader-modal ::selection,
 .reader-page ::selection {
   background: rgba(34, 197, 94, 0.35);
@@ -27,15 +20,11 @@
   text-shadow: none;
 }
 
-/* ссылки при выделении */
 .reader-modal a::selection {
   background: #3b82f6;
   color: white;
 }
 
-/* =========================
-   READER TEXT
-========================= */
 .reader-page {
   font-family: 'Manrope', sans-serif;
   font-size: 18px;
@@ -44,9 +33,6 @@
   margin-bottom: 20px;
 }
 
-/* =========================
-   CONTROLS
-========================= */
 .reader-controls {
   display: flex;
   align-items: center;
@@ -55,7 +41,6 @@
   margin-top: 10px;
 }
 
-/* input страниц */
 .reader-controls input[type="number"],
 .reader-page-input {
   width: 50px;
@@ -76,7 +61,6 @@
   margin: 0;
 }
 
-/* buttons */
 .reader-controls button {
   background-color: #222;
   color: #fff;
@@ -91,9 +75,6 @@
   cursor: default;
 }
 
-/* =========================
-   OVERLAY
-========================= */
 .reader-overlay {
   position: fixed;
   inset: 0;
@@ -104,9 +85,6 @@
   z-index: 99999;
 }
 
-/* =========================
-   QUOTES MODAL
-========================= */
 .quotes-list-overlay {
   position: fixed;
   inset: 0;
@@ -129,7 +107,6 @@
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* scroll */
 .quotes-list {
   scrollbar-width: thin;
   scrollbar-color: #fff transparent;
@@ -152,9 +129,6 @@
   background-color: #ccc;
 }
 
-/* =========================
-   QUOTES ITEMS
-========================= */
 .quote-item {
   padding: 8px;
   border-bottom: 1px solid #333;
@@ -200,9 +174,6 @@
   background: rgba(255, 107, 107, 0.1);
 }
 
-/* =========================
-   ADD QUOTE BUTTON
-========================= */
 .add-quote-btn {
   position: absolute;
   z-index: 1400;
@@ -221,9 +192,6 @@
   transform: scale(1.05);
 }
 
-/* =========================
-   META INFO
-========================= */
 .reader-book-info {
   display: flex;
   align-items: center;
@@ -252,13 +220,6 @@
 
 
 
-/* крестик */
-
-
-
-/* =========================
-   CLOSE BUTTON
-========================= */
 .reader-modal.black-theme .reader-close {
   position: absolute !important;
   top: 20px !important;
@@ -274,6 +235,6 @@
 }
 
 .reader-modal.black-theme .reader-close:hover {
-  color: #22c55e !important; /* зелёный при наведении */
+  color: #22c55e !important;
   transform: rotate(90deg) scale(1.2) !important;
 }

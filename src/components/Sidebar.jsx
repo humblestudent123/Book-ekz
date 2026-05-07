@@ -23,7 +23,6 @@ export default function Sidebar({
       <div className="meta">{author} · {year}</div>
       <div className="description">{description}</div>
 
-      {/* рекомендации */}
       <div className="rec-block">
         <h3>Рекомендации</h3>
         {recommendations.length === 0 ? (
@@ -40,10 +39,8 @@ export default function Sidebar({
         )}
       </div>
 
-      {/* кнопки */}
       <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
         <button className="reset-btn" onClick={reset}>Сбросить</button>
-        {/* исправленная строка */}
         <button
           className="reset-btn"
           style={{ background: '#222', border: '1px solid #555' }}

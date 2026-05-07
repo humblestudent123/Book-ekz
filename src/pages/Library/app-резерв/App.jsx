@@ -4,15 +4,13 @@ import SearchBar from '../components/SearchBar';
 import BookList from '../widgets/BookList/BookList';
 import ReaderModal from '../widgets/Reader/ReaderModal';
 import { SAMPLE_BOOKS } from '../data';
-import Library from './Library'; // Исправленный путь
+import Library from './Library';
 import logo from '../assets/ReadNext-logo.png';
 
-/* constants */
 const LOAD_MORE_STEP = 6;
 const PAGE_CHARS = 1000;
 const ALL_GENRE = 'Все';
 
-/* utils */
 const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   if (!text) return [''];
   const words = text.split(/\s+/);
@@ -30,7 +28,6 @@ const paginateText = (text, approxCharsPerPage = PAGE_CHARS) => {
   return pages.length ? pages : [text];
 };
 
-/* App component */
 export default function App() {
   const books = SAMPLE_BOOKS;
 
@@ -112,7 +109,7 @@ export default function App() {
         })
         .catch(err => {
           console.error('Ошибка загрузки книги:', err);
-          // Обработка ошибки пользователю
+          
         });
     }
   }, [selected, readingPages]);
@@ -123,7 +120,6 @@ export default function App() {
     localStorage.setItem('reading-pages', JSON.stringify(readingPages));
   }, [readingPages]);
 
-  // Основной рендер - отображаем Library компонент
   return (
     <div className="app-container">
       <Library />

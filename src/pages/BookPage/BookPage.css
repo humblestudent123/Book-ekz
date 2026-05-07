@@ -13,9 +13,6 @@
 
 
 
-/* === GLOBAL STYLES === */
-
-/* шрифт */
 body {
   font-family: 'Manrope', sans-serif;
   color: var(--text-main);
@@ -53,7 +50,6 @@ input, button, textarea, select {
   overflow-x: hidden;
 }
 
-/* === BACKGROUND & LAYERING === */
 .book-bg {
   position: absolute;
   inset: 0;
@@ -66,7 +62,6 @@ input, button, textarea, select {
   transform: none;
 }
 
-/* Цветной градиент поверх фона */
 .book-page::after {
   content: "";
   position: absolute;
@@ -76,18 +71,15 @@ input, button, textarea, select {
   z-index: -1;
 }
 
-/* Паттерн на фоне (маленькие точки) */
 .book-page::before {
   content: none;
 }
 
-/* === Z-INDEX LAYERS === */
 .book-page > *:not(.reader-overlay) {
   position: relative;
   z-index: 2;
 }
 
-/* === LAYOUT === */
 .book-layout {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -97,7 +89,6 @@ input, button, textarea, select {
   margin: 0 auto;
 }
 
-/* === BOOK COVER (MODERN) === */
 .book-cover {
   position: sticky;
   top: 80px;
@@ -107,7 +98,6 @@ input, button, textarea, select {
 }
 
 .book-page > .book-layout:hover .book-cover {
-  /* Легкий эффект parallax при движении мыши */
   transform: scale(1.02);
 }
 
@@ -115,7 +105,7 @@ input, button, textarea, select {
   width: 100%;
   max-width: 300px;
   height: auto;
-  aspect-ratio: 2/3; /* Удерживает пропорцию */
+  aspect-ratio: 2/3;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.48);
@@ -127,12 +117,10 @@ input, button, textarea, select {
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.54);
 }
 
-/* === INFO SECTION === */
 .book-info {
   max-width: 700px;
 }
 
-/* TITLE & AUTHOR */
 .book-info h1 {
   font-family: 'Playfair Display', serif;
   font-size: 56px;
@@ -154,7 +142,6 @@ input, button, textarea, select {
   gap: 12px;
 }
 
-/* === META DATA === */
 .book-meta {
   display: flex;
   gap: 24px;
@@ -171,7 +158,6 @@ input, button, textarea, select {
   gap: 6px;
 }
 
-/* === GENRES (APPLE-LIKE) === */
 .book-genres {
   display: flex;
   flex-wrap: wrap;
@@ -194,7 +180,6 @@ input, button, textarea, select {
   transform: translateY(-1px);
 }
 
-/* === DESCRIPTION (TYPOGRAPHY) === */
 .book-description {
   line-height: 1.8;
   color: #d4d4d8;
@@ -212,7 +197,6 @@ input, button, textarea, select {
   color: var(--primary);
 }
 
-/* === ACTIONS (BUTTONS) === */
 .book-actions {
   display: flex;
   gap: 16px;
@@ -289,7 +273,6 @@ input, button, textarea, select {
 
 
 
-/* сердечко :3 */
 .favorite-btn {
   border: none;
   outline: none;
@@ -317,7 +300,6 @@ input, button, textarea, select {
 
 
 
-/* === RESPONSIVE === */
 @media (max-width: 980px) {
   .book-layout {
     grid-template-columns: 1fr;

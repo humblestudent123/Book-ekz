@@ -1,0 +1,16 @@
+[
+  {"id": 1, "genres": ["roman", "crime", "philosophy"], "tags": ["психология", "совесть", "искупление"], "featured": false, "isNew": false, "isPopular": true},
+  {"id": 2, "genres": ["antiutopia", "satire"], "tags": ["тоталитаризм", "пропаганда", "контроль"], "featured": false, "isNew": false, "isPopular": true},
+  {"id": 3, "genres": ["fantasy_epic", "fantasy_high", "adventure"], "tags": ["средиземье", "квест", "борьба добра и зла"], "featured": false, "isNew": true, "isPopular": false},
+  {"id": 4, "genres": ["magical_realism", "family_saga"], "tags": ["макондо", "семья буэндиа", "магический реализм"], "featured": false, "isNew": true, "isPopular": false},
+  {"id": 5, "genres": ["social_scifi", "antiutopia", "philosophy"], "tags": ["цензура", "книги", "общество будущего"], "featured": false, "isNew": true, "isPopular": false},
+  {"id": 6, "genres": ["roman", "magical_realism", "satire"], "tags": ["москва", "воланд", "вечная любовь"], "featured": false, "isNew": false, "isPopular": true},
+  {"id": 7, "genres": ["war_novel", "anti_war", "realism"], "tags": ["первая мировая война", "окопная правда", "потерянное поколение"], "featured": true, "isNew": false, "isPopular": false},
+  {"id": 8, "genres": ["classic_prose"], "tags": ["холден колфилд", "взросление", "одиночество"], "featured": true, "isNew": false, "isPopular": false},
+  {"id": 9, "genres": ["realism", "historic_roman"], "tags": ["казачество", "гражданская война", "эпопея"], "featured": true, "isNew": false, "isPopular": false},
+  {"id": 10, "genres": ["realism", "family_saga"], "tags": ["англия", "семейная сага", "собственность"], "featured": false, "isNew": true, "isPopular": false},
+  {"id": 11, "genres": ["realism", "historic_roman"], "tags": ["жан вальжан", "франция", "милосердие"], "featured": true, "isNew": false, "isPopular": false},
+  {"id": 12, "genres": ["roman", "historic_roman"], "tags": ["скарлетт о`хара", "гражданская война", "любовь"], "featured": false, "isNew": false, "isPopular": true},
+  {"id": 13, "genres": ["realism", "adventure"], "tags": ["необитаемый остров", "выживание", "приключения"], "featured": false, "isNew": true, "isPopular": false},
+  {"id": 14, "genres": ["epic_poetry"], "tags": ["ад", "чистилище", "рай", "беатриче"], "featured": false, "isNew": true, "isPopular": false}
+]

@@ -15,7 +15,6 @@
   --accent-strong: #22c55e80;   
   --accent-dark: #15803d;     
 
-  /* glow  эффекты */
   --accent-soft: rgba(74, 222, 128, 0.15);
 
   --shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
@@ -314,6 +313,39 @@ html {
   color: var(--muted);
   max-width: 760px;
   line-height: 1.5;
+}
+
+.reco-courses__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.reco-courses__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.reco-courses__item a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.reco-courses__item a:hover {
+  text-decoration: underline;
+}
+
+.reco-courses__meta {
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .books-grid {

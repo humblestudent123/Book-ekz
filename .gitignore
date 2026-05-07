@@ -9,6 +9,8 @@
 /coverage
 /tests/cypress/artifacts
 /tests/playwright/artifacts
+/test-results
+/recommendation-api/node_modules
 
 # production
 /build
