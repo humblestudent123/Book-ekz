@@ -14,14 +14,11 @@ export const Reader = ({ book }) => {
 
   return (
     <div className={`reader ${settings.theme}`}>
-      
-      {/* 🔝 Панель */}
       <div className="reader-header">
         <span>{progress.toFixed(0)}%</span>
         <span>Осталось ~{minutesLeft} мин</span>
       </div>
 
-      {/* 📖 Текст */}
       <div
         ref={containerRef}
         onScroll={handleScroll}
@@ -34,7 +31,6 @@ export const Reader = ({ book }) => {
         {book.text}
       </div>
 
-      {/* ⚙️ Настройки */}
       <div className="reader-controls">
         <button onClick={() => updateSettings({ fontSize: settings.fontSize + 2 })}>
           A+

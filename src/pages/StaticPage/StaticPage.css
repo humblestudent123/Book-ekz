@@ -1,0 +1,132 @@
+.static-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 64px 24px 56px;
+  position: relative;
+  contain: layout paint style;
+}
+
+.static-page::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.static-page h1 {
+  margin: 0 0 28px;
+  color: var(--text);
+  font-size: 44px;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.static-page__content {
+  padding: 42px;
+  background: rgba(23, 26, 34, 0.96);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+  contain: layout paint style;
+}
+
+.static-page h2,
+.static-page h3 {
+  margin: 0 0 16px;
+  color: var(--text);
+  letter-spacing: 0;
+}
+
+.static-page h2 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.static-page h3 {
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.static-page p,
+.static-page li {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.static-page p,
+.static-page ul,
+.static-page ol {
+  margin: 0 0 18px;
+}
+
+.static-page ul,
+.static-page ol {
+  padding-left: 24px;
+}
+
+.static-page li {
+  margin-bottom: 10px;
+}
+
+.static-page li::marker {
+  color: var(--accent);
+}
+
+.static-page a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.16s ease, border-color 0.16s ease;
+}
+
+.static-page a:hover,
+.static-page a:focus-visible {
+  color: #86efac;
+  border-bottom-color: currentColor;
+}
+
+.static-page__section {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  content-visibility: auto;
+  contain-intrinsic-size: 180px;
+}
+
+.static-page__cta {
+  margin-top: 18px;
+}
+
+@media (max-width: 700px) {
+  .static-page {
+    padding: 46px 16px 36px;
+  }
+
+  .static-page h1 {
+    font-size: 32px;
+  }
+
+  .static-page__content {
+    padding: 26px 20px;
+    border-radius: 16px;
+  }
+
+  .static-page h2 {
+    font-size: 24px;
+  }
+
+  .static-page h3 {
+    font-size: 20px;
+  }
+
+  .static-page p,
+  .static-page li {
+    font-size: 16px;
+  }
+}

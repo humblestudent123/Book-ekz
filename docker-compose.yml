@@ -1,0 +1,32 @@
+# Локальный стенд: фронт (nginx), API рекомендаций, Redis
+# Запуск из корня Book-ekz: docker compose up --build
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ./recommendation-api
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: "4000"
+      REDIS_URL: redis://redis:6379
+      CACHE_TTL_SEC: "120"
+      CORS_ORIGIN: "http://localhost:3000,http://127.0.0.1:3000"
+    depends_on:
+      - redis
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_RECOMMENDATIONS_API_URL: http://localhost:4000
+    ports:
+      - "3000:80"
+    depends_on:
+      - api

@@ -17,7 +17,6 @@ export const useReader = (bookId, text) => {
         };
   });
 
-  // 📌 восстановление позиции
   useEffect(() => {
     const saved = localStorage.getItem(`book-${bookId}-progress`);
     if (saved && containerRef.current) {
@@ -25,7 +24,6 @@ export const useReader = (bookId, text) => {
     }
   }, [bookId]);
 
-  // 📌 сохранение позиции + прогресс
   const handleScroll = () => {
     const el = containerRef.current;
     const scrollTop = el.scrollTop;
@@ -38,14 +36,12 @@ export const useReader = (bookId, text) => {
     localStorage.setItem(`book-${bookId}-progress`, scrollTop);
   };
 
-  // 📌 настройки
   const updateSettings = (newSettings) => {
     const updated = { ...settings, ...newSettings };
     setSettings(updated);
     localStorage.setItem('reader-settings', JSON.stringify(updated));
   };
 
-  // 📌 время чтения
   const words = text.split(/\s+/).length;
   const minutesLeft = Math.max(
     1,

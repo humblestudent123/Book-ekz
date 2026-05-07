@@ -1,25 +1,25 @@
-export const loadBookText = async (url) => {
-  try {
-    const res = await fetch(url);
+const countReplacementChars = (text) => (text.match(/\uFFFD/g) || []).length;
 
-    if (!res.ok) {
-      throw new Error(`Failed to load book: ${res.status}`);
-    }
-
-    const buffer = await res.arrayBuffer();
-
-    const decode = (encoding) =>
-      new TextDecoder(encoding).decode(buffer);
-
-    let text = decode('utf-8');
-
-    if (text.includes('�')) {
-      text = decode('windows-1251');
-    }
-
-    return text;
-  } catch (error) {
-    console.error('loadBookText error:', error);
-    return 'Ошибка загрузки книги';
+export const loadBookText = async (url, options = {}) => {
+  if (!url) {
+    throw new Error('Не указан путь к тексту книги');
   }
+
+  const response = await fetch(encodeURI(url), {
+    signal: options.signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Не удалось загрузить книгу: ${response.status}`);
+  }
+
+  const buffer = await response.arrayBuffer();
+  const decode = (encoding) => new TextDecoder(encoding).decode(buffer);
+
+  const utf8Text = decode('utf-8');
+  const windows1251Text = decode('windows-1251');
+
+  return countReplacementChars(utf8Text) <= countReplacementChars(windows1251Text)
+    ? utf8Text
+    : windows1251Text;
 };
