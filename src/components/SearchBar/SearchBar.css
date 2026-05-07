@@ -8,20 +8,17 @@
   gap: 20px;
 }
 
-/* логотип не сжимается */
 .header-bar .logo {
   flex-shrink: 0;
 }
 
-/* ВАЖНО: центрируем search нормально */
 .search-bar {
   flex: 1;
   display: flex;
-  justify-content: center; /* было flex-end → стало center */
+  justify-content: center;
   min-width: 0;
 }
 
-/* инпут остаётся фиксированной ширины */
 .search-bar input {
   width: 100%;
   max-width: 520px;

@@ -1,4 +1,3 @@
-// footer.data.js
 export const FOOTER_SECTIONS = [
   {
     title: 'О проекте',
