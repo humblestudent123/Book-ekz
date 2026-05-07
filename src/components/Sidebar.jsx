@@ -5,7 +5,7 @@ export default function Sidebar({
   setSelected,
   recommendations,
   reset,
-  openReader   // <-- новый проп
+  openReader   
 }) {
   if (!selected) return (
     <aside className="sidebar">

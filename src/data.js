@@ -1,103 +1,446 @@
-/* src/data.js – способ добавленния книг. */
-
-
-
+import { GENRES } from './genres';
 
 export const SAMPLE_BOOKS = [
-  /* ---------- Преступление и наказание ----------  */
-
   {
     id: 1,
-    title: "Преступление и наказание",
-    author: "Фёдор Достоевский",
+    title: 'Преступление и наказание',
+    author: 'Федор Достоевский',
     year: 1866,
-    genres: ["Роман", "Криминальный жанр"],
-    tags: ["Психология", "Философия"],
+    genres: [GENRES.ROMAN, GENRES.CRIME, GENRES.PHILOSOPHY],
+    tags: ['психология', 'совесть', 'искупление'],
     description:
-      "Бедный студент Раскольников убивает старуху‑процентщицу…",
-      cover: "../covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg",
-    content: "/books/преступление-и-наказание111.txt",
+      'Бедный студент Родион Раскольников совершает убийство старухи-процентщицы, чтобы проверить свою теорию о "праве имеющих", но в итоге сталкивается с невыносимыми муками совести и ищет путь к искуплению.',
+    cover: '/covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg',
+    content: '/books/преступление-и-наказание111.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
   },
-
-
   {
     id: 2,
-    title: "1984",
-    author: "Джордж Оруэлл",
+    title: '1984',
+    author: 'Джордж Оруэлл',
     year: 1949,
-    genres: ["Антиутопия", "Политическая сатира"],
-    tags: ["Тоталитаризм", "Пропаганда", "Контроль"],
+    genres: [GENRES.ANTIUTOPIA, GENRES.SATIRE],
+    tags: ['тоталитаризм', 'пропаганда', 'контроль'],
     description:
-      "Мрачное будущее под властью тоталитарного режима, где «Большой Брат» всегда наблюдает.",
-      cover: "/covers/Jorge-Oryel-1984.jpg",
-    content: "/books/Оруэлл-Джордж.-1984.txt",
+      'Мрачное будущее под властью тоталитарного режима, где Большой Брат всегда наблюдает, а язык, память и личная свобода становятся инструментами политического контроля.',
+    cover: '/covers/Jorge-Oryel-1984.jpg',
+    content: '/books/Оруэлл-Джордж.-1984.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
   },
-
   {
     id: 3,
-    title: "Дж. Р. Р. Толкин",
-    author: "Властелин колец",
+    title: 'Властелин колец',
+    author: 'Дж. Р. Р. Толкин',
     year: 1955,
-    genres: ["Эпическое фэнтези", "Героическое фэнтези", "Приключенческий роман", "Высокое фэнтези"],
-    tags: ["Средиземье ", "Квест", "Борьба добра и зла"],
+    genres: [GENRES.FANTASY_EPIC, GENRES.FANTASY_HIGH, GENRES.ADVENTURE],
+    tags: ['Средиземье', 'квест', 'борьба добра и зла'],
     description:
-      "Хоббит Фродо Бэггинс и его верные спутники отправляются в опасное путешествие через всё Средиземье, чтобы уничтожить древний артефакт абсолютной власти и остановить Тёмного Властелина.",
-      cover: "/covers/Vlastelin-Colec.jpg",
-    content: "/books/Дж. Р. Р. Толкин — Властелин колец.txt" 
+      'Хоббит Фродо Бэггинс и его верные спутники отправляются в опасное путешествие через Средиземье, чтобы уничтожить древний артефакт абсолютной власти и остановить Темного Властелина.',
+    cover: '/covers/Vlastelin-Colec.jpg',
+    content: '/books/Дж. Р. Р. Толкин — Властелин колец.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
   },
-
-
   {
     id: 4,
-    title: "Сто лет одиночества",
-    author: "Габриэль Гарсиа Маркес",
+    title: 'Сто лет одиночества',
+    author: 'Габриэль Гарсиа Маркес',
     year: 1967,
-    genres: ["Детектив", "Мистика"],
-    tags: ["Становления героя", "Пророчество", "Филосовское"],
+    genres: [GENRES.MAGICAL_REALISM, GENRES.FAMILY_SAGA],
+    tags: ['Макондо', 'семья Буэндиа', 'магический реализм'],
     description:
-      "Сага о нескольких поколениях семьи Буэндиа, чья судьба неразрывно связана с мистическим городком Макондо и фатальным, повторяющимся одиночеством.",
-      cover: "/covers/Gabriel-Garcia-100let.jpg",
-    content: "/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt"
+      'Сага о нескольких поколениях семьи Буэндиа, чья судьба неразрывно связана с мистическим городком Макондо и повторяющимся одиночеством.',
+    cover: '/covers/Gabriel-Garcia-100let.jpg',
+    content: '/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
   },
-
-
   {
     id: 5,
-    title: "451 градус по Фаренгейту",
-    author: "Рэй Брэдбери",
+    title: '451 градус по Фаренгейту',
+    author: 'Рэй Брэдбери',
     year: 1953,
-    genres: ["Социальная фантастика", "Философский роман"],
-    tags: ["Антиутопия", "Цензура", "Научная фантастика"],
+    genres: [GENRES.SOCIAL_SCI_FI, GENRES.ANTIUTOPIA, GENRES.PHILOSOPHY],
+    tags: ['цензура', 'книги', 'общество будущего'],
     description:
-      "История о пожарном, который в мире запретных знаний перестаёт сжигать книги и начинает их спасать.",
-      cover: "/covers/451-gradus-po-foringeity.jpg",
-    content: "/books/Fahrenheit-451.txt"
+      'История о пожарном Гае Монтэге, который в мире запрещенных книг перестает сжигать знания и начинает их спасать.',
+    cover: '/covers/451-gradus-po-foringeity.jpg',
+    content: '/books/Fahrenheit-451.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 6,
+    title: 'Мастер и Маргарита',
+    author: 'Михаил Булгаков',
+    year: 1940,
+    genres: [GENRES.ROMAN, GENRES.MAGICAL_REALISM, GENRES.SATIRE],
+    tags: ['Москва', 'Воланд', 'вечная любовь'],
+    description:
+      'Визит Воланда и его свиты в Москву переворачивает жизнь горожан и дает шанс на спасение гениальному автору и его верной возлюбленной.',
+    cover: '/covers/master-i-margarita-bulgakov.jpg',
+    content: '/books/Булгаков-Михаил-Мастер-и-Маргарита.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+  {
+    id: 7,
+    title: 'На Западном фронте без перемен',
+    author: 'Эрих Мария Ремарк',
+    year: 1929,
+    genres: [GENRES.WAR_NOVEL, GENRES.ANTI_WAR, GENRES.REALISM],
+    tags: ['Первая мировая война', 'окопная правда', 'потерянное поколение'],
+    description:
+      'История о вчерашних школьниках, которые сталкиваются с беспощадной реальностью Первой мировой войны и взрослеют внутри кровавого ада окопов.',
+    cover: '/covers/Na-zapodnom-fronte-bez-peremen.jpg',
+    content: '/books/Erig-maria-remark-na-zapadnom-fronte.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+  {
+    id: 8,
+    title: 'Над пропастью во ржи',
+    author: 'Джером Д. Сэлинджер',
+    year: 1951,
+    genres: [GENRES.CLASSIC_PROSE],
+    tags: ['Холден Колфилд', 'взросление', 'одиночество'],
+    description:
+      'Роман о нескольких днях из жизни подростка Холдена Колфилда, который пытается понять себя, людей вокруг и болезненный переход во взрослый мир.',
+    cover: '/covers/nad_propasiy_rji.jpg',
+    content: '/books/nad-propastyu-vo-rzhi.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+  {
+    id: 9,
+    title: 'Тихий Дон',
+    author: 'Михаил Шолохов',
+    year: 1940,
+    genres: [GENRES.REALISM, GENRES.HISTORIC_ROMAN],
+    tags: ['казачество', 'Гражданская война', 'эпопея'],
+    description:
+      '"Тихий Дон" - масштабная эпопея о трагедии казачества, любви и разрушительных исторических потрясениях начала XX века.',
+    cover: '/covers/tihiy-don.jpg',
+    content: '/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+  {
+    id: 10,
+    title: 'Сага о Форсайтах',
+    author: 'Джон Голсуорси',
+    year: 1922,
+    genres: [GENRES.REALISM, GENRES.FAMILY_SAGA],
+    tags: ['Англия', 'семейная сага', 'собственность'],
+    description:
+      '"Сага о Форсайтах" - монументальный цикл о жизни буржуазной семьи, запертой в мире собственности, расчета и болезненной привязанности к красоте.',
+    cover: '/covers/saga-forsaity.jpg',
+    content: null,
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 11,
+    title: 'Отверженные',
+    author: 'Виктор Гюго',
+    year: 1862,
+    genres: [GENRES.REALISM, GENRES.HISTORIC_ROMAN],
+    tags: ['Жан Вальжан', 'Франция', 'милосердие'],
+    description:
+      '"Отверженные" - грандиозная эпопея о судьбе беглого каторжника Жана Вальжана, силе человеческого духа и борьбе добра со злом.',
+    cover: '/covers/gugo-otverjenie.jpg',
+    content: '/books/Гюго Виктор. Отверженные - TheLib.Ru.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+  {
+    id: 12,
+    title: 'Унесенные ветром. Том 1',
+    author: 'Маргарет Митчелл',
+    year: 1936,
+    genres: [GENRES.ROMAN, GENRES.HISTORIC_ROMAN],
+    tags: ['Скарлетт О`Хара', 'Гражданская война', 'любовь'],
+    description:
+      '"Унесенные ветром" - роман о судьбе южанки Скарлетт О`Хара, чья беспечная молодость обрывается с началом Гражданской войны в США.',
+    cover: '/covers/vetrom.jpg',
+    content: '/books/vetrom.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+  {
+    id: 13,
+    title: 'Робинзон Крузо',
+    author: 'Даниэль Дефо',
+    year: 1719,
+    genres: [GENRES.REALISM, GENRES.ADVENTURE],
+    tags: ['необитаемый остров', 'выживание', 'приключения'],
+    description:
+      'История британского моряка, который после кораблекрушения оказывается на необитаемом острове и выживает благодаря труду, стойкости и изобретательности.',
+    cover: '/covers/robinzon-kruzo.jpg',
+    content: '/books/robinzon-kruzo.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 14,
+    title: 'Божественная комедия',
+    author: 'Данте Алигьери',
+    year: 1320,
+    genres: [GENRES.EPIC_POETRY],
+    tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
+    description:
+      'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
+    cover: '/covers/comedia.jpg',
+    content: '/books/Алигьери Данте. Божественная комедия.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 15,
+    title: 'Мартин Иден',
+    author: 'Джек Лондон',
+    year: 1909,
+    genres: [GENRES.ROMAN_VOSPITANIYA, GENRES.REALISM],
+    tags: ['Самообразование', 'Любовь', 'Классовая борьба', 'Писательство', 'Трагедия'],
+    description:
+      'История простого моряка, который благодаря железной воле и любви к женщине из высшего общества проходит тернистый путь к литературной славе, разочаровываясь в своих идеалах.',
+    cover: '/covers/martin-aiden.jpg',
+    content: '/books/Лондон Джек. Мартин Иден.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+  {
+    id: 16,
+    title: 'Фауст',
+    author: 'Иоганн Вольфганг фон Гёте',
+    year: 1808,
+    genres: [GENRES.PHILOSOPHICAL_TRAGEDY, GENRES.DRAMA],
+    tags: ['Мефистофель', 'Сделка с дьяволом', 'Поиск смысла', 'Маргарита', 'Душа'],
+    description:
+      'Философская трагедия о великом ученом, который продал душу Мефистофелю в обмен на безграничные знания, молодость и мимолетное земное счастье.',
+    cover: '/covers/Faust-gete.jpg',
+    content: '/books/Faust - gette.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
   },
 
   {
-    id: 6,
-    title: "Мастер и Маргарита",
-    author: "Михаил Булгаков",
-    year: 1940,
-    genres: ["Роман", "магический реализм", "сатира"],
-    tags: ["Дьяволвмоскве", "Советскаясатира", "Вечнаялюбовь"],
+    id: 17,
+    title: 'донки хот',
+    author: 'Илья Ильф, Евгений Петров',
+    year: 1928,
+    genres: [GENRES.SATIRE, GENRES.ADVENTURE],
+    tags: ['Остап Бендер', 'Киса Воробьянинов', 'Бриллианты', 'Поиск сокровищ', 'СССР'],
     description:
-      "Визит сатаны и его свиты в предвоенную Москву переворачивает жизнь горожан и дает шанс на спасение гениальному автору и его верной возлюбленной.",
-      cover: "/covers/master-i-margarita-bulgakov.jpg",
-    content: "/books/Булгаков-Михаил-Мастер-и-Маргарита.txt"
+      'Блестящий сатирический роман о похождениях «великого комбинатора» Остапа Бендера и бывшего дворянина Ипполита Матвеевича, разыскивающих сокровища мадам Петуховой, спрятанные в одном из двенадцати стульев гарнитура мастера Гамбса.',
+    cover: '/covers/don-kihot.jpg',
+    content: '/books/Сервантес Сааведра Мигель де. Хитроумный идальго Дон Кихот Ламанчский.txt',
+    featured: true,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 18,
+    title: 'Мертвые души',
+    author: 'Николай Гоголь',
+    year: 1842,
+    genres: [GENRES.SATIRE, GENRES.EPIC_POETRY],
+    tags: ['Чичиков', 'Помещики', 'Афера', 'Дорога', 'Россия'],
+    description:
+      'Поэма в прозе о предприимчивом дельце Чичикове, который путешествует по России, скупая у помещиков «мертвые души» ради собственного обогащения и статуса.',
+    cover: '/covers/dushi-gogol.jpg',
+    content: '/books/Гоголь Николай. Мертвые души.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 19,
+    title: 'Портрет Дориана Грея (сборник)',
+    author: 'Оскар Уайльд',
+    year: 1890,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.GOTHIC_FICTION],
+    tags: ['Вечная молодость', 'Искушение', 'Искусство', 'Порок', 'Лорд Генри'],
+    description:
+      'Единственный опубликованный роман Уайльда, рассказывающий о юноше, чей портрет стареет и принимает на себя все следы его пороков, в то время как сам Дориан сохраняет ангельскую красоту.',
+    cover: '/covers/dorian-grey.jpg',
+    content: '/books/Уайльд Оскар. Портрет Дориана Грея.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 20,
+    title: 'Приключения Оливера Твиста',
+    author: 'Чарльз Диккенс',
+    year: 1838,
+    genres: [GENRES.SOCIAL_NOVEL, GENRES.ADVENTURE],
+    tags: ['Сирота', 'Лондон', 'Криминал', 'Фейгин', 'Трущобы'],
+    description:
+      'История маленького сироты, который сбегает из работного дома и попадает в дебри лондонского преступного мира, но вопреки всему сохраняет чистоту души и находит свой путь к свету.',
+    cover: '/covers/oliver-tvist.jpg',
+    content: '/books/Диккенс Чарльз. Приключения Оливера Твиста.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+
+
+  {
+    id: 21,
+    title: 'Темные аллеи',
+    author: 'Иван Бунин',
+    year: 1943,
+    genres: [GENRES.SHORT_STORY_COLLECTION, GENRES.ROMAN],
+    tags: ['Любовь', 'Страсть', 'Ностальгия', 'Россия', 'Драма'],
+    description:
+      'Цикл рассказов о любви — трагической, мимолетной и роковой. Шедевр русской психологической прозы, исследующий самые потаенные уголки человеческой души.',
+    cover: '/covers/dark-alleys-bunin.jpg',
+    content: '/books/Бунин Иван. Темные аллеи.txt',
+    featured: true,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 22,
+    title: 'Три мушкетера',
+    author: 'Александр Дюма',
+    year: 1844,
+    genres: [GENRES.ADVENTURE, GENRES.HISTORICAL_FICTION],
+    tags: ['д’Артаньян', 'Дружба', 'Париж', 'Дуэли', 'Ришелье'],
+    description:
+      'Бессмертный роман о приключениях молодого гасконца д’Артаньяна и его верных друзей-мушкетеров, полных опасностей, придворных интриг и истинной верности девизу «Один за всех, и все за одного!»',
+    cover: '/covers/3-muskitera.jpg',
+    content: '/books/Дюма Александр. Три мушкетёра.txt',
+    featured: false,
+    isNew: true,
+    isPopular: false,
+  },
+
+  {
+    id: 23,
+    title: 'Идиот',
+    author: 'Фёдор Достоевский',
+    year: 1869,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.REALISM],
+    tags: ['Князь Мышкин', 'Настасья Филипповна', 'Милосердие', 'Общество', 'Трагедия'],
+    description:
+      'Роман о «положительно прекрасном человеке» — князе Мышкине, чья детская искренность и доброта сталкиваются с жестоким, эгоистичным и порочным миром петербургского общества.',
+    cover: '/covers/idiot.jpg',
+    content: '/books/Достоевский Федор. ИДИОТ.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+    
+  
+  {
+    id: 24,
+    title: 'Человек-амфибия',
+    author: 'Александр Беляев',
+    year: 1928,
+    genres: [GENRES.SCIENCE_FICTION, GENRES.ADVENTURE],
+    tags: ['Ихтиандр', 'Океан', 'Эксперимент', 'Любовь', 'Наука'],
+    description:
+      'Захватывающая история о юноше Ихтиандре, который в результате смелой операции профессора Сальватора обрел способность дышать под водой, и о его трагическом столкновении с жестоким миром людей.',
+    cover: '/covers/chelovek-amfibia.jpg',
+    content: '/books/Беляев Александр. Человек-амфибия.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+
+  {
+    id: 25,
+    title: 'Евгений Онегин',
+    author: 'Александр Пушкин',
+    year: 1833,
+    genres: [GENRES.ROMAN, GENRES.REALISM],
+    tags: ['Татьяна Ларина', 'Дуэль', 'Лишний человек', 'Энциклопедия русской жизни', 'Дворянство'],
+    description:
+      'Бессмертный роман в стихах, повествующий о драматической судьбе светского денди, искренней любви провинциальной девушки и утраченных идеалах на фоне блестящей и противоречивой эпохи.',
+    cover: '/covers/evgeney-onegyn.jpg',
+    content: '/books/Пушкин Александр. Евгений Онегин.txt',
+    featured: true,
+    isNew: false,
+    isPopular: false,
+  },
+
+  {
+    id: 26,
+    title: 'Герой нашего времени',
+    author: 'Михаил Лермонтов',
+    year: 1840,
+    genres: [GENRES.PSYCHOLOGICAL_FICTION, GENRES.REALISM],
+    tags: ['Печорин', 'Лишний человек', 'Кавказ', 'Дуэль', 'Фатализм'],
+    description:
+      'Первый в русской прозе психологический роман, представляющий собой портрет целого поколения в лице Григория Печорина — человека с глубокой душой, чей ум и воля не находят достойного применения.',
+    cover: '/covers/lermontov-geroi-nashego.jpg',
+    content: '/books/Лермонтов Михаил. Герой нашего времени.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  
+  {
+    id: 27,
+    title: 'Палата № 6',
+    author: 'Антон Чехов',
+    year: 1892,
+    genres: [GENRES.PHILOSOPHICAL_FICTION, GENRES.REALISM],
+    tags: ['Андрей Рагин', 'Безумие', 'Философия', 'Интеллигенция', 'Больница'],
+    description:
+      'Глубокая и пугающая повесть о докторе и пациенте, чьи философские беседы о смысле страдания и жизни приводят к трагическому столкновению с жестокой реальностью системы.',
+    cover: '/covers/palata-6.jpg',
+    content: '/books/Чехов Антон. Палата   6.txt',
+    featured: false,
+    isNew: false,
+    isPopular: true,
+  },
+
+  {
+    id: 28,
+    title: 'След смерти',
+    author: 'Блейк Пирс',
+    year: 2016,
+    genres: [GENRES.DETECTIVE, GENRES.THRILLER],
+    tags: ['Райли Пейдж', 'ФБР', 'Серийный убийца', 'Расследование', 'Триллер'],
+    description:
+      'Первая книга в захватывающей серии о специальном агенте ФБР Райли Пейдж, которая должна проникнуть в сознание жестокого маньяка, чтобы остановить серию загадочных убийств.',
+    cover: '/covers/sled-smerti.jpg',
+    content: '/books/Пирс Блейк. След смерти.txt',
+    featured: false,
+    isNew: true,
+    isPopular: true,
   },
 
 
 
-  /* книги */
-  // {
-  //   id: 5,
-  //   title: "...",
-  //   author: "...",
-  //   year: ...,
-  //   genres: [...],
-  //   tags: [...],
-  //   description: "...",
-  //   content: "..." 
-  // },
+
+
+
 ];

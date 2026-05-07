@@ -7,6 +7,8 @@
 
 # testing
 /coverage
+/tests/cypress/artifacts
+/tests/playwright/artifacts
 
 # production
 /build

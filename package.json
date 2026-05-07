@@ -15,8 +15,23 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start:ci": "cross-env BROWSER=none PORT=3100 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "cypress:install": "cypress install",
+    "cypress:open": "cypress open --config-file tests/cypress/cypress.config.js",
+    "cypress:run": "cypress run --config-file tests/cypress/cypress.config.js",
+    "playwright:install": "playwright install",
+    "playwright:open": "playwright test --ui --config=tests/playwright/playwright.config.js",
+    "playwright:run": "playwright test --config=tests/playwright/playwright.config.js",
+    "e2e": "npm run e2e:cypress && npm run e2e:playwright",
+    "e2e:cypress": "node tests/scripts/run-with-app.cjs cypress:run",
+    "e2e:cypress:open": "node tests/scripts/run-with-app.cjs cypress:open",
+    "e2e:playwright": "npm run playwright:run",
+    "e2e:playwright:open": "npm run playwright:open",
+    "e2e:open": "npm run e2e:cypress:open",
+    "add-book": "node scripts/add-book.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,6 +53,9 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "cross-env": "^7.0.3",
+    "cypress": "^13.17.0",
     "sass": "^1.99.0"
   }
 }
