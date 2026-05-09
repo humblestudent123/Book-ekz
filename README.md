@@ -900,6 +900,16 @@ npm run dev
 
 ## Контакты автора
 
-**Автор:** Поняев Никита Иванович  
-**Email:** vasickinfedor@gmail.com  
+**Авторы:**
+Frontend разработчик: Поняев Никита 
+**Email:** vasickinfedor@gmail.com 
 **Telegram:** `@hard1050`
+
+
+
+Devops разработчик: Зотеев Владислав
+**Email:** vladzoteev16@gmail.com
+**Telegram:** `@wwhitem`
+ 
+
+
