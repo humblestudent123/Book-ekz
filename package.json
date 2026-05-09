@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://humblestudent123.github.io/Book-ekz",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -35,6 +36,8 @@
     "api:install": "npm install --prefix recommendation-api",
     "api:start": "npm start --prefix recommendation-api",
     "api:test": "npm test --prefix recommendation-api",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "add-book": "node scripts/add-book.js",
     "eject": "react-scripts eject"
   },
@@ -60,6 +63,7 @@
     "@playwright/test": "^1.57.0",
     "cross-env": "^7.0.3",
     "cypress": "^13.17.0",
+    "gh-pages": "^6.3.0",
     "sass": "^1.99.0"
   }
 }

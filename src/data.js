@@ -1,5 +1,7 @@
 import { GENRES } from './genres';
 
+const withPublicUrl = (assetPath) => (process.env.PUBLIC_URL || '') + assetPath;
+
 export const SAMPLE_BOOKS = [
   {
     id: 1,
@@ -10,8 +12,8 @@ export const SAMPLE_BOOKS = [
     tags: ['психология', 'совесть', 'искупление'],
     description:
       'Бедный студент Родион Раскольников совершает убийство старухи-процентщицы, чтобы проверить свою теорию о "праве имеющих", но в итоге сталкивается с невыносимыми муками совести и ищет путь к искуплению.',
-    cover: '/covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg',
-    content: '/books/преступление-и-наказание111.txt',
+    cover: withPublicUrl('/covers/Fedor-Dostoevsky-Prestyplenie-i-nakazanie.jpg'),
+    content: withPublicUrl('/books/преступление-и-наказание111.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -25,8 +27,8 @@ export const SAMPLE_BOOKS = [
     tags: ['тоталитаризм', 'пропаганда', 'контроль'],
     description:
       'Мрачное будущее под властью тоталитарного режима, где Большой Брат всегда наблюдает, а язык, память и личная свобода становятся инструментами политического контроля.',
-    cover: '/covers/Jorge-Oryel-1984.jpg',
-    content: '/books/Оруэлл-Джордж.-1984.txt',
+    cover: withPublicUrl('/covers/Jorge-Oryel-1984.jpg'),
+    content: withPublicUrl('/books/Оруэлл-Джордж.-1984.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -40,8 +42,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Средиземье', 'квест', 'борьба добра и зла'],
     description:
       'Хоббит Фродо Бэггинс и его верные спутники отправляются в опасное путешествие через Средиземье, чтобы уничтожить древний артефакт абсолютной власти и остановить Темного Властелина.',
-    cover: '/covers/Vlastelin-Colec.jpg',
-    content: '/books/Дж. Р. Р. Толкин — Властелин колец.txt',
+    cover: withPublicUrl('/covers/Vlastelin-Colec.jpg'),
+    content: withPublicUrl('/books/Дж. Р. Р. Толкин — Властелин колец.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -55,8 +57,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Макондо', 'семья Буэндиа', 'магический реализм'],
     description:
       'Сага о нескольких поколениях семьи Буэндиа, чья судьба неразрывно связана с мистическим городком Макондо и повторяющимся одиночеством.',
-    cover: '/covers/Gabriel-Garcia-100let.jpg',
-    content: '/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt',
+    cover: withPublicUrl('/covers/Gabriel-Garcia-100let.jpg'),
+    content: withPublicUrl('/books/Markes_Gabriel_Garsia_Sto_let_odinochestva.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -70,8 +72,8 @@ export const SAMPLE_BOOKS = [
     tags: ['цензура', 'книги', 'общество будущего'],
     description:
       'История о пожарном Гае Монтэге, который в мире запрещенных книг перестает сжигать знания и начинает их спасать.',
-    cover: '/covers/451-gradus-po-foringeity.jpg',
-    content: '/books/Fahrenheit-451.txt',
+    cover: withPublicUrl('/covers/451-gradus-po-foringeity.jpg'),
+    content: withPublicUrl('/books/Fahrenheit-451.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -85,8 +87,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Москва', 'Воланд', 'вечная любовь'],
     description:
       'Визит Воланда и его свиты в Москву переворачивает жизнь горожан и дает шанс на спасение гениальному автору и его верной возлюбленной.',
-    cover: '/covers/master-i-margarita-bulgakov.jpg',
-    content: '/books/Булгаков-Михаил-Мастер-и-Маргарита.txt',
+    cover: withPublicUrl('/covers/master-i-margarita-bulgakov.jpg'),
+    content: withPublicUrl('/books/Булгаков-Михаил-Мастер-и-Маргарита.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -100,8 +102,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Первая мировая война', 'окопная правда', 'потерянное поколение'],
     description:
       'История о вчерашних школьниках, которые сталкиваются с беспощадной реальностью Первой мировой войны и взрослеют внутри кровавого ада окопов.',
-    cover: '/covers/Na-zapodnom-fronte-bez-peremen.jpg',
-    content: '/books/Erig-maria-remark-na-zapadnom-fronte.txt',
+    cover: withPublicUrl('/covers/Na-zapodnom-fronte-bez-peremen.jpg'),
+    content: withPublicUrl('/books/Erig-maria-remark-na-zapadnom-fronte.txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -115,8 +117,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Холден Колфилд', 'взросление', 'одиночество'],
     description:
       'Роман о нескольких днях из жизни подростка Холдена Колфилда, который пытается понять себя, людей вокруг и болезненный переход во взрослый мир.',
-    cover: '/covers/nad_propasiy_rji.jpg',
-    content: '/books/nad-propastyu-vo-rzhi.txt',
+    cover: withPublicUrl('/covers/nad_propasiy_rji.jpg'),
+    content: withPublicUrl('/books/nad-propastyu-vo-rzhi.txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -130,8 +132,8 @@ export const SAMPLE_BOOKS = [
     tags: ['казачество', 'Гражданская война', 'эпопея'],
     description:
       '"Тихий Дон" - масштабная эпопея о трагедии казачества, любви и разрушительных исторических потрясениях начала XX века.',
-    cover: '/covers/tihiy-don.jpg',
-    content: '/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt',
+    cover: withPublicUrl('/covers/tihiy-don.jpg'),
+    content: withPublicUrl('/books/Шолохов Михаил Александрович. Тихий Дон (Книги 1 и 2).txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -145,7 +147,7 @@ export const SAMPLE_BOOKS = [
     tags: ['Англия', 'семейная сага', 'собственность'],
     description:
       '"Сага о Форсайтах" - монументальный цикл о жизни буржуазной семьи, запертой в мире собственности, расчета и болезненной привязанности к красоте.',
-    cover: '/covers/saga-forsaity.jpg',
+    cover: withPublicUrl('/covers/saga-forsaity.jpg'),
     content: null,
     featured: false,
     isNew: true,
@@ -160,8 +162,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Жан Вальжан', 'Франция', 'милосердие'],
     description:
       '"Отверженные" - грандиозная эпопея о судьбе беглого каторжника Жана Вальжана, силе человеческого духа и борьбе добра со злом.',
-    cover: '/covers/gugo-otverjenie.jpg',
-    content: '/books/Гюго Виктор. Отверженные - TheLib.Ru.txt',
+    cover: withPublicUrl('/covers/gugo-otverjenie.jpg'),
+    content: withPublicUrl('/books/Гюго Виктор. Отверженные - TheLib.Ru.txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -175,8 +177,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Скарлетт О`Хара', 'Гражданская война', 'любовь'],
     description:
       '"Унесенные ветром" - роман о судьбе южанки Скарлетт О`Хара, чья беспечная молодость обрывается с началом Гражданской войны в США.',
-    cover: '/covers/vetrom.jpg',
-    content: '/books/vetrom.txt',
+    cover: withPublicUrl('/covers/vetrom.jpg'),
+    content: withPublicUrl('/books/vetrom.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -190,8 +192,8 @@ export const SAMPLE_BOOKS = [
     tags: ['необитаемый остров', 'выживание', 'приключения'],
     description:
       'История британского моряка, который после кораблекрушения оказывается на необитаемом острове и выживает благодаря труду, стойкости и изобретательности.',
-    cover: '/covers/robinzon-kruzo.jpg',
-    content: '/books/robinzon-kruzo.txt',
+    cover: withPublicUrl('/covers/robinzon-kruzo.jpg'),
+    content: withPublicUrl('/books/robinzon-kruzo.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -205,8 +207,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Ад', 'Чистилище', 'Рай', 'Беатриче'],
     description:
       'Монументальная поэма, в которой автор проходит через Ад, Чистилище и Рай в поисках божественной истины и спасения.',
-    cover: '/covers/comedia.jpg',
-    content: '/books/Алигьери Данте. Божественная комедия.txt',
+    cover: withPublicUrl('/covers/comedia.jpg'),
+    content: withPublicUrl('/books/Алигьери Данте. Божественная комедия.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -220,8 +222,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Самообразование', 'Любовь', 'Классовая борьба', 'Писательство', 'Трагедия'],
     description:
       'История простого моряка, который благодаря железной воле и любви к женщине из высшего общества проходит тернистый путь к литературной славе, разочаровываясь в своих идеалах.',
-    cover: '/covers/martin-aiden.jpg',
-    content: '/books/Лондон Джек. Мартин Иден.txt',
+    cover: withPublicUrl('/covers/martin-aiden.jpg'),
+    content: withPublicUrl('/books/Лондон Джек. Мартин Иден.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -235,8 +237,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Мефистофель', 'Сделка с дьяволом', 'Поиск смысла', 'Маргарита', 'Душа'],
     description:
       'Философская трагедия о великом ученом, который продал душу Мефистофелю в обмен на безграничные знания, молодость и мимолетное земное счастье.',
-    cover: '/covers/Faust-gete.jpg',
-    content: '/books/Faust - gette.txt',
+    cover: withPublicUrl('/covers/Faust-gete.jpg'),
+    content: withPublicUrl('/books/Faust - gette.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -251,8 +253,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Остап Бендер', 'Киса Воробьянинов', 'Бриллианты', 'Поиск сокровищ', 'СССР'],
     description:
       'Блестящий сатирический роман о похождениях «великого комбинатора» Остапа Бендера и бывшего дворянина Ипполита Матвеевича, разыскивающих сокровища мадам Петуховой, спрятанные в одном из двенадцати стульев гарнитура мастера Гамбса.',
-    cover: '/covers/don-kihot.jpg',
-    content: '/books/Сервантес Сааведра Мигель де. Хитроумный идальго Дон Кихот Ламанчский.txt',
+    cover: withPublicUrl('/covers/don-kihot.jpg'),
+    content: withPublicUrl('/books/Сервантес Сааведра Мигель де. Хитроумный идальго Дон Кихот Ламанчский.txt'),
     featured: true,
     isNew: false,
     isPopular: true,
@@ -267,8 +269,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Чичиков', 'Помещики', 'Афера', 'Дорога', 'Россия'],
     description:
       'Поэма в прозе о предприимчивом дельце Чичикове, который путешествует по России, скупая у помещиков «мертвые души» ради собственного обогащения и статуса.',
-    cover: '/covers/dushi-gogol.jpg',
-    content: '/books/Гоголь Николай. Мертвые души.txt',
+    cover: withPublicUrl('/covers/dushi-gogol.jpg'),
+    content: withPublicUrl('/books/Гоголь Николай. Мертвые души.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -283,8 +285,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Вечная молодость', 'Искушение', 'Искусство', 'Порок', 'Лорд Генри'],
     description:
       'Единственный опубликованный роман Уайльда, рассказывающий о юноше, чей портрет стареет и принимает на себя все следы его пороков, в то время как сам Дориан сохраняет ангельскую красоту.',
-    cover: '/covers/dorian-grey.jpg',
-    content: '/books/Уайльд Оскар. Портрет Дориана Грея.txt',
+    cover: withPublicUrl('/covers/dorian-grey.jpg'),
+    content: withPublicUrl('/books/Уайльд Оскар. Портрет Дориана Грея.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -299,8 +301,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Сирота', 'Лондон', 'Криминал', 'Фейгин', 'Трущобы'],
     description:
       'История маленького сироты, который сбегает из работного дома и попадает в дебри лондонского преступного мира, но вопреки всему сохраняет чистоту души и находит свой путь к свету.',
-    cover: '/covers/oliver-tvist.jpg',
-    content: '/books/Диккенс Чарльз. Приключения Оливера Твиста.txt',
+    cover: withPublicUrl('/covers/oliver-tvist.jpg'),
+    content: withPublicUrl('/books/Диккенс Чарльз. Приключения Оливера Твиста.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -316,8 +318,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Любовь', 'Страсть', 'Ностальгия', 'Россия', 'Драма'],
     description:
       'Цикл рассказов о любви — трагической, мимолетной и роковой. Шедевр русской психологической прозы, исследующий самые потаенные уголки человеческой души.',
-    cover: '/covers/dark-alleys-bunin.jpg',
-    content: '/books/Бунин Иван. Темные аллеи.txt',
+    cover: withPublicUrl('/covers/dark-alleys-bunin.jpg'),
+    content: withPublicUrl('/books/Бунин Иван. Темные аллеи.txt'),
     featured: true,
     isNew: false,
     isPopular: true,
@@ -332,8 +334,8 @@ export const SAMPLE_BOOKS = [
     tags: ['д’Артаньян', 'Дружба', 'Париж', 'Дуэли', 'Ришелье'],
     description:
       'Бессмертный роман о приключениях молодого гасконца д’Артаньяна и его верных друзей-мушкетеров, полных опасностей, придворных интриг и истинной верности девизу «Один за всех, и все за одного!»',
-    cover: '/covers/3-muskitera.jpg',
-    content: '/books/Дюма Александр. Три мушкетёра.txt',
+    cover: withPublicUrl('/covers/3-muskitera.jpg'),
+    content: withPublicUrl('/books/Дюма Александр. Три мушкетёра.txt'),
     featured: false,
     isNew: true,
     isPopular: false,
@@ -348,8 +350,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Князь Мышкин', 'Настасья Филипповна', 'Милосердие', 'Общество', 'Трагедия'],
     description:
       'Роман о «положительно прекрасном человеке» — князе Мышкине, чья детская искренность и доброта сталкиваются с жестоким, эгоистичным и порочным миром петербургского общества.',
-    cover: '/covers/idiot.jpg',
-    content: '/books/Достоевский Федор. ИДИОТ.txt',
+    cover: withPublicUrl('/covers/idiot.jpg'),
+    content: withPublicUrl('/books/Достоевский Федор. ИДИОТ.txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -365,8 +367,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Ихтиандр', 'Океан', 'Эксперимент', 'Любовь', 'Наука'],
     description:
       'Захватывающая история о юноше Ихтиандре, который в результате смелой операции профессора Сальватора обрел способность дышать под водой, и о его трагическом столкновении с жестоким миром людей.',
-    cover: '/covers/chelovek-amfibia.jpg',
-    content: '/books/Беляев Александр. Человек-амфибия.txt',
+    cover: withPublicUrl('/covers/chelovek-amfibia.jpg'),
+    content: withPublicUrl('/books/Беляев Александр. Человек-амфибия.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -382,8 +384,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Татьяна Ларина', 'Дуэль', 'Лишний человек', 'Энциклопедия русской жизни', 'Дворянство'],
     description:
       'Бессмертный роман в стихах, повествующий о драматической судьбе светского денди, искренней любви провинциальной девушки и утраченных идеалах на фоне блестящей и противоречивой эпохи.',
-    cover: '/covers/evgeney-onegyn.jpg',
-    content: '/books/Пушкин Александр. Евгений Онегин.txt',
+    cover: withPublicUrl('/covers/evgeney-onegyn.jpg'),
+    content: withPublicUrl('/books/Пушкин Александр. Евгений Онегин.txt'),
     featured: true,
     isNew: false,
     isPopular: false,
@@ -398,8 +400,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Печорин', 'Лишний человек', 'Кавказ', 'Дуэль', 'Фатализм'],
     description:
       'Первый в русской прозе психологический роман, представляющий собой портрет целого поколения в лице Григория Печорина — человека с глубокой душой, чей ум и воля не находят достойного применения.',
-    cover: '/covers/lermontov-geroi-nashego.jpg',
-    content: '/books/Лермонтов Михаил. Герой нашего времени.txt',
+    cover: withPublicUrl('/covers/lermontov-geroi-nashego.jpg'),
+    content: withPublicUrl('/books/Лермонтов Михаил. Герой нашего времени.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -415,8 +417,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Андрей Рагин', 'Безумие', 'Философия', 'Интеллигенция', 'Больница'],
     description:
       'Глубокая и пугающая повесть о докторе и пациенте, чьи философские беседы о смысле страдания и жизни приводят к трагическому столкновению с жестокой реальностью системы.',
-    cover: '/covers/palata-6.jpg',
-    content: '/books/Чехов Антон. Палата   6.txt',
+    cover: withPublicUrl('/covers/palata-6.jpg'),
+    content: withPublicUrl('/books/Чехов Антон. Палата   6.txt'),
     featured: false,
     isNew: false,
     isPopular: true,
@@ -431,8 +433,8 @@ export const SAMPLE_BOOKS = [
     tags: ['Райли Пейдж', 'ФБР', 'Серийный убийца', 'Расследование', 'Триллер'],
     description:
       'Первая книга в захватывающей серии о специальном агенте ФБР Райли Пейдж, которая должна проникнуть в сознание жестокого маньяка, чтобы остановить серию загадочных убийств.',
-    cover: '/covers/sled-smerti.jpg',
-    content: '/books/Пирс Блейк. След смерти.txt',
+    cover: withPublicUrl('/covers/sled-smerti.jpg'),
+    content: withPublicUrl('/books/Пирс Блейк. След смерти.txt'),
     featured: false,
     isNew: true,
     isPopular: true,

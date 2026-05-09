@@ -1,13 +1,15 @@
 import { GENRES } from '../genres';
 
+const COURSE_COVER_BASE = `${process.env.PUBLIC_URL || ''}/course-covers`;
+const coverUrl = (filename) => `${COURSE_COVER_BASE}/${filename}`;
+
 export const COURSES = [
   {
     id: 'frontend-react',
     title: 'React: современная разработка интерфейсов',
     author: 'ReadNext Academy',
     category: GENRES.FRONTEND,
-    image:
-      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('frontend-react.png'),
     lessons: 42,
     duration: '18 часов',
     rating: 4.9,
@@ -19,8 +21,7 @@ export const COURSES = [
     title: 'UI-системы и дизайн интерфейсов',
     author: 'Мария Орлова',
     category: GENRES.FRONTEND,
-    image:
-      'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('frontend-ui-systems.png'),
     lessons: 30,
     duration: '12 часов',
     rating: 4.8,
@@ -32,8 +33,7 @@ export const COURSES = [
     title: 'Backend на Node.js без лишней магии',
     author: 'Алексей Морозов',
     category: GENRES.BACKEND,
-    image:
-      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('backend-node.png'),
     lessons: 38,
     duration: '16 часов',
     rating: 4.7,
@@ -45,8 +45,7 @@ export const COURSES = [
     title: 'Алгоритмы для собеседований и реальных задач',
     author: 'Игорь Ковалев',
     category: GENRES.ALGORITHMS,
-    image:
-      'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('algorithms-foundation.png'),
     lessons: 48,
     duration: '22 часа',
     rating: 4.9,
@@ -58,8 +57,7 @@ export const COURSES = [
     title: 'Критическое мышление и философия выбора',
     author: 'Елена Соколова',
     category: GENRES.PHILOSOPHY,
-    image:
-      'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('philosophy-critical-thinking.png'),
     lessons: 24,
     duration: '9 часов',
     rating: 4.8,
@@ -71,8 +69,7 @@ export const COURSES = [
     title: 'Миростроение в фэнтези',
     author: 'Антон Лисин',
     category: GENRES.FANTASY_EPIC,
-    image:
-      'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('fantasy-worldbuilding.png'),
     lessons: 26,
     duration: '10 часов',
     rating: 4.6,
@@ -84,8 +81,7 @@ export const COURSES = [
     title: 'Антиутопии: власть, язык и медиа',
     author: 'Ольга Данилова',
     category: GENRES.ANTIUTOPIA,
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('antiutopia-media.png'),
     lessons: 18,
     duration: '7 часов',
     rating: 4.7,
@@ -97,8 +93,7 @@ export const COURSES = [
     title: 'Реализм: как читать социальный роман',
     author: 'Никита Воронов',
     category: GENRES.REALISM,
-    image:
-      'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('realism-literature.png'),
     lessons: 20,
     duration: '8 часов',
     rating: 4.5,
@@ -110,8 +105,7 @@ export const COURSES = [
     title: 'Исторический роман: эпоха как герой',
     author: 'Вера Каменская',
     category: GENRES.HISTORIC_ROMAN,
-    image:
-      'https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('history-roman.png'),
     lessons: 22,
     duration: '9 часов',
     rating: 4.6,
@@ -123,8 +117,7 @@ export const COURSES = [
     title: 'Магический реализм: невозможное как норма',
     author: 'Софья Рамирес',
     category: GENRES.MAGICAL_REALISM,
-    image:
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('magical-realism.png'),
     lessons: 19,
     duration: '7 часов',
     rating: 4.8,
@@ -136,8 +129,7 @@ export const COURSES = [
     title: 'Приключенческий сюжет: темп, риск, путь',
     author: 'Дмитрий Нестеров',
     category: GENRES.ADVENTURE,
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('adventure-storytelling.png'),
     lessons: 21,
     duration: '8 часов',
     rating: 4.5,
@@ -149,8 +141,7 @@ export const COURSES = [
     title: 'Семейная сага: поколения, память, конфликт',
     author: 'Ксения Белова',
     category: GENRES.FAMILY_SAGA,
-    image:
-      'https://images.unsplash.com/photo-1519682577862-22b62b24e493?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('family-saga.png'),
     lessons: 17,
     duration: '6 часов',
     rating: 4.4,
@@ -162,8 +153,7 @@ export const COURSES = [
     title: 'Как читать классику без страха',
     author: 'ReadNext Academy',
     category: GENRES.CLASSIC_PROSE,
-    image:
-      'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('classic-reading.png'),
     lessons: 16,
     duration: '5 часов',
     rating: 4.7,
@@ -175,8 +165,7 @@ export const COURSES = [
     title: 'Сатира и язык иронии',
     author: 'Павел Ершов',
     category: GENRES.SATIRE,
-    image:
-      'https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('satire-language.png'),
     lessons: 14,
     duration: '5 часов',
     rating: 4.3,
@@ -188,8 +177,7 @@ export const COURSES = [
     title: 'Личная образовательная траектория',
     author: 'ReadNext Lab',
     category: GENRES.ETC,
-    image:
-      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop',
+    image: coverUrl('learning-roadmap.png'),
     lessons: 12,
     duration: '4 часа',
     rating: 4.6,

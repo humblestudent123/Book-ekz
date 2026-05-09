@@ -41,7 +41,7 @@ function CourseCard({
           decoding="async"
           onError={(event) => {
             event.currentTarget.onerror = null;
-            event.currentTarget.src = '/logo192.png';
+            event.currentTarget.src = `${process.env.PUBLIC_URL || ''}/logo192.png`;
           }}
         />
       </button>
