@@ -902,7 +902,7 @@ npm run dev
 
 **Авторы:**
 Frontend разработчик: Поняев Никита 
-**Email:** vasickinfedor@gmail.com 
+**Email:** vasickinfedor@gmail.com
 **Telegram:** `@hard1050`
 
 
