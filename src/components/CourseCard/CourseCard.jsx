@@ -39,6 +39,7 @@ function CourseCard({
           alt={course.title}
           loading="lazy"
           decoding="async"
+          referrerPolicy="no-referrer"
           onError={(event) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = '/logo192.png';

@@ -281,7 +281,17 @@ export default function CoursePage() {
 
       <div className="course-layout">
         <div className="course-cover">
-          <img src={course.image} alt={course.title} decoding="async" fetchPriority="high" />
+          <img
+            src={course.image}
+            alt={course.title}
+            decoding="async"
+            fetchPriority="high"
+            referrerPolicy="no-referrer"
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = '/logo192.png';
+            }}
+          />
         </div>
 
         <div className="course-info">
