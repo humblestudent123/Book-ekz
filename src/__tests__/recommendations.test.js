@@ -2,7 +2,7 @@ import {
   getRelatedCourses,
   moveIdToFront,
   toggleId,
-} from './recommendations';
+} from '../utils/recommendations';
 
 describe('recommendations utilities', () => {
   test('toggleId adds and removes ids consistently', () => {

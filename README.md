@@ -204,7 +204,7 @@ Book-ekz/
 | `src/entities/book` | Карточка книги |
 | `src/components/SearchBar` | Компонент поиска |
 | `src/utils/loadBook.js` | Загрузка и декодирование текста книги |
-| `src/utils/recommendations.test.js` | Jest-тесты утилит рекомендаций |
+| `src/__tests__` | Отдельная папка с Jest-тестами |
 | `package.json` | Список зависимостей и команд проекта |
 
 ---
@@ -456,7 +456,7 @@ npx serve -s build
 
 ```text
 src/
-  utils/
+  __tests__/
     recommendations.test.js
 ```
 
